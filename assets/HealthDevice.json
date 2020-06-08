@@ -1,0 +1,65 @@
+{
+  "@id": "urn:lucacpm:HealthDevice:1",
+  "@type": "CapabilityModel",
+  "implements": [
+    {
+      "@id": "urn:lucacpm:HealthDevice:m0bszgacs:1",
+      "@type": "InterfaceInstance",
+      "displayName": {
+        "en": "Telemetry"
+      },
+      "name": "telemetry",
+      "schema": {
+        "@id": "urn:lucacpm:HealthDevice:telemetry:2",
+        "@type": "Interface",
+        "displayName": {
+          "en": "Telemetry"
+        },
+        "contents": [
+          {
+            "@id": "urn:lucacpm:HealthDevice:temperature:1",
+            "@type": [
+              "Telemetry",
+              "SemanticType/Temperature"
+            ],
+            "displayName": {
+              "en": "Temperature"
+            },
+            "name": "ble00002A1C00001000800000805f9b34fb",
+            "schema": "double"
+          },
+          {
+            "@id": "urn:lucacpm:HealthDevice:heartrate:1",
+            "@type": "Telemetry",
+            "displayName": {
+              "en": "Heart Rate"
+            },
+            "name": "ble00002A3700001000800000805f9b34fb",
+            "displayUnit": {
+              "en": "BPM"
+            },
+            "schema": "double"
+          },
+          {
+             "@id": "urn:lucacpm:HealthDevice:pressure:1",
+            "@type": [
+              "Telemetry",
+              "SemanticType/Pressure"
+            ],
+            "displayName": {
+              "en": "Blood Pressure"
+            },
+            "name": "ble00002A3500001000800000805f9b34fb",
+            "schema": "double"
+          }
+        ]
+      }
+    }
+  ],
+  "displayName": {
+    "en": "HealthDevice"
+  },
+  "@context": [
+    "http://azureiot.com/v1/contexts/IoTModel.json"
+  ]
+}

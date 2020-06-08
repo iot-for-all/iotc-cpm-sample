@@ -1,0 +1,77 @@
+{
+  "name": "cpm",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "android": "react-native run-android",
+    "ios": "react-native run-ios",
+    "start": "react-native start",
+    "test": "jest",
+    "lint": "eslint .",
+    "podinstall":"cd ios && pod install && cd ..",
+    "postinstall": "npx jetify && npm run podinstall && npm run prepackage",
+    "prepackage": "node pre-packager.js"
+  },
+  "dependencies": {
+    "@react-native-community/masked-view": "^0.1.10",
+    "@react-navigation/drawer": "^5.7.2",
+    "@react-navigation/material-bottom-tabs": "^5.1.15",
+    "@react-navigation/native": "^5.2.4",
+    "@react-navigation/stack": "^5.2.19",
+    "react": "16.9.0",
+    "react-native": "0.61.5",
+    "react-native-azure-iotcentral-client": "^1.1.2",
+    "react-native-ble-plx": "^1.1.1",
+    "react-native-camera": "^3.18.0",
+    "react-native-charts-wrapper": "^0.5.7",
+    "react-native-gesture-handler": "^1.6.1",
+    "react-native-get-random-values": "^1.4.0",
+    "react-native-google-fit": "^0.10.0",
+    "react-native-linear-gradient": "^2.5.6",
+    "react-native-paper": "^3.6.0",
+    "react-native-permissions": "^2.0.9",
+    "react-native-qrcode-scanner": "^1.3.1",
+    "react-native-reanimated": "^1.8.0",
+    "react-native-safe-area-context": "^0.7.3",
+    "react-native-screens": "^2.7.0",
+    "react-native-svg": "^11.0.1",
+    "react-native-vector-icons": "^6.6.0",
+    "rn-apple-healthkit": "^0.8.0"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.8.4",
+    "@babel/runtime": "^7.8.4",
+    "@react-native-community/eslint-config": "^0.0.7",
+    "@types/react": "^16.9.22",
+    "@types/react-native": "^0.61.16",
+    "@types/react-native-charts-wrapper": "^0.5.0",
+    "@types/react-native-linear-gradient": "^2.4.0",
+    "@types/react-native-vector-icons": "^6.4.5",
+    "babel-jest": "^25.1.0",
+    "eslint": "^6.8.0",
+    "fs": "^0.0.1-security",
+    "jest": "^25.1.0",
+    "metro-react-native-babel-preset": "^0.59.0",
+    "react-native-svg-transformer": "^0.14.3",
+    "react-test-renderer": "16.9.0",
+    "typescript": "^3.8.2"
+  },
+  "jest": {
+    "preset": "react-native",
+    "transform": {
+      "^.+\\.js$": "<rootDir>/node_modules/react-native/jest/preprocessor.js",
+      "\\.(ts|tsx)$": "ts-jest"
+    },
+    "globals": {
+      "ts-jest": {
+        "tsConfig": "tsconfig.jest.json"
+      }
+    },
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js"
+    ],
+    "testRegex": "(/__tests__/.*|\\.(test|spec))\\.(ts|tsx|js)$"
+  }
+}
