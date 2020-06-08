@@ -24,7 +24,7 @@ PODS:
     - DoubleConversion
     - glog
   - glog (0.3.5)
-  - Permission-Camera (2.1.4):
+  - Permission-Camera (2.1.5):
     - RNPermissions
   - RCTAppleHealthKit (0.8.0):
     - React
@@ -195,13 +195,13 @@ PODS:
     - React
     - react-native-ble-plx-swift
   - react-native-ble-plx-swift (1.1.1)
-  - react-native-camera (3.24.1):
+  - react-native-camera (3.28.0):
     - React
-    - react-native-camera/RCT (= 3.24.1)
-    - react-native-camera/RN (= 3.24.1)
-  - react-native-camera/RCT (3.24.1):
+    - react-native-camera/RCT (= 3.28.0)
+    - react-native-camera/RN (= 3.28.0)
+  - react-native-camera/RCT (3.28.0):
     - React
-  - react-native-camera/RN (3.24.1):
+  - react-native-camera/RN (3.28.0):
     - React
   - react-native-get-random-values (1.4.0):
     - React
@@ -250,11 +250,11 @@ PODS:
     - React
   - RNGestureHandler (1.6.1):
     - React
-  - RNPermissions (2.1.4):
+  - RNPermissions (2.1.5):
     - React
-  - RNReanimated (1.8.0):
+  - RNReanimated (1.9.0):
     - React
-  - RNScreens (2.7.0):
+  - RNScreens (2.8.0):
     - React
   - RNSVG (11.0.1):
     - React
@@ -408,7 +408,7 @@ SPEC CHECKSUMS:
   FBReactNativeSpec: 118d0d177724c2d67f08a59136eb29ef5943ec75
   Folly: 30e7936e1c45c08d884aa59369ed951a8e68cf51
   glog: 1f3da668190260b06b429bb211bfbee5cd790c28
-  Permission-Camera: 402f1ac15b962448d75e8cf2039d235e7bc09a85
+  Permission-Camera: afad27bf90337684d4a86f3825112d648c8c4d3b
   RCTAppleHealthKit: bbb19a33c922d0c36631cd571680eed68e78c63a
   RCTRequired: b153add4da6e7dbc44aebf93f3cf4fcae392ddf1
   RCTTypeSafety: 9aa1b91d7f9310fc6eadc3cf95126ffe818af320
@@ -421,7 +421,7 @@ SPEC CHECKSUMS:
   React-jsinspector: fa0ecc501688c3c4c34f28834a76302233e29dc0
   react-native-ble-plx: 304c7bee074a05581672c9990f375b3906808718
   react-native-ble-plx-swift: eb64f02b988becb84a60164aba9fab5d6ddb6dc8
-  react-native-camera: 6d47390c89812306baa37b88508a1f110b4a9794
+  react-native-camera: 8ab02aac456a7db830980cef5f3772644fe96e1f
   react-native-get-random-values: 2b7500cdb68066aba87cdccd97067c29e16ffe95
   react-native-safe-area-context: e200d4433aba6b7e60b52da5f37af11f7a0b0392
   React-RCTActionSheet: 600b4d10e3aea0913b5a92256d2719c0cdd26d76
@@ -437,9 +437,9 @@ SPEC CHECKSUMS:
   RNCharts: d364ca2085e24edb9ee0390d3fb7209257daa44c
   RNCMaskedView: 5a8ec07677aa885546a0d98da336457e2bea557f
   RNGestureHandler: 8f09cd560f8d533eb36da5a6c5a843af9f056b38
-  RNPermissions: 3635b407c15f2fe591bd2101c8f20aa0912caba8
-  RNReanimated: 955cf4068714003d2f1a6e2bae3fb1118f359aff
-  RNScreens: cf198f915f8a2bf163de94ca9f5bfc8d326c3706
+  RNPermissions: ad71dd4f767ec254f2cd57592fbee02afee75467
+  RNReanimated: b5ccb50650ba06f6e749c7c329a1bc3ae0c88b43
+  RNScreens: 62211832af51e0aebcf6e8c36bcf7dd65592f244
   RNSVG: 67f1f12dae2cef6ed59a42cae74a6b8f5a9e7b46
   RNVectorIcons: 0bb4def82230be1333ddaeee9fcba45f0b288ed4
   SwiftyJSON: 36413e04c44ee145039d332b4f4e2d3e8d6c4db7
