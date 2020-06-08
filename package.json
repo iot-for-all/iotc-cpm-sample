@@ -8,7 +8,7 @@
     "start": "react-native start",
     "test": "jest",
     "lint": "eslint .",
-    "podinstall":"cd ios && pod install && cd ..",
+    "podinstall": "cd ios && pod install && cd ..",
     "postinstall": "npx jetify && npm run podinstall && npm run prepackage",
     "prepackage": "node pre-packager.js"
   },
@@ -18,10 +18,10 @@
     "@react-navigation/material-bottom-tabs": "^5.1.15",
     "@react-navigation/native": "^5.2.4",
     "@react-navigation/stack": "^5.2.19",
-    "react": "16.9.0",
-    "react-native": "0.61.5",
+    "react": "16.11.0",
+    "react-native": "0.62.2",
     "react-native-azure-iotcentral-client": "^1.1.2",
-    "react-native-ble-plx": "^1.1.1",
+    "react-native-ble-plx": "^2.0.0",
     "react-native-camera": "^3.18.0",
     "react-native-charts-wrapper": "^0.5.7",
     "react-native-gesture-handler": "^1.6.1",
@@ -53,7 +53,7 @@
     "jest": "^25.1.0",
     "metro-react-native-babel-preset": "^0.59.0",
     "react-native-svg-transformer": "^0.14.3",
-    "react-test-renderer": "16.9.0",
+    "react-test-renderer": "16.11.0",
     "typescript": "^3.8.2"
   },
   "jest": {
