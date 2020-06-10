@@ -1,6 +1,7 @@
 import { IHealthhManager, IHealthDevice, IHealthItem, isHealthService, DataAvailableCallback } from "../models";
-import { BleManager as NativeManager, State, Device, Subscription } from 'react-native-ble-plx';
+import { BleManager as NativeManager, State, Device, Subscription, Characteristic } from 'react-native-ble-plx';
 import { Platform, PermissionsAndroid } from "react-native";
+import { STMDevice } from "./stm";
 
 export class UnsupportedError extends Error {
 
@@ -10,10 +11,31 @@ export class PoweredOffError extends Error {
 
 }
 
+export const ManufacterMap: {
+    [manufacterId: string]: {
+        ids: string[],
+        deviceCtr: any
+    }
+} = {
+    stmicro: {
+        ids: ['AABB'],
+        deviceCtr: STMDevice
+    }
+}
+
+function getManufacterDeviceFromId(nativeDevice: Device): IHealthDevice {
+    Object.keys(ManufacterMap).forEach(manufacterId => {
+        if (ManufacterMap[manufacterId].ids.includes(nativeDevice.id)) {
+            return new ManufacterMap[manufacterId].deviceCtr(nativeDevice);
+        }
+    });
+    return new BleDevice(nativeDevice);
+}
+
 export class BleManager implements IHealthhManager {
 
 
-    private constructor(private nativeManager: NativeManager) {
+    protected constructor(private nativeManager: NativeManager) {
 
     }
 
@@ -69,10 +91,9 @@ export class BleManager implements IHealthhManager {
     startScan(onDeviceFound: (device: IHealthDevice) => void): void {
         this.nativeManager.startDeviceScan(null, null, (error, device) => {
             if (error || !device) {
-                // TODO:handle error
                 return;
             }
-            onDeviceFound(new BleDevice(device))
+            onDeviceFound(getManufacterDeviceFromId(device));
         });
     }
     stopScan(): void {
@@ -94,9 +115,9 @@ export class BleDevice implements IHealthDevice {
     /**
     * keeps track of the enabled notifications
     */
-    private enabled: { [itemId: string]: Subscription };
+    protected enabled: { [itemId: string]: Subscription };
 
-    constructor(private nativeDevice: Device) {
+    constructor(protected nativeDevice: Device) {
         this.id = nativeDevice.id;
         this.name = nativeDevice.name ? nativeDevice.name : nativeDevice.id;
         this.paired = true;
@@ -118,13 +139,16 @@ export class BleDevice implements IHealthDevice {
         }
         this.enabled[item.id] = this.nativeDevice.monitorCharacteristicForService(item.parentId as string, item.id, (error, characteristic) => {
             if (error || !characteristic) {
-                // TODO: handle error
                 return;
             }
-            onDataAvailable(item.id, characteristic.value, item.name);
+            onDataAvailable(item.id, this.getValue(characteristic), item.name);
         });
         item.enabled = true;
         return true;
+    }
+
+    protected getValue(characteristic: Characteristic): string | null {
+        return characteristic.value;
     }
 
     async fetch(): Promise<void> {
