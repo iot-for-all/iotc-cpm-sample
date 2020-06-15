@@ -49,7 +49,7 @@
 		00E356F21AD99517003FC87E /* cpmTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = cpmTests.m; sourceTree = "<group>"; };
 		0C648560B71FD785C2D471AE /* Pods-cpm-tvOSTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-cpm-tvOSTests.release.xcconfig"; path = "Target Support Files/Pods-cpm-tvOSTests/Pods-cpm-tvOSTests.release.xcconfig"; sourceTree = "<group>"; };
 		12AECDC0FBDA69A7699619EF /* Pods-cpmTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-cpmTests.release.xcconfig"; path = "Target Support Files/Pods-cpmTests/Pods-cpmTests.release.xcconfig"; sourceTree = "<group>"; };
-		13B07F961A680F5B00A75B9A /* cpm.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = cpm.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		13B07F961A680F5B00A75B9A /* IoTCentral CPM.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "IoTCentral CPM.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		13B07FAF1A68108700A75B9A /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = cpm/AppDelegate.h; sourceTree = "<group>"; };
 		13B07FB01A68108700A75B9A /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AppDelegate.m; path = cpm/AppDelegate.m; sourceTree = "<group>"; };
 		13B07FB21A68108700A75B9A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
@@ -57,7 +57,7 @@
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = cpm/Info.plist; sourceTree = "<group>"; };
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = cpm/main.m; sourceTree = "<group>"; };
 		223C838A7AA655B07AC3ABF5 /* Pods-cpmTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-cpmTests.debug.xcconfig"; path = "Target Support Files/Pods-cpmTests/Pods-cpmTests.debug.xcconfig"; sourceTree = "<group>"; };
-		2D02E47B1E0B4A5D006451C7 /* cpm-tvOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "cpm-tvOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		2D02E47B1E0B4A5D006451C7 /* IoTCentral CPM.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "IoTCentral CPM.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2D02E4901E0B4A5D006451C7 /* cpm-tvOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "cpm-tvOSTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		3FA5AB23C74705887C1F2082 /* Pods-cpm-cpmTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-cpm-cpmTests.debug.xcconfig"; path = "Target Support Files/Pods-cpm-cpmTests/Pods-cpm-cpmTests.debug.xcconfig"; sourceTree = "<group>"; };
 		4A3BD5F3240515EC00E3019B /* MaterialCommunityIcons.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = MaterialCommunityIcons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/MaterialCommunityIcons.ttf"; sourceTree = "<group>"; };
@@ -217,9 +217,9 @@
 		83CBBA001A601CBA00E9B192 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				13B07F961A680F5B00A75B9A /* cpm.app */,
+				13B07F961A680F5B00A75B9A /* IoTCentral CPM.app */,
 				00E356EE1AD99517003FC87E /* cpmTests.xctest */,
-				2D02E47B1E0B4A5D006451C7 /* cpm-tvOS.app */,
+				2D02E47B1E0B4A5D006451C7 /* IoTCentral CPM.app */,
 				2D02E4901E0B4A5D006451C7 /* cpm-tvOSTests.xctest */,
 			);
 			name = Products;
@@ -266,7 +266,7 @@
 			);
 			name = cpm;
 			productName = cpm;
-			productReference = 13B07F961A680F5B00A75B9A /* cpm.app */;
+			productReference = 13B07F961A680F5B00A75B9A /* IoTCentral CPM.app */;
 			productType = "com.apple.product-type.application";
 		};
 		2D02E47A1E0B4A5D006451C7 /* cpm-tvOS */ = {
@@ -286,7 +286,7 @@
 			);
 			name = "cpm-tvOS";
 			productName = "cpm-tvOS";
-			productReference = 2D02E47B1E0B4A5D006451C7 /* cpm-tvOS.app */;
+			productReference = 2D02E47B1E0B4A5D006451C7 /* IoTCentral CPM.app */;
 			productType = "com.apple.product-type.application";
 		};
 		2D02E48F1E0B4A5D006451C7 /* cpm-tvOSTests */ = {
@@ -738,7 +738,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/cpm.app/cpm";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/IoTCentral CPM.app/IoTCentral CPM";
 			};
 			name = Debug;
 		};
@@ -764,7 +764,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/cpm.app/cpm";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/IoTCentral CPM.app/IoTCentral CPM";
 			};
 			name = Release;
 		};
@@ -793,7 +793,7 @@
 					"-lc++",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.github.lucadruda.cpm;
-				PRODUCT_NAME = cpm;
+				PRODUCT_NAME = "IoTCentral CPM";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "cpm-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -826,7 +826,7 @@
 					"-lc++",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "com.microsoft.CPM-df";
-				PRODUCT_NAME = cpm;
+				PRODUCT_NAME = "IoTCentral CPM";
 				PROVISIONING_PROFILE_SPECIFIER = "CPM Dogfood";
 				SWIFT_OBJC_BRIDGING_HEADER = "cpm-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
@@ -862,7 +862,7 @@
 					"-lc++",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "com.microsoft.cpm-df.tvOS";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = "IoTCentral CPM";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = appletvos;
 				TARGETED_DEVICE_FAMILY = 3;
@@ -896,7 +896,7 @@
 					"-lc++",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "com.microsoft.cpm-df.tvOS";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = "IoTCentral CPM";
 				SDKROOT = appletvos;
 				TARGETED_DEVICE_FAMILY = 3;
 				TVOS_DEPLOYMENT_TARGET = 9.2;
@@ -929,7 +929,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "com.facebook.REACT.cpm-tvOSTests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = appletvos;
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/cpm-tvOS.app/cpm-tvOS";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/IoTCentral CPM.app/IoTCentral CPM";
 				TVOS_DEPLOYMENT_TARGET = 10.1;
 			};
 			name = Debug;
@@ -960,7 +960,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "com.facebook.REACT.cpm-tvOSTests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = appletvos;
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/cpm-tvOS.app/cpm-tvOS";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/IoTCentral CPM.app/IoTCentral CPM";
 				TVOS_DEPLOYMENT_TARGET = 10.1;
 			};
 			name = Release;

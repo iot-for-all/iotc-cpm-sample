@@ -13,13 +13,18 @@ export function useScreenDimensions() {
     const [screenData, setScreenData] = useState(Dimensions.get('screen'));
     const [orientation, setOrientation] = useState<Orientation>(getOrientation(screenData.width, screenData.height));
 
-    useEffect(() => {
-        const onChange = (result: { window: ScaledSize, screen: ScaledSize }) => {
-            setScreenData(result.screen);
-            setOrientation(getOrientation(result.screen.width, result.screen.height));
+    const onChange = (result: { window: ScaledSize, screen: ScaledSize }) => {
+        setScreenData(result.screen);
+        setOrientation(getOrientation(result.screen.width, result.screen.height));
 
-        };
+    };
+
+    useEffect(() => {
+        console.log(`Orientation: ${orientation}`);
         Dimensions.addEventListener('change', onChange);
-    });
+        return () => {
+            Dimensions.removeEventListener('change', onChange);
+        }
+    }, [orientation]);
     return { screen: screenData, orientation };
 }

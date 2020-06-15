@@ -11,7 +11,8 @@ export interface IHealthDevice {
     connected: boolean,
     fetch(): Promise<void>,
     disconnect(): Promise<void>,
-    items?: IHealthItem[]
+    items?: IHealthItem[],
+    simulated?: boolean
 }
 
 export interface IHealthItem {

@@ -1,14 +1,13 @@
-import React, { useContext, useState, useEffect, useRef } from 'react';
-import { SafeAreaView, View, StyleSheet, Image, SwitchComponent } from 'react-native';
-import { Name, Headline, Detail } from './typography';
-import { Switch, Modal, IconButton, Divider } from 'react-native-paper';
-import { ReactDispatch, ChartUpdateCallback, DrawerProperty } from '../types';
+import React, { useContext, useEffect, useRef } from 'react';
+import { SafeAreaView, View, StyleSheet, Image } from 'react-native';
+import { Name, Headline, Detail, Item } from './typography';
+import { Switch, IconButton, Divider } from 'react-native-paper';
+import { ChartUpdateCallback } from '../types';
 import { ConfigContext } from '../contexts/config';
 import { ScrollView } from 'react-native-gesture-handler';
 import { AppleHealthManager } from '../health/appleHealth';
 import { GoogleFitManager } from '../health/googleFit';
-import { IHealthItem, isHealthService } from '../models';
-import { useNavigation } from '@react-navigation/native';
+import { isHealthService } from '../models';
 
 interface DrawerProps {
     sourceSide: 'left' | 'right',
@@ -70,7 +69,7 @@ export default function InsightDrawer(props: DrawerProps) {
                     <View style={{ flexDirection: 'row' }}>
                         <Headline>Sync options</Headline>
                         <IconButton onPress={() => {
-                           props.close()
+                            props.close()
                         }} icon='chevron-left' style={{ marginLeft: 40, marginTop: -5 }} />
                     </View>
                     <Detail>Which kind of device data would you like to show?</Detail>
@@ -81,7 +80,7 @@ export default function InsightDrawer(props: DrawerProps) {
             <ScrollView>
                 {state.device.items.map((item, index) => (
                     <View style={style.itemContainer} key={`view-${item.id}`}>
-                        <Name>{item.name}</Name>
+                        <Item style={{ width: 150 }}>{item.name}</Item>
 
                         {/* pass extra parameter to the ref in order to process and enable only valid ids */}
                         <Switch {...{ refId: `${item.parentId}/${item.id}` }} ref={element => (switchRefs.current = [...switchRefs.current, element as any])} value={item.enabled} onValueChange={async (current) => {

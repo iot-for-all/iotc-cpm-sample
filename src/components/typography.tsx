@@ -15,6 +15,11 @@ export function Name(props: Props) {
     return (<Text style={[style, { fontSize: 14, fontWeight: 'bold', fontStyle: 'normal', letterSpacing: 1.15 }]}>{props.children}</Text>)
 }
 
+export function Item(props: Props) {
+    const { children, style, ...textProps } = props;
+    return (<Text style={[style, { fontSize: 14, fontWeight: 'bold', fontStyle: 'normal' }]}>{props.children}</Text>)
+}
+
 export function Detail(props: Props) {
     const { children, style, ...textProps } = props;
 

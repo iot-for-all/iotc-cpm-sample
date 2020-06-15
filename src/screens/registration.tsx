@@ -1,12 +1,12 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { View, StyleSheet, BackHandler, Dimensions, ViewStyle } from "react-native";
-import { Text, Button, TextInput, IconButton, ActivityIndicator } from 'react-native-paper';
+import { Text, Button, TextInput, IconButton, ActivityIndicator, Dialog } from 'react-native-paper';
 import { Footer } from '../components/footer';
 import QRCodeScanner, { Event } from 'react-native-qrcode-scanner'
 import { ConfigContext } from '../contexts/config';
 import { useUser } from '../hooks/auth';
 import { DecryptCredentials, IoTCClient, IOTC_CONNECT, IOTC_LOGGING } from 'react-native-azure-iotcentral-client';
-import { Loading } from '../components/utils';
+import { Loading, ErrorDialog } from '../components/utils';
 import { getCredentialsFromNumericCode } from '../api/central';
 import QRCodeMask from '../components/qrcodeMask';
 import { Headline, Name } from '../components/typography';
@@ -46,18 +46,13 @@ export function Registration() {
         if (user == null) {
             throw new Error('User not logged in');
         }
-        setLoading(true);
         const creds = DecryptCredentials(data, user.id);
+        setLoading(true);
         // connect to IoTCentral before passing over
         let iotc = new IoTCClient(creds.deviceId, creds.scopeId, IOTC_CONNECT.DEVICE_KEY, creds.deviceKey);
         iotc.setModelId(creds.modelId);
         iotc.setLogging(IOTC_LOGGING.ALL);
-        try {
-            await iotc.connect();
-        }
-        catch (ex) {
-            throw ex;
-        }
+        await iotc.connect();
         dispatch({
             type: 'CONNECT',
             payload: iotc
@@ -73,6 +68,7 @@ export function Registration() {
 
     useEffect(() => {
         BackHandler.addEventListener('hardwareBackPress', onBack);
+        return () => { BackHandler.removeEventListener('hardwareBackPress', onBack) }
     }, [])
 
     if (!user || state.centralClient !== undefined) {
@@ -109,24 +105,39 @@ export function Registration() {
 
 function NumericCode(props: IRegistrationProps) {
     const [data, setData] = useState('');
-    return (<View style={{ flex: 2, ...style.container }}>
+    const [errorVisible, setErrorVisible] = useState(false);
+    const verify = async () => {
+        try {
+            const creds = await getCredentialsFromNumericCode(data)
+            await props.onVerify(creds);
+        }
+        catch (e) {
+            console.log('errr');
+            setErrorVisible(true);
+        }
+    };
+    return (<View style={{ flex: 3, ...style.container }}>
         <IconButton icon='arrow-left' onPress={props.onClose} size={30} style={{ marginTop: 40, alignSelf: 'flex-start' }} />
-        <View style={{ flex: 1, justifyContent: 'center' }}>
+        <View style={{ flex: 1, marginTop: 50 }}>
             <Text style={style.instructions}>{numeric.instructions}</Text>
         </View>
-        <View style={{ flex: 1 }}>
-            {/**
-             * Multiline set to true to keep input linked to the bottom line,
-             * otherwise it will take all space of flex container
-             */}
-            <TextInput placeholder={numeric.placeholder} value={data} multiline={true} onChangeText={setData}></TextInput>
-            <CPMButton mode='contained' style={style.button} onPress={async () => {
-                await props.onVerify(await getCredentialsFromNumericCode(data));
-            }}>{numeric.button}</CPMButton>
+        <View style={{ flex: 1, justifyContent: 'center', width: '80%' }}>
+            <TextInput placeholder={numeric.placeholder}
+                value={data}
+                onChangeText={setData}
+                numberOfLines={1}
+                onSubmitEditing={verify}></TextInput>
+            <CPMButton mode='contained' style={style.button} onPress={verify}>{numeric.button}</CPMButton>
         </View>
-        <SimulatedButton />
-        <Footer text={footerText} />
+        <View style={{ flex: 1 }}>
+            <SimulatedButton />
+            <Footer text={footerText} />
+        </View>
+        <ErrorDialog title='Error' text='Failed to parse inserted code. Try again or use a simulated connection' visible={errorVisible} setVisible={setErrorVisible} />
     </View>)
+    // return (<View style={{flex:1,justifyContent:'center'}}>
+    //     <TextInput placeholder={numeric.placeholder} value={data} onChangeText={setData} numberOfLines={1}></TextInput>
+    // </View>)
 }
 
 function QRCode(props: IRegistrationProps) {
@@ -138,19 +149,20 @@ function QRCode(props: IRegistrationProps) {
                 await props.onVerify(e.data);
             }}
                 customMarker={
-                    <View style={{ justifyContent: 'center' }}>
+                    <View>
                         <QRCodeMask />
                         <Text style={{ ...style.qrtext, ...style.center }}>Move closer to scan</Text>
                     </View>
                 }
                 showMarker={true}
-                cameraStyle={{ height: screen.height + 20, width: screen.width, ...(orientation === 'portrait' ? { top: -200 } : {}) }}
-                bottomContent={<>
+                cameraStyle={{ height: screen.height + 20, width: screen.width, ...(orientation === 'portrait' ? { top: -250 } : {}) }}
+                bottomContent={(orientation === 'portrait') ? < View style={{ flex: 1, marginTop: -30 }}>
                     <SimulatedButton textColor='white' />
-                </>}
+                    <Footer text={qrcodeFooterText} textColor='white' />
+                </View> : undefined}
+
             />
-            <Footer text={qrcodeFooterText} textColor='white' />
-        </View>
+        </View >
     )
 }
 
@@ -175,8 +187,7 @@ function SimulatedButton(props: { textColor?: string }) {
 const style = StyleSheet.create({
     container: {
         alignItems: 'center',
-        marginHorizontal: 30,
-        flex: 1
+        marginHorizontal: 30
     },
     title: {
         fontWeight: 'bold',
@@ -189,6 +200,7 @@ const style = StyleSheet.create({
     button: {
         alignSelf: 'center',
         width: 230,
+        height: 40,
         marginVertical: 20
     },
     center: {

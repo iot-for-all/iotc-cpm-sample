@@ -1,14 +1,32 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { View, processColor } from 'react-native';
-import { ActivityIndicator, Text } from 'react-native-paper';
+import { ActivityIndicator, Text, Portal, Dialog, Button } from 'react-native-paper';
 import { Detail } from './typography';
 import DefaultStyles from '../styles';
 import GetConnected from '../assets/home_connected_icon.svg'
+import { ReactDispatch } from '../types';
 
 export function Loading() {
     return (<View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
         <ActivityIndicator size='large' />
     </View>)
+}
+
+export function ErrorDialog(props: { visible: boolean, setVisible: ReactDispatch<boolean>, title: string, text: string }) {
+    const { visible, setVisible, text, title } = props;
+    return (<Portal>
+        <Dialog
+            visible={visible}
+            onDismiss={() => setVisible(false)}>
+            <Dialog.Title>{title}</Dialog.Title>
+            <Dialog.Content>
+                <Detail>{text}</Detail>
+            </Dialog.Content>
+            <Dialog.Actions>
+                <Button onPress={() => setVisible(false)}>OK</Button>
+            </Dialog.Actions>
+        </Dialog>
+    </Portal>)
 }
 
 export function GetConnectedHeader() {

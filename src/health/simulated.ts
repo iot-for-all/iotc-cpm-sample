@@ -47,6 +47,7 @@ export class SimulatedHealthManager implements IHealthhManager {
 export class SimulatedDevice implements IHealthDevice {
     public paired: boolean;
     public connected: boolean;
+    public simulated: boolean;
     public items: IHealthItem[] | undefined;
     /**
      * keeps track of the running simulated items.
@@ -56,6 +57,7 @@ export class SimulatedDevice implements IHealthDevice {
     private enabled: { [itemId: string]: number };
 
     constructor(public id: string, public name: string) {
+        this.simulated = true;
         this.paired = true;
         this.enabled = {};
         this.connected = false;

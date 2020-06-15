@@ -19,8 +19,8 @@ import { isSimulated } from '../hooks/bluetoothHooks';
 const SEARCH = 'SEARCH FOR DEVICES';
 const NOT_FOUND_TITLE = 'Device could not be located';
 const NOT_FOUND_TEXT = 'Make sure your bluetooth is enabled and available for pairing or use a simulated device.';
-const PAIRED = 'Paired';
-const NOT_PAIRED = 'Not paired';
+const SIMULATED = 'Simulated';
+const REAL = '';
 const MY_DEVICE = 'My devices';
 
 // on iOS some devices have no name so the uuid is shown. 
@@ -167,7 +167,7 @@ function Device(props: { device: IHealthDevice, connect: (deviceId: string) => P
                 <Name style={DefaultStyles.itemName}>{((device.name).length > MAX_NAME_LENGTH) ?
                     (((device.name).substring(0, MAX_NAME_LENGTH - 3)) + '...') :
                     device.name}</Name>
-                <Detail>{device.paired ? PAIRED : NOT_PAIRED}</Detail>
+                <Detail>{device.simulated ? SIMULATED : REAL}</Detail>
             </TouchableOpacity>
             <View style={{
                 flex: 1,
