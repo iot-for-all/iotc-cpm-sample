@@ -16,7 +16,7 @@ In Continuous Patient Monitoring scenarios, most medical wearable devices are Bl
 <tr>
 <td>
 <h3>Android</h3>
-<img src='assets/android.gif' style="height:500px"/>
+<img src='assets/android.gif' style="height:600px"/>
 </td>
 <td>
 <h3>iOS</h3>
@@ -38,7 +38,7 @@ The main features of the app are:
 The application is available for both Android and iOS.
 It can be run on emulators as well (Android Studio or Xcode required). The "simulated" options appearing during the application flow can be used to simulate the full experience since camera and bluetooth are not available in these environments.
 
-### Required Prerequisties
+### Required tools
 See [React Native Getting Started](https://facebook.github.io/react-native/docs/0.59/getting-started)
 and click on React Native CLI Quickstart for more detailed instructions.
 "Installing dependencies" is the section that explains
