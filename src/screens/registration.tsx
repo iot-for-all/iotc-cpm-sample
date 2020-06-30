@@ -143,7 +143,7 @@ function NumericCode(props: IRegistrationProps) {
 function QRCode(props: IRegistrationProps) {
     const { screen, orientation } = useScreenDimensions();
     return (
-        <View style={{ ...style.container, position: 'relative' }}>
+        <View style={{ ...style.container, flex: 2, position: 'relative'}}>
             <IconButton icon='arrow-left' onPress={props.onClose} size={30} color='white' style={{ position: 'absolute', alignSelf: 'flex-start', top: 40, zIndex: 2 }} />
             <QRCodeScanner onRead={async (e: Event) => {
                 await props.onVerify(e.data);
@@ -155,11 +155,12 @@ function QRCode(props: IRegistrationProps) {
                     </View>
                 }
                 showMarker={true}
-                cameraStyle={{ height: screen.height + 20, width: screen.width, ...(orientation === 'portrait' ? { top: -250 } : {}) }}
-                bottomContent={(orientation === 'portrait') ? < View style={{ flex: 1, marginTop: -30 }}>
+                topViewStyle={{ flex: 0, height: 0 }}
+                cameraStyle={{ height: screen.height + 20, width: screen.width }}
+                bottomContent={< View style={{ flex: 2, justifyContent: 'flex-end' }}>
                     <SimulatedButton textColor='white' />
                     <Footer text={qrcodeFooterText} textColor='white' />
-                </View> : undefined}
+                </View>}
 
             />
         </View >
@@ -170,7 +171,7 @@ function SimulatedButton(props: { textColor?: string }) {
     const { dispatch } = useContext(ConfigContext);
     const { screen, orientation } = useScreenDimensions();
 
-    const viewStyle: ViewStyle = orientation == 'portrait' ? { flex: 1 } : { position: 'absolute', top: screen.height / 2, right: 10 };
+    const viewStyle: ViewStyle = orientation == 'portrait' ? {} : {};
     return (
         <View style={{ alignItems: 'center', ...viewStyle }}>
             <Text style={props.textColor ? { color: props.textColor } : {}}>Don't have a code?</Text>
