@@ -59,9 +59,6 @@ export default function Devices() {
         setScanning(true);
         startScanProcess(state.healthManager as IHealthhManager, (device: IHealthDevice) => {
             if (focused.current) {
-                // check if it is simulated device and comes from the right manager or from an old instance just disabled
-                if (!device.simulated && state.healthManager instanceof SimulatedHealthManager)
-                    return;
                 setDevices(current => {
                     if (!current) {
                         return [];
@@ -235,6 +232,13 @@ function NotFound(props: { retry: () => void }) {
 function SimulatedButton(props: { refresh: () => void }) {
     const { state, dispatch } = useContext(ConfigContext);
     const simulated = isSimulated();
+
+    useEffect(() => {
+        if (state.healthManager instanceof SimulatedHealthManager) {
+            props.refresh(); // cleans up device list and start populating
+        }
+    }, [state.healthManager]);
+
     return (<CPMButton mode='contained' style={{ ...DefaultStyles.centeredButton, ...DefaultStyles.elevated, display: (simulated ? 'none' : 'flex') }} onPress={() => {
         const currentManager = state.healthManager;
         currentManager?.stopScan();
@@ -243,7 +247,6 @@ function SimulatedButton(props: { refresh: () => void }) {
             type: 'ACTIVATE',
             payload: simManager
         });
-        props.refresh(); // cleans up device list and start populating
     }}><Text>USE SIMULATED DEVICES</Text></CPMButton>)
 }
 
