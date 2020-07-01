@@ -14,6 +14,7 @@ import { ConfigContext } from '../contexts/config';
 import { bleToIoTCName } from '../utils';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { IconButton } from 'react-native-paper';
+import { DATA_AVAILABLE_EVENT } from '../health/ble';
 
 
 
@@ -39,30 +40,38 @@ export default function Insight() {
  * @param startTime Start time of the sampling. Must be the same value used as "since" param in the chart
  * @param setData Dispatch to update dataset with current sample
  */
-    function updateData(itemdata: ItemData) {
-        if (state.centralClient && state.centralClient.isConnected()) {
-            state.centralClient.sendTelemetry({ [bleToIoTCName(itemdata.itemId)]: itemdata.value });
+    function updateData(item: ItemData) {
+        let itemToProcess: ItemData[] = [item];
+        if ((typeof item.value) !== 'string' && (typeof item.value) !== 'number') {
+            // data is composite
+            itemToProcess = Object.keys(item.value).map(i => ({
+                itemId: `${item.itemId}.${i}`,
+                value: item.value[i],
+                itemName: `${item.itemName}.${i}`
+            }));
         }
+        itemToProcess.forEach(itemdata => {
 
-        setData(currentDataSet => {
-            let currentItemData = currentDataSet.dataSets.find(d => d.itemId === itemdata.itemId);
+            setData(currentDataSet => {
+                let currentItemData = currentDataSet.dataSets.find(d => d.itemId === itemdata.itemId);
 
-            // Current sample time (x-axis) is the difference between current timestamp e the start time of sampling
-            const newSample = { x: Date.now() - start, y: itemdata.value };
+                // Current sample time (x-axis) is the difference between current timestamp e the start time of sampling
+                const newSample = { x: Date.now() - start, y: itemdata.value };
 
-            if (!currentItemData) {
-                // current item is not in the dataset yet
-                return { ...currentDataSet, dataSets: [...currentDataSet.dataSets, ...[{ itemId: itemdata.itemId, values: [newSample], label: itemdata.itemName ? itemdata.itemName : itemdata.itemId, config: { color: getRandomColor() } }]] };
-            }
-            return {
-                ...currentDataSet,
-                dataSets: currentDataSet.dataSets.map(({ ...item }) => {
-                    if (item.itemId === itemdata.itemId && item.values) {
-                        item.values = [...item.values, ...[newSample]];
-                    }
-                    return item;
-                })
-            }
+                if (!currentItemData) {
+                    // current item is not in the dataset yet
+                    return { ...currentDataSet, dataSets: [...currentDataSet.dataSets, ...[{ itemId: itemdata.itemId, values: [newSample], label: itemdata.itemName ? itemdata.itemName : itemdata.itemId, config: { color: getRandomColor() } }]] };
+                }
+                return {
+                    ...currentDataSet,
+                    dataSets: currentDataSet.dataSets.map(({ ...item }) => {
+                        if (item.itemId === itemdata.itemId && item.values) {
+                            item.values = [...item.values, ...[newSample]];
+                        }
+                        return item;
+                    })
+                }
+            });
         });
 
     }
@@ -80,16 +89,14 @@ export default function Insight() {
                 }
             }
         });
-        /**
-         * Setup the update function in the context.
-         * This way the drawer can manage enabled/disabled items and "onDataAvailable" for them
-         */
-        dispatch({
-            type: 'UPDATE',
-            payload: updateData
-        })
         drawer.openDrawer();
     }, []);
+
+    useEffect(() => {
+        if (state.device) {
+            state.device.addListener(DATA_AVAILABLE_EVENT, updateData);
+        }
+    }, [state.device])
 
     /**
      * Manage component unmount. Remove all listeners
@@ -104,12 +111,6 @@ export default function Insight() {
                     type: 'DISCONNECT',
                     payload: null
                 });
-
-                // send 
-                dispatch({
-                    type: 'UPDATE',
-                    payload: null
-                })
             }
         });
         return unsubscribe;

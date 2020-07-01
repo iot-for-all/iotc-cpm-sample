@@ -35,12 +35,8 @@ type IHeaderAction = {
     payload: HeadersActions
 }
 
-type IInsightAction = {
-    type: 'UPDATE',
-    payload: ChartUpdateCallback | null
-}
 
-type IConfigAction = IDeviceAction | IHeaderAction | IHealthAction | IInsightAction | IIoTCAction;
+type IConfigAction = IDeviceAction | IHeaderAction | IHealthAction | IIoTCAction;
 
 export type IConfigContext = {
     state: IConfigState,
@@ -60,8 +56,6 @@ export const configReducer = (state: IConfigState, action: IConfigAction) => {
         case 'ACTIVATE':
         case 'UNACTIVATE':
             return { ...state, healthManager: action.payload };
-        case 'UPDATE':
-            return { ...state, insightUpdate: action.payload };
         default:
             return state;
     }
