@@ -8,7 +8,7 @@ import ApplicationBar from "../components/appbar";
 import { Detail } from "../components/typography";
 import { useUser } from "../hooks/auth";
 import { createStackNavigator, TransitionPresets } from '@react-navigation/stack';
-import ConnectedLogo from '../assets/home_connected_logo.svg'
+import ConnectedLogo from '../assets/home_connected_logo.svg';
 import Devices from './devices';
 import Insight from './insight';
 import { TouchableOpacity } from "react-native-gesture-handler";
@@ -81,9 +81,16 @@ export default function Main() {
     }
 
     return (<React.Fragment>
-        <Drawer.Navigator drawerContent={(navigator) => <InsightDrawer sourceSide='left' close={() => {
-            navigator.navigation.dispatch(DrawerActions.closeDrawer());
-        }} />}
+        <Drawer.Navigator drawerContent={({ state: navigationState, navigation }) => {
+            let currentScreen = '';
+            const stackState = navigationState.routes[0].state;
+            if (stackState && stackState.index) {
+                currentScreen = stackState.routes[stackState.index].name;
+            }
+            return (<InsightDrawer sourceSide='left' close={() => {
+                navigation.dispatch(DrawerActions.closeDrawer());
+            }} currentScreen={currentScreen} />)
+        }}
             edgeWidth={-100}
         >
             <Drawer.Screen name='Main' component={Navigation} />

@@ -2,23 +2,30 @@ import React, { useContext, useEffect, useRef } from 'react';
 import { SafeAreaView, View, StyleSheet, Image } from 'react-native';
 import { Name, Headline, Detail, Item } from './typography';
 import { Switch, IconButton, Divider } from 'react-native-paper';
-import { ChartUpdateCallback } from '../types';
+import { ChartUpdateCallback, NavigationProperty, CONSTANTS } from '../types';
 import { ConfigContext } from '../contexts/config';
 import { ScrollView } from 'react-native-gesture-handler';
 import { AppleHealthManager } from '../health/appleHealth';
 import { GoogleFitManager } from '../health/googleFit';
 import { isHealthService } from '../models';
+import { useNavigation } from '@react-navigation/native';
 
 interface DrawerProps {
     sourceSide: 'left' | 'right',
+    currentScreen: string,
     close(): void
 }
 
-
+/**
+ * This navigator doesn't actually navigate to any screen.
+ * It is used to have a drawer for chart management by levereging on what react-navigation already offers (gestures, styles...).
+ * @param props 
+ */
 export default function InsightDrawer(props: DrawerProps) {
     const { state, dispatch } = useContext(ConfigContext);
+    const { sourceSide, currentScreen } = props;
     const switchRefs = useRef<React.Component<{ refId: string, onValueChange: Function, value: boolean }>[]>([]);
-    const alignSelf = props.sourceSide === 'left' ? 'flex-start' : 'flex-end';
+    const alignSelf = sourceSide === 'left' ? 'flex-start' : 'flex-end';
     let icon: any = 'bluetooth';
 
     /**
@@ -58,7 +65,7 @@ export default function InsightDrawer(props: DrawerProps) {
         }
     }
 
-    if (!state.device || !state.device.items || !state.insightUpdate) {
+    if (!state.device || !state.device.items || currentScreen !== CONSTANTS.Screens.INSIGHT_SCREEN) {
         return (null);
     }
     return (
@@ -81,16 +88,9 @@ export default function InsightDrawer(props: DrawerProps) {
                 {state.device.items.map((item, index) => (
                     <View style={style.itemContainer} key={`view-${item.id}`}>
                         <Item style={{ width: 150 }}>{item.name}</Item>
-
                         {/* pass extra parameter to the ref in order to process and enable only valid ids */}
                         <Switch {...{ refId: `${item.parentId}/${item.id}` }} ref={element => (switchRefs.current = [...switchRefs.current, element as any])} value={item.enabled} onValueChange={async (current) => {
-                            await item.enable(current, (itemId, value, itemName) => {
-                                (state.insightUpdate as ChartUpdateCallback)({
-                                    itemId,
-                                    itemName,
-                                    value
-                                });
-                            });
+                            await item.enable(current);
                             // dispatch is needed to update state of device items
                             dispatch({
                                 type: 'REGISTER',
