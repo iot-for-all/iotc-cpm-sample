@@ -87,7 +87,7 @@ export default function Devices() {
         const dev = await state.healthManager.connect(deviceId);
         await dev.fetch();
         if (state.centralClient) {
-            dev.addListener(DATA_AVAILABLE_EVENT, sendTelemetryData.bind(null, state.centralClient, !dev.simulated));
+            dev.addListener(DATA_AVAILABLE_EVENT, sendTelemetryData.bind(null, state.centralClient, dev.type === 'real'));
         }
         dispatch({
             type: 'REGISTER',
@@ -170,7 +170,7 @@ function Device(props: { device: IHealthDevice, connect: (deviceId: string) => P
                 <Name style={DefaultStyles.itemName}>{((device.name).length > MAX_NAME_LENGTH) ?
                     (((device.name).substring(0, MAX_NAME_LENGTH - 3)) + '...') :
                     device.name}</Name>
-                <Detail>{device.simulated ? SIMULATED : REAL}</Detail>
+                <Detail>{device.type === 'simulated' ? SIMULATED : REAL}</Detail>
             </TouchableOpacity>
             <View style={{
                 flex: 1,

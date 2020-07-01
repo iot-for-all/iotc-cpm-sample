@@ -1,4 +1,4 @@
-import { IHealthhManager, IHealthDevice, IHealthItem, DataAvailableCallback } from "../models";
+import { IHealthhManager, IHealthDevice, IHealthItem, DataAvailableCallback, DeviceType } from "../models";
 import GoogleFit, { Scopes } from 'react-native-google-fit';
 import { camelToName, dottedToName, snakeToName } from "../utils";
 import { PermissionsAndroid } from "react-native";
@@ -66,6 +66,7 @@ export class GoogleFitDevice implements IHealthDevice {
     public paired: boolean;
     public connected: boolean;
     private eventEmitter: EventEmitter;
+    public type: DeviceType = 'platform';
 
     /**
     * keeps track of the subscribtions

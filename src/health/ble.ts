@@ -1,7 +1,7 @@
-import { IHealthhManager, IHealthDevice, IHealthItem } from "../models";
+import { IHealthhManager, IHealthDevice, IHealthItem, DeviceType } from "../models";
 import { BleManager as NativeManager, State, Device, Subscription, Characteristic } from 'react-native-ble-plx';
 import { Platform, PermissionsAndroid } from "react-native";
-import {EventEmitter} from 'events';
+import { EventEmitter } from 'events';
 
 
 export class UnsupportedError extends Error {
@@ -114,6 +114,7 @@ export class BleDevice implements IHealthDevice {
     public items: IHealthItem[] | undefined;
     public connected: boolean;
     private eventEmitter: EventEmitter
+    public type: DeviceType = 'real';
 
     /**
     * keeps track of the enabled notifications
@@ -149,7 +150,7 @@ export class BleDevice implements IHealthDevice {
             if (error || !characteristic) {
                 return;
             }
-            this.eventEmitter.emit(DATA_AVAILABLE_EVENT,  { itemId: item.id, value: this.getValue(characteristic), itemName: item.name });
+            this.eventEmitter.emit(DATA_AVAILABLE_EVENT, { itemId: item.id, value: this.getValue(characteristic), itemName: item.name });
         });
         item.enabled = true;
         return true;

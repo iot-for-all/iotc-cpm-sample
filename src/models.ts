@@ -6,17 +6,19 @@ export interface IHealthhManager {
     stopScan(): void,
     connect(deviceId: string): Promise<IHealthDevice>
 }
+
+export type DeviceType = 'real' | 'simulated' | 'platform';
 export interface IHealthDevice {
     name: string,
     id: string,
     paired: boolean,
     connected: boolean,
+    type: DeviceType,
     fetch(): Promise<void>,
     disconnect(): Promise<void>,
     items?: IHealthItem[],
     addListener(eventType: string, listener: (...args: any[]) => any, context?: any): void,
-    removeListener(eventType: string, listener: (...args: any[]) => any): void,
-    simulated?: boolean
+    removeListener(eventType: string, listener: (...args: any[]) => any): void
 }
 
 export interface IHealthItem {

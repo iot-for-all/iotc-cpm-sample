@@ -8,6 +8,8 @@ import { GoogleFitManager } from '../health/googleFit';
 import { Headline } from '../components/typography';
 import { useNavigation } from '@react-navigation/native';
 import { NavigationProperty, CONSTANTS } from '../types';
+import { DATA_AVAILABLE_EVENT } from '../health/ble';
+import { sendTelemetryData } from '../api/central';
 
 
 const Manager = Platform.select<typeof AppleHealthManager | typeof GoogleFitManager>({
@@ -26,6 +28,10 @@ export default function Providers() {
                     const dev = await (state.healthManager as IHealthhManager).connect('');
                     navigation.navigate(CONSTANTS.Screens.INSIGHT_SCREEN);
                     await dev.fetch();
+
+                    if (state.centralClient) {
+                        dev.addListener(DATA_AVAILABLE_EVENT, sendTelemetryData.bind(null, state.centralClient, false));
+                    }
                     dispatch({
                         type: 'REGISTER',
                         payload: dev

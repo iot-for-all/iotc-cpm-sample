@@ -7,14 +7,15 @@ import { Footer } from '../components/footer';
 import VitalsLogo from '../assets/vitals_logo.svg';
 import { Detail, Headline, Name } from '../components/typography';
 import { LineChart } from 'react-native-charts-wrapper';
-import { Loading, getRandomColor } from '../components/utils';
+import { Loading, getRandomColor, ErrorDialog } from '../components/utils';
 import { ReactDispatch, DrawerProperty, ExtendedLineData } from '../types';
 import { useNavigation } from '@react-navigation/native';
 import { ConfigContext } from '../contexts/config';
 import { bleToIoTCName } from '../utils';
 import { TouchableOpacity } from 'react-native-gesture-handler';
-import { IconButton } from 'react-native-paper';
+import { IconButton, Text } from 'react-native-paper';
 import { DATA_AVAILABLE_EVENT } from '../health/ble';
+import { useTimer } from '../hooks/common';
 
 
 
@@ -33,6 +34,8 @@ export default function Insight() {
         dataSets: []
     });
     const timestamp = Date.now() - start;
+    // const timeoutLoading = useTimer(6);
+    // const [showError, setShowError] = useState(true);
 
     /**
  * 
@@ -116,6 +119,11 @@ export default function Insight() {
         return unsubscribe;
     }, [drawer, state, dispatch])
 
+    // if (timeoutLoading) {
+    //     return (<View style={style.container}>
+    //         <ErrorDialog visible={showError} title='Error' text='Timeout getting data from provider.' setVisible={setShowError} />
+    //     </View>)
+    // }
     if (!state.device || data.dataSets.length === 0) {
         return (<Loading />)
     }

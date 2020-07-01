@@ -1,4 +1,4 @@
-import { IHealthDevice, IHealthItem, IHealthhManager, DataAvailableCallback } from "../models";
+import { IHealthDevice, IHealthItem, IHealthhManager, DataAvailableCallback, DeviceType } from "../models";
 import { EventEmitter } from "events";
 import { DATA_AVAILABLE_EVENT } from "./ble";
 
@@ -52,6 +52,7 @@ export class SimulatedDevice implements Omit<IHealthDevice, 'fetch'> {
     public simulated: boolean;
     public items: IHealthItem[] | undefined;
     private eventEmitter: EventEmitter;
+    public type: DeviceType = 'simulated';
     /**
      * keeps track of the running simulated items.
      * The value of each item represents the interval Id to stop simulation

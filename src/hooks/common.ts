@@ -47,3 +47,17 @@ export function useEnv() {
     console.log(JSON.stringify(variables));
     return variables;
 }
+
+/**
+ * Get a timer returning 'true' when triggers.
+ * @param seconds Number of seconds before timer triggers.
+ */
+export function useTimer(seconds: number) {
+    const [done, setDone] = useState(false);
+    useEffect(() => {
+        setTimeout(() => {
+            setDone(true);
+        }, seconds);
+    }, []);
+    return done;
+}

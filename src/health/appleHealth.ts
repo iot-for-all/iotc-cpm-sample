@@ -1,4 +1,4 @@
-import { IHealthhManager, IHealthDevice, IHealthItem, DataAvailableCallback } from "../models";
+import { IHealthhManager, IHealthDevice, IHealthItem, DataAvailableCallback, DeviceType } from "../models";
 import HealthKit, { HealthKitPermissions, RealTimeData } from 'rn-apple-healthkit';
 import { NativeAppEventEmitter } from "react-native";
 import { camelToName } from "../utils";
@@ -66,6 +66,7 @@ export class AppleHealthDevice implements IHealthDevice {
     public paired: boolean;
     public connected: boolean;
     private eventEmitter: EventEmitter;
+    public type: DeviceType = 'platform';
 
     /**
     * keeps track of the subscribtions
