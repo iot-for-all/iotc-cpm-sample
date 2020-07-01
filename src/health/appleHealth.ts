@@ -1,8 +1,10 @@
 import { IHealthhManager, IHealthDevice, IHealthItem, DataAvailableCallback } from "../models";
 import HealthKit, { HealthKitPermissions, RealTimeData } from 'rn-apple-healthkit';
-import { NativeAppEventEmitter, EmitterSubscription, TouchableOpacityBase } from "react-native";
+import { NativeAppEventEmitter } from "react-native";
 import { camelToName } from "../utils";
 import { HealthRealTimeData } from "../types";
+import { DATA_AVAILABLE_EVENT } from "./ble";
+import { EventEmitter } from 'events';
 
 
 const PERMS = HealthKit.Constants.Permissions;
@@ -31,6 +33,7 @@ export class AppleHealthManager implements IHealthhManager {
     constructor() {
         this.device = null;
     }
+
     startScan(onDeviceFound: (device: IHealthDevice) => void): void {
         // Use start scan to init
         requestPermissions().then(() => {
@@ -62,6 +65,7 @@ export class AppleHealthDevice implements IHealthDevice {
     public items: IHealthItem[] | undefined;
     public paired: boolean;
     public connected: boolean;
+    private eventEmitter: EventEmitter;
 
     /**
     * keeps track of the subscribtions
@@ -75,6 +79,7 @@ export class AppleHealthDevice implements IHealthDevice {
         this.paired = true;
         this.connected = false;
         this.enabled = {};
+        this.eventEmitter = new EventEmitter();
         NativeAppEventEmitter.addListener('change:steps', async (data) => {
             const value = await new Promise(r => HealthKit.getStepCount({}, (err, result) => r(result.value)));
             if (this.items) {
@@ -89,8 +94,15 @@ export class AppleHealthDevice implements IHealthDevice {
         })
     }
 
-    private async enableItem(item: IHealthItem, status: boolean, onDataAvailable?: DataAvailableCallback): Promise<boolean> {
-        if (status && onDataAvailable) {
+    addListener(eventType: string, listener: (...args: any[]) => any, context?: any) {
+        this.eventEmitter.addListener(eventType, listener)
+    }
+    removeListener(eventType: string, listener: (...args: any[]) => any) {
+        this.eventEmitter.removeListener(eventType, listener);
+    }
+
+    private async enableItem(item: IHealthItem, status: boolean): Promise<boolean> {
+        if (status) {
             if (this.enabled[item.id]) {
                 return true;
             }
@@ -144,7 +156,7 @@ export class AppleHealthDevice implements IHealthDevice {
             // sometimes setInterval gets typings from node instead of react-native
             this.enabled[item.id] = setInterval(() => {
                 if (item.value) {
-                    onDataAvailable(item.id, item.value, item.name);
+                    this.eventEmitter.emit(DATA_AVAILABLE_EVENT, { itemId: item.id, value: item.value, itemName: item.name });
                 }
             }, 5000);
             item.enabled = true;
@@ -167,8 +179,8 @@ export class AppleHealthDevice implements IHealthDevice {
             value: undefined
         }));
         fetchedItems.map(i => {
-            i.enable = function (this: AppleHealthDevice, status: boolean, onDataAvailable?: DataAvailableCallback) {
-                return this.enableItem(i, status, onDataAvailable);
+            i.enable = function (this: AppleHealthDevice, status: boolean) {
+                return this.enableItem(i, status);
             }.bind(this);
         }, this);
         this.items = fetchedItems;
@@ -187,6 +199,8 @@ export class AppleHealthDevice implements IHealthDevice {
             }, this);
             return Promise.resolve();
         }
+        // remove all data listeners
+        this.eventEmitter.removeAllListeners(DATA_AVAILABLE_EVENT);
     }
 
 }

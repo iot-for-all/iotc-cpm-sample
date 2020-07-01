@@ -3,6 +3,8 @@ import GoogleFit, { Scopes } from 'react-native-google-fit';
 import { camelToName, dottedToName, snakeToName } from "../utils";
 import { PermissionsAndroid } from "react-native";
 import { GoogleFitStepResult } from '../types';
+import { DATA_AVAILABLE_EVENT } from "./ble";
+import {EventEmitter} from 'events';
 
 const SCOPES = [Scopes.FITNESS_ACTIVITY_READ, Scopes.FITNESS_BODY_READ, Scopes.FITNESS_BODY_TEMPERATURE_READ, Scopes.FITNESS_BLOOD_PRESSURE_READ];
 enum GOOGLE_ITEMS {
@@ -63,6 +65,7 @@ export class GoogleFitDevice implements IHealthDevice {
     public items: IHealthItem[] | undefined;
     public paired: boolean;
     public connected: boolean;
+    private eventEmitter: EventEmitter;
 
     /**
     * keeps track of the subscribtions
@@ -76,6 +79,7 @@ export class GoogleFitDevice implements IHealthDevice {
         this.paired = true;
         this.connected = false;
         this.enabled = {};
+        this.eventEmitter = new EventEmitter();
         GoogleFit.observeSteps((data) => {
             if (this.enabled[GOOGLE_ITEMS.STEPS]) {
                 if (this.items) {
@@ -88,8 +92,15 @@ export class GoogleFitDevice implements IHealthDevice {
         });
     }
 
-    private async enableItem(item: IHealthItem, status: boolean, onDataAvailable?: DataAvailableCallback): Promise<boolean> {
-        if (status && onDataAvailable) {
+    addListener(eventType: string, listener: (...args: any[]) => any, context?: any) {
+        this.eventEmitter.addListener(eventType, listener)
+    }
+    removeListener(eventType: string, listener: (...args: any[]) => any) {
+        this.eventEmitter.removeListener(eventType, listener);
+    }
+
+    private async enableItem(item: IHealthItem, status: boolean): Promise<boolean> {
+        if (status) {
             if (this.enabled[item.id]) {
                 return true;
             }
@@ -98,7 +109,7 @@ export class GoogleFitDevice implements IHealthDevice {
             // sometimes setInterval gets typings from node instead of react-native
             this.enabled[item.id] = setInterval(async () => {
                 if (item.value) {
-                    onDataAvailable(item.id, item.value, item.name);
+                    this.eventEmitter.emit(DATA_AVAILABLE_EVENT,  { itemId: item.id, value: item.value, itemName: item.name });
                 }
                 else {
                     // get current value for the item
@@ -113,7 +124,7 @@ export class GoogleFitDevice implements IHealthDevice {
                                     item.value = result.steps[result.steps.length - 1].value;
                                 }
                             });
-                            onDataAvailable(item.id, item.value, item.name);
+                            this.eventEmitter.emit(DATA_AVAILABLE_EVENT,  { itemId: item.id, value: item.value, itemName: item.name });
                             break;
                         default:
                             break;
@@ -144,8 +155,8 @@ export class GoogleFitDevice implements IHealthDevice {
             }
         });
         fetchedItems.map(i => {
-            i.enable = function (this: GoogleFitDevice, status: boolean, onDataAvailable?: DataAvailableCallback) {
-                return this.enableItem(i, status, onDataAvailable);
+            i.enable = function (this: GoogleFitDevice, status: boolean) {
+                return this.enableItem(i, status);
             }.bind(this);
         }, this);
         this.items = fetchedItems;
@@ -164,6 +175,8 @@ export class GoogleFitDevice implements IHealthDevice {
             }, this);
             return Promise.resolve();
         }
+        // remove all data listeners
+        this.eventEmitter.removeAllListeners(DATA_AVAILABLE_EVENT);
     }
 
 }

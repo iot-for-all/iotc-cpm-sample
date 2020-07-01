@@ -10,11 +10,12 @@ import { useNavigation } from '@react-navigation/native';
 import { ConfigContext } from '../contexts/config';
 import { IHealthDevice, IHealthhManager } from '../models';
 import { Loading, GetConnectedHeader } from '../components/utils';
-import { BleManager } from '../health/ble';
+import { BleManager, DATA_AVAILABLE_EVENT } from '../health/ble';
 import { SimulatedHealthManager } from '../health/simulated';
 import { usePrevious } from '../hooks/common';
 import { CPMButton } from '../components/buttons';
 import { isSimulated } from '../hooks/bluetoothHooks';
+import { sendTelemetryData } from '../api/central';
 
 const SEARCH = 'SEARCH FOR DEVICES';
 const NOT_FOUND_TITLE = 'Device could not be located';
@@ -85,6 +86,9 @@ export default function Devices() {
         navigation.navigate(CONSTANTS.Screens.INSIGHT_SCREEN);
         const dev = await state.healthManager.connect(deviceId);
         await dev.fetch();
+        if (state.centralClient) {
+            dev.addListener(DATA_AVAILABLE_EVENT, sendTelemetryData.bind(null, state.centralClient, !dev.simulated));
+        }
         dispatch({
             type: 'REGISTER',
             payload: dev

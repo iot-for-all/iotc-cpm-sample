@@ -1,3 +1,5 @@
+import { EventEmitter, EmitterSubscription } from "react-native";
+
 export type DataAvailableCallback = (itemId: string, value: any, itemName?: string) => void;
 export interface IHealthhManager {
     startScan(onDeviceFound: (device: IHealthDevice) => void): void,
@@ -12,6 +14,8 @@ export interface IHealthDevice {
     fetch(): Promise<void>,
     disconnect(): Promise<void>,
     items?: IHealthItem[],
+    addListener(eventType: string, listener: (...args: any[]) => any, context?: any): void,
+    removeListener(eventType: string, listener: (...args: any[]) => any): void,
     simulated?: boolean
 }
 
@@ -21,7 +25,8 @@ export interface IHealthItem {
     parentId?: string,
     value: any | undefined,
     enabled: boolean,
-    enable(status: boolean, onDataAvailable?: DataAvailableCallback): Promise<boolean>
+    enable(status: boolean): Promise<boolean>
+    getData?(): any
 }
 
 export type ItemData = {

@@ -1,14 +1,16 @@
 import { IHealthDevice, IHealthItem, IHealthhManager, DataAvailableCallback } from "../models";
+import { EventEmitter } from "events";
+import { DATA_AVAILABLE_EVENT } from "./ble";
 
 export class SimulatedHealthManager implements IHealthhManager {
 
     private devices: IHealthDevice[] = [
-        new SimulatedDevice('00:11:22:33:44:55', 'Device1'),
-        new SimulatedDevice('A0:39:42:FD:BA:AB', 'Device2'),
-        new SimulatedDevice('0D:44:21:FF:37:AA', 'Device3'),
-        new SimulatedDevice('AB:8A:60:D3:83:16', 'Device4'),
-        new SimulatedDevice('CE:2B:88:1A:32:03', 'Device5'),
-        new SimulatedDevice('32:83:74:AA:CC:33', 'Device6'),
+        new SmartKneeBraceDevice('00:11:22:33:44:55', 'Smart Knee Brace 1'),
+        new SmartKneeBraceDevice('A0:39:42:FD:BA:AB', 'Smart Knee Brace 2'),
+        new SmartKneeBraceDevice('0D:44:21:FF:37:AA', 'Smart Knee Brace 3'),
+        new SmartVitalsPatchDevice('AB:8A:60:D3:83:16', 'Smart Vitals Patch 1'),
+        new SmartVitalsPatchDevice('CE:2B:88:1A:32:03', 'Smart Vitals Patch 2'),
+        new SmartVitalsPatchDevice('32:83:74:AA:CC:33', 'Smart Vitals Patch 3'),
     ];
 
     /**
@@ -44,11 +46,12 @@ export class SimulatedHealthManager implements IHealthhManager {
 
 }
 
-export class SimulatedDevice implements IHealthDevice {
+export class SimulatedDevice implements Omit<IHealthDevice, 'fetch'> {
     public paired: boolean;
     public connected: boolean;
     public simulated: boolean;
     public items: IHealthItem[] | undefined;
+    private eventEmitter: EventEmitter;
     /**
      * keeps track of the running simulated items.
      * The value of each item represents the interval Id to stop simulation
@@ -61,20 +64,28 @@ export class SimulatedDevice implements IHealthDevice {
         this.paired = true;
         this.enabled = {};
         this.connected = false;
+        this.eventEmitter = new EventEmitter();
+    }
+    addListener(eventType: string, listener: (...args: any[]) => any, context?: any) {
+        this.eventEmitter.addListener(eventType, listener)
+    }
+    removeListener(eventType: string, listener: (...args: any[]) => any) {
+        this.eventEmitter.removeListener(eventType, listener);
     }
 
-    private async enableItem(item: IHealthItem, status: boolean, onDataAvailable?: DataAvailableCallback): Promise<boolean> {
+    protected async enableItem(item: IHealthItem, status: boolean): Promise<boolean> {
         if (status) {
             if (this.enabled[item.id]) {
                 return true;
             }
             // @ts-ignore
             // sometimes setInterval gets typings from node instead of react-native
-            this.enabled[item.id] = setInterval(function () {
-                if (onDataAvailable) {
-                    onDataAvailable(item.id, Math.floor(Math.random() * 40), item.name);
-                }
-            }, 5000);
+            this.enabled[item.id] = setInterval(function (this: SimulatedDevice) {
+                // if (onDataAvailable) {
+                //     onDataAvailable(item.id, Math.floor(Math.random() * 40), item.name);
+                // }
+                this.eventEmitter.emit(DATA_AVAILABLE_EVENT, { itemId: item.id, value: (item.getData ? item.getData() : Math.floor(Math.random() * 40)), itemName: item.name });
+            }.bind(this), 5000);
             item.enabled = true;
             return true;
         }
@@ -88,7 +99,7 @@ export class SimulatedDevice implements IHealthDevice {
         }
     }
 
-    public async fetch() {
+    protected async fetch() {
         let fetchedItems: any[] = [{
             id: '00002A1C-0000-1000-8000-00805f9b34fb',
             name: 'Temperature',
@@ -111,8 +122,8 @@ export class SimulatedDevice implements IHealthDevice {
             value: undefined
         }];
         fetchedItems.map(i => {
-            i.enable = function (this: SimulatedDevice, status: boolean, onDataAvailable?: DataAvailableCallback) {
-                return this.enableItem(i, status, onDataAvailable);
+            i.enable = function (this: SimulatedDevice, status: boolean) {
+                return this.enableItem(i, status);
             }.bind(this);
         }, this);
         this.items = fetchedItems;
@@ -130,7 +141,106 @@ export class SimulatedDevice implements IHealthDevice {
             }, this);
             return Promise.resolve();
         }
+        this.eventEmitter.removeAllListeners(DATA_AVAILABLE_EVENT);
     }
 
+}
+
+export class SmartKneeBraceDevice extends SimulatedDevice implements IHealthDevice {
+    public async fetch() {
+        let fetchedItems: any[] = [
+            {
+                id: 'Acceleration',
+                name: 'Acceleration',
+                parentId: '00001809-0000-1000-8000-00805f9b34fb',
+                enabled: false,
+                value: undefined,
+                getData: function () {
+                    return {
+                        x: Math.floor(Math.random() * 40),
+                        y: Math.floor(Math.random() * 40),
+                        z: Math.floor(Math.random() * 40)
+                    }
+                }
+            },
+            {
+                id: 'RangeOfMotion',
+                parentId: '0000180D-0000-1000-8000-00805f9b34fb',
+                name: 'Range of motion',
+                enabled: false,
+                value: undefined,
+                getData: function () {
+                    return Math.floor(Math.random() * 40)
+                }
+            },
+            {
+                id: 'KneeBend',
+                name: 'Knee bend',
+                parentId: '00001810-0000-1000-8000-00805f9b34fb',
+                enabled: false,
+                value: undefined,
+                getData: function () {
+                    return Math.floor(Math.random() * 40)
+                }
+            }];
+        fetchedItems.map(i => {
+            i.enable = function (this: SmartKneeBraceDevice, status: boolean) {
+                return this.enableItem(i, status);
+            }.bind(this);
+        }, this);
+        this.items = fetchedItems;
+    }
+}
+
+
+export class SmartVitalsPatchDevice extends SimulatedDevice implements IHealthDevice {
+    public async fetch() {
+        let fetchedItems: any[] = [{
+            id: 'HeartRate',
+            name: 'Heart Rate',
+            parentId: '00001809-0000-1000-8000-00805f9b34fb',
+            enabled: false,
+            value: undefined,
+            getData: function () {
+                return Math.floor(Math.random() * 40)
+            }
+        },
+        {
+            id: 'RespiratoryRate',
+            parentId: '0000180D-0000-1000-8000-00805f9b34fb',
+            name: 'Respiratory Rate',
+            enabled: false,
+            value: undefined,
+            getData: function () {
+                return Math.floor(Math.random() * 40)
+            }
+        },
+        {
+            id: 'HeartRateVariability',
+            name: 'Heart rate variability',
+            parentId: '00001810-0000-1000-8000-00805f9b34fb',
+            enabled: false,
+            value: undefined,
+            getData: function () {
+                return Math.floor(Math.random() * 40)
+            }
+        },
+        {
+            id: 'BodyTemperature',
+            name: 'Body temperature',
+            parentId: '00001810-0000-1000-8000-00805f9b34fb',
+            enabled: false,
+            value: undefined,
+            getData: function () {
+                return Math.random() * 40
+            }
+        }];
+        fetchedItems.map(i => {
+            i.enable = function (this: SmartVitalsPatchDevice, status: boolean) {
+                return this.enableItem(i, status);
+            }.bind(this);
+        }, this);
+        this.items = fetchedItems;
+    }
 }
 
