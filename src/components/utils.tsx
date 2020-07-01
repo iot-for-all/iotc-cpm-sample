@@ -3,7 +3,7 @@ import { View, processColor } from 'react-native';
 import { ActivityIndicator, Text, Portal, Dialog, Button } from 'react-native-paper';
 import { Detail } from './typography';
 import DefaultStyles from '../styles';
-import GetConnected from '../assets/home_connected_icon.svg'
+import GetConnected from '../assets/home_connected_icon.svg';
 import { ReactDispatch } from '../types';
 
 export function Loading() {
