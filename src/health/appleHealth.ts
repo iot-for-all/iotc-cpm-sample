@@ -80,15 +80,20 @@ export class AppleHealthDevice implements IHealthDevice {
         this.connected = false;
         this.enabled = {};
         this.eventEmitter = new EventEmitter();
-        NativeAppEventEmitter.addListener('change:steps', async (data) => {
-            const value = await new Promise(r => HealthKit.getStepCount({}, (err, result) => r(result.value)));
-            if (this.items) {
-                let item = this.items.find(i => i.id === PERMS.StepCount);
-                if (item) {
-                    item.value = value;
+        NativeAppEventEmitter.addListener('change:steps', (data) => {
+            HealthKit.getStepCount({}, (err, result) => {
+                if (err) {
+                    console.log(`Error from Apple HealthKit:\n${(err as any).message}`);
+                    return;
                 }
-            }
-        })
+                if (this.items) {
+                    let item = this.items.find(i => i.id === PERMS.StepCount);
+                    if (item) {
+                        item.value = result.value;
+                    }
+                }
+            });
+        });
         NativeAppEventEmitter.addListener('observer', (data) => {
             console.log(`Observer: ${data}`);
         })
@@ -114,7 +119,20 @@ export class AppleHealthDevice implements IHealthDevice {
             switch (item.id) {
                 case PERMS.Steps:
                 case PERMS.StepCount:
-                    item.value = await new Promise(r => HealthKit.getStepCount({}, (err, result) => r(result.value)));
+                    try {
+                        item.value = await new Promise((resolve, reject) => HealthKit.getStepCount({}, (err, result) => {
+                            if (err) {
+                                reject(`Error from Apple HealthKit:\n${(err as any).message}`)
+                            }
+                            else {
+                                resolve(result.value);
+                            }
+                        }));
+                    }
+                    catch (e) {
+                        // steps not available for today. Let's put 0
+                        item.value = 0
+                    }
                     break;
                 case PERMS.HeartRate:
                     item.value = await new Promise(r => HealthKit.getHeartRateSamples({ startDate: startDate.toISOString() }, (err, result) => {
@@ -155,7 +173,7 @@ export class AppleHealthDevice implements IHealthDevice {
             // @ts-ignore
             // sometimes setInterval gets typings from node instead of react-native
             this.enabled[item.id] = setInterval(() => {
-                if (item.value) {
+                if (item.value != undefined || item.value != null) {
                     this.eventEmitter.emit(DATA_AVAILABLE_EVENT, { itemId: item.id, value: item.value, itemName: item.name });
                 }
             }, 5000);
