@@ -15,11 +15,7 @@
     "strict": true,
     "module": "commonjs",
     "target": "es2017",
-    "skipLibCheck": true,
-    "typeRoots": [
-      "src/typings",
-      "node_modules/@types"
-    ]
+    "skipLibCheck": true
   },
   "exclude": [
     "node_modules",
