@@ -1,4 +1,4 @@
-import { IHealthhManager, IHealthDevice, IHealthItem, DataAvailableCallback, DeviceType } from "../models";
+import { IHealthManager, IHealthDevice, IHealthItem, DataAvailableCallback, DeviceType } from "../models";
 import HealthKit, { HealthKitPermissions, RealTimeData } from 'rn-apple-healthkit';
 import { NativeAppEventEmitter } from "react-native";
 import { camelToName } from "../utils";
@@ -27,7 +27,7 @@ async function requestPermissions(): Promise<void> {
     });
 }
 
-export class AppleHealthManager implements IHealthhManager {
+export class AppleHealthManager implements IHealthManager {
 
     private device: IHealthDevice | null;
     constructor() {

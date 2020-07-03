@@ -6,13 +6,13 @@ import DefaultStyles from '../styles';
 import { Detail, Headline, Action, Name } from '../components/typography';
 import { NavigationProperty, CONSTANTS } from '../types';
 import { TouchableOpacity } from 'react-native-gesture-handler';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useIsFocused } from '@react-navigation/native';
 import { ConfigContext } from '../contexts/config';
-import { IHealthDevice, IHealthhManager } from '../models';
+import { IHealthDevice, IHealthManager } from '../models';
 import { Loading, GetConnectedHeader } from '../components/utils';
 import { BleManager, DATA_AVAILABLE_EVENT } from '../health/ble';
 import { SimulatedHealthManager } from '../health/simulated';
-import { usePrevious } from '../hooks/common';
+import { usePrevious, useHeaderTitle } from '../hooks/common';
 import { CPMButton } from '../components/buttons';
 import { isSimulated } from '../hooks/bluetoothHooks';
 import { sendTelemetryData } from '../api/central';
@@ -31,7 +31,7 @@ const MAX_NAME_LENGTH = 30;
 
 type ConnectFunction = (deviceId: string) => void
 
-function startScanProcess(manager: IHealthhManager, onDeviceFound: (device: IHealthDevice) => void, onStop: () => void) {
+function startScanProcess(manager: IHealthManager, onDeviceFound: (device: IHealthDevice) => void, onStop: () => void) {
     let timeout = 10000;
     manager.startScan(onDeviceFound);
     if (manager instanceof SimulatedHealthManager) {
@@ -52,14 +52,17 @@ export default function Devices() {
     const [devices, setDevices] = useState<IHealthDevice[] | null>(null);
     const simulated = isSimulated();
 
+    useHeaderTitle('Devices');
 
-    const focused = useRef(true);
+    // If true, scan is in progress and focused, component is mounted and devices can be added.
+    // If false, scanning asynchronous task will not add devices to the component as is unmounted
+    const scanInProgress = useRef(true);
 
     const refresh = function () {
         setDevices([]);
         setScanning(true);
-        startScanProcess(state.healthManager as IHealthhManager, (device: IHealthDevice) => {
-            if (focused.current) {
+        startScanProcess(state.healthManager as IHealthManager, (device: IHealthDevice) => {
+            if (scanInProgress.current) {
                 setDevices(current => {
                     if (!current) {
                         return [];
@@ -71,7 +74,7 @@ export default function Devices() {
                 });
             }
         }, () => {
-            if (focused.current) {
+            if (scanInProgress.current) {
                 setScanning(false);
             }
         });
@@ -82,20 +85,21 @@ export default function Devices() {
             console.log(`No Health manager available`);
             return;
         }
-        // connect and change screen
-        navigation.navigate(CONSTANTS.Screens.INSIGHT_SCREEN);
         const dev = await state.healthManager.connect(deviceId);
         await dev.fetch();
         if (state.centralClient) {
             dev.addListener(DATA_AVAILABLE_EVENT, sendTelemetryData.bind(null, state.centralClient, dev.type === 'real'));
         }
         dispatch({
-            type: 'REGISTER',
+            type: 'HEALTH_CONNECT',
             payload: dev
         })
     }
 
-
+    /**
+     * Run when screen mounts. Initializes the HealthManager
+     *
+     */
     useEffect(() => {
         const initManager = async () => {
             if (state.healthManager) {
@@ -122,12 +126,19 @@ export default function Devices() {
         initManager();
     }, [state.healthManager]);
 
+    useEffect(() => {
+        if (state.device) {
+            // device has been selected. navigate to insight
+            navigation.navigate(CONSTANTS.Screens.INSIGHT_SCREEN);
+        }
+    }, [state.device])
+
     /**
-     * cleanup
+     * cleanup function. run when going back to previous screen
      */
     useEffect(() => {
         const resetManager = () => {
-            focused.current = false;
+            scanInProgress.current = false;
             dispatch({
                 type: 'UNACTIVATE',
                 payload: null
@@ -135,7 +146,6 @@ export default function Devices() {
         };
         return resetManager;
     }, [dispatch]);
-
 
     if (!state.healthManager || !devices) {
         return <Loading />

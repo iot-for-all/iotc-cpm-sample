@@ -1,4 +1,4 @@
-import { IHealthhManager, IHealthDevice, IHealthItem, DataAvailableCallback, DeviceType } from "../models";
+import { IHealthManager, IHealthDevice, IHealthItem, DataAvailableCallback, DeviceType } from "../models";
 import GoogleFit, { Scopes } from 'react-native-google-fit';
 import { camelToName, dottedToName, snakeToName } from "../utils";
 import { PermissionsAndroid } from "react-native";
@@ -12,7 +12,7 @@ enum GOOGLE_ITEMS {
 }
 const GOOGLE_PREFIX = 'https://www.googleapis.com/auth/fitness.';
 
-export class GoogleFitManager implements IHealthhManager {
+export class GoogleFitManager implements IHealthManager {
 
     private device: IHealthDevice | null;
     constructor() {

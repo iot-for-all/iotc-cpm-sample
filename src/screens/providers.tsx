@@ -3,7 +3,7 @@ import { ConfigContext } from '../contexts/config';
 import { Loading } from '../components/utils';
 import { Platform, View } from 'react-native';
 import { AppleHealthManager } from '../health/appleHealth';
-import { IHealthhManager, IHealthDevice } from '../models';
+import { IHealthManager, IHealthDevice } from '../models';
 import { GoogleFitManager } from '../health/googleFit';
 import { Headline } from '../components/typography';
 import { useNavigation } from '@react-navigation/native';
@@ -25,7 +25,7 @@ export default function Providers() {
         const initManager = async () => {
             if (state.healthManager) {
                 state.healthManager.startScan(async (device) => {
-                    const dev = await (state.healthManager as IHealthhManager).connect('');
+                    const dev = await (state.healthManager as IHealthManager).connect('');
                     navigation.navigate(CONSTANTS.Screens.INSIGHT_SCREEN);
                     await dev.fetch();
 
@@ -33,7 +33,7 @@ export default function Providers() {
                         dev.addListener(DATA_AVAILABLE_EVENT, sendTelemetryData.bind(null, state.centralClient, false));
                     }
                     dispatch({
-                        type: 'REGISTER',
+                        type: 'HEALTH_CONNECT',
                         payload: dev
                     });
                 });

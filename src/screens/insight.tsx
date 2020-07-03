@@ -1,6 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { View, StyleSheet, SafeAreaView } from 'react-native';
-import ApplicationBar from '../components/appbar';
+import { View, StyleSheet } from 'react-native';
 import { ItemData } from '../models';
 import DefaultStyles from '../styles';
 import { Footer } from '../components/footer';
@@ -15,7 +14,8 @@ import { bleToIoTCName } from '../utils';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { IconButton, Text } from 'react-native-paper';
 import { DATA_AVAILABLE_EVENT } from '../health/ble';
-import { useTimer } from '../hooks/common';
+import { useHeaderTitle } from '../hooks/common';
+import { UIContext } from '../contexts/ui';
 
 
 
@@ -28,12 +28,16 @@ const footer = 'This view is showing real-time data from the paired device or Go
 
 export default function Insight() {
     const { state, dispatch } = useContext(ConfigContext);
+    const { dispatch: uiDispatch } = useContext(UIContext);
     const [start, setStart] = useState<number>(Date.now());
     const drawer = useNavigation<DrawerProperty>();
     const [data, setData] = useState<ExtendedLineData>({
         dataSets: []
     });
     const timestamp = Date.now() - start;
+
+    useHeaderTitle('Insight');
+
     // const timeoutLoading = useTimer(6);
     // const [showError, setShowError] = useState(true);
 
@@ -84,7 +88,7 @@ export default function Insight() {
         drawer.setParams({
             title: 'Health Insight'
         });
-        dispatch({
+        uiDispatch({
             type: 'SET',
             payload: {
                 right: () => {
@@ -111,7 +115,7 @@ export default function Insight() {
 
                 // send disconnection event
                 dispatch({
-                    type: 'DISCONNECT',
+                    type: 'HEALTH_DISCONNECT',
                     payload: null
                 });
             }

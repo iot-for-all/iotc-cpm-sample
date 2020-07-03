@@ -1,8 +1,8 @@
-import { IHealthDevice, IHealthItem, IHealthhManager, DataAvailableCallback, DeviceType } from "../models";
+import { IHealthDevice, IHealthItem, IHealthManager, DataAvailableCallback, DeviceType } from "../models";
 import { EventEmitter } from "events";
 import { DATA_AVAILABLE_EVENT } from "./ble";
 
-export class SimulatedHealthManager implements IHealthhManager {
+export class SimulatedHealthManager implements IHealthManager {
 
     private devices: IHealthDevice[] = [
         new SmartKneeBraceDevice('00:11:22:33:44:55', 'Smart Knee Brace 1'),

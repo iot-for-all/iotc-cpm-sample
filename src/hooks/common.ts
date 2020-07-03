@@ -1,4 +1,5 @@
 import { useRef, useEffect, useState } from "react";
+import { useIsFocused, useNavigation } from "@react-navigation/native";
 
 export type EnvironmentVariables = {
     GoogleFit?: boolean,
@@ -44,7 +45,6 @@ export function useEnv() {
         readEnv();
     }, []);
 
-    console.log(JSON.stringify(variables));
     return variables;
 }
 
@@ -60,4 +60,18 @@ export function useTimer(seconds: number) {
         }, seconds);
     }, []);
     return done;
+}
+
+
+export function useHeaderTitle(title: string): void {
+    const isFocused = useIsFocused();
+    const navigation = useNavigation();
+    const counter = useRef(0);
+
+    useEffect(() => {
+        if (isFocused) {
+            counter.current++;
+            navigation.setParams({ title })
+        }
+    }, [isFocused]);
 }

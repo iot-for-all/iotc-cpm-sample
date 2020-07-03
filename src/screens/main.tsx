@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useState, memo } from "react";
 import { ConfigContext } from "../contexts/config";
 import { View, StyleSheet, Platform } from "react-native";
 import { Text, IconButton } from "react-native-paper";
@@ -12,13 +12,14 @@ import ConnectedLogo from '../assets/home_connected_logo.svg';
 import Devices from './devices';
 import Insight from './insight';
 import { TouchableOpacity } from "react-native-gesture-handler";
-import { useNavigation, DrawerActions } from "@react-navigation/native";
-import { CONSTANTS, NavigationScreens } from "../types";
+import { useNavigation, DrawerActions, Route } from "@react-navigation/native";
+import { CONSTANTS, NavigationScreens, NavigationParams, RouteParams } from "../types";
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import InsightDrawer from '../components/insightDrawer';
 import Providers from "./providers";
 import { GetConnectedHeader } from "../components/utils";
-import { useEnv } from "../hooks/common";
+import { useEnv, useHeaderTitle } from "../hooks/common";
+import { Scene } from "@react-navigation/stack/lib/typescript/src/types";
 
 
 const instructions = 'Start seeing insights by pairing a bluetooth device or syncing data from your health app.'
@@ -36,16 +37,25 @@ const headerMode = Platform.select<'screen' | 'float'>({
 
 const Stack = createStackNavigator<NavigationScreens>();
 const Drawer = createDrawerNavigator();
-
-
+const getTitle = function (scene: Scene<RouteParams<string>>) {
+    if (scene.route.params) {
+        const routeTitle = (scene.route.params as NavigationParams).title!;
+        if (routeTitle) {
+            return routeTitle;
+        }
+    }
+    return scene.route.name;
+}
 
 function Navigation() {
     return (
         <Stack.Navigator initialRouteName={CONSTANTS.Screens.HOME_SCREEN} headerMode={headerMode}
             screenOptions={{
-                header: ({ scene, previous, navigation }) => (
-                    <ApplicationBar navigation={navigation} previous={previous} scene={scene} />
-                ),
+                header: function ({ scene, previous, navigation }) {
+                    return (
+                        <ApplicationBar goBack={navigation.pop} hasPrevious={previous != undefined} title={getTitle(scene)} />
+                    )
+                },
                 transitionSpec: {
                     open: TransitionPresets.DefaultTransition.transitionSpec.open,
                     close: {
@@ -99,6 +109,9 @@ export default function Main() {
 }
 
 function Home() {
+    const navigation = useNavigation();
+    useHeaderTitle('Home');
+
     return (<View style={{ flex: 4 }}>
         <View style={{ ...DefaultStyles.elevated, ...style.box }}>
             <GetConnectedHeader />
@@ -110,6 +123,7 @@ function Home() {
     </View>);
 }
 
+
 function Options() {
     const navigation = useNavigation();
     const envs = useEnv();
@@ -117,6 +131,7 @@ function Options() {
     return (<View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', padding: 20, marginTop: 10 }}>
         <TouchableOpacity style={{ flexDirection: 'row', alignItems: 'center' }} onPress={() => {
             navigation.navigate(CONSTANTS.Screens.DEVICES_SCREEN);
+            // Custom title can be set in this way. However, this will not be reverted when going back
             navigation.setParams({ title: 'Devices' });
         }}>
             <IconButton icon='bluetooth' size={30} style={{ marginRight: -5 }} />
