@@ -63,7 +63,8 @@ yarn install ( or 'npm install' if using npm)
 
 ```
 
-## Test on device/emulator
+## Quickly run on device/emulator
+This sample is ready to run to quickly have a demonstration of its features without any customizations. However some tweaks may be required to read data from particular devices (see [Data Format](#data-format)).
 
 ### From the Command Line
 From the root folder, run `yarn run android` or  `yarn run ios`.
@@ -80,7 +81,21 @@ From the root folder, run `yarn run android` or  `yarn run ios`.
 2. Generate a QRCode or a numeric code for an IoTCentral device using the credentials portal.
 3. Scan the obtained QRCode or insert the numeric code.
 4. Select operation (scan BLE devices, Google Fit or Apple Health).
-5. Data is available in the chart. Items can be enabled or disabled through the sync option menu.
+5. Data is available in the chart. Items can be enabled or disabled through the sync option menu. (see [Insight docs](docs/INSIGHT.md))
+
+
+## Data Format
+By default, the application only converts raw data to standard integers or floating point number using usual conversion from bytes.
+
+>e.g. 
+Device sends 1 byte with value 0x32. This will result in a telemetry field with value 50.
+
+However some manufacturers have custom data encoding mainly to include extra information when targeting propertary platforms.
+
+>e.g. 
+Device sends 3 byte for an integer. The first 2 bytes represent a timestamp and the 3rd one is the real value.
+
+More details and implementations suggestion [here](docs/DATA_FORMAT.md)
 
 
 ## Disable health providers
@@ -124,8 +139,13 @@ The capability is enabled by default. If you want to disable Health Kit feature,
 ## Connect to Azure IoT Central
 When not running in simulated mode, the mobile application connects to an Azure IoTCentral application and sends telemetry message to specific device. After login you can choose to authenticate through a QRCode or a numeric code.
 
-### Prepare device model
-A compatible device model must be created in the Azure IoT Central application in order to see data in the dashboards.
+Simulated devices available in this sample, map models in the IoT Central CPM template.
+CPM applications ca be created from the IoT Central home page or directly from [https://apps.azureiotcentral.com/build/new/continuous-patient-monitoring](https://apps.azureiotcentral.com/build/new/continuous-patient-monitoring)
+
+If you need to define your own custom model read basic instructions at [https://docs.microsoft.com/en-us/azure/iot-central/core/howto-set-up-template](https://docs.microsoft.com/en-us/azure/iot-central/core/howto-set-up-template), and follow details below for preparing a compatible model.
+
+### Prepare a device model
+A compatible device model must be created in the Azure IoT Central application in order to see real devices data in the dashboards.
 For each bluetooth item, the telemetry Id to use in model has the following syntax:
 
 `ble<ITEM_ID>`
@@ -136,12 +156,13 @@ where *ITEM_ID* is the UUID of the bluetooth characteristic to read. It can't co
 UUID="00002A35-0000-1000-8000-00805f9b34fb"<br/>
 IOTC_FIELD="ble00002A3500001000800000805f9b34fb"
 
-A sample model definition is available for simulated devices [here](assets/HealthDevice.json). You can directly import it into the IoT Central application and run with simulated BLE devices or use it as a reference. 
+A sample model definition is available [here](assets/HealthDevice.json). You can directly import it into the IoT Central application and run with simulated BLE devices or use it as a reference. 
 
 ### Generate credentials
 User can generate both a QRCode and a numeric code to be used for connecting to IoTCentral.
 Just go to http://cpm-cred-server.azurewebsites.net and generate codes by inserting IoT Central data in the form.
 The patientId must be the equal to the password used to login into the mobile app since it works as encryption key for QRCode data.
+
 
 
 ## Troubleshooting
