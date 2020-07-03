@@ -1,7 +1,7 @@
 import { EventEmitter, EmitterSubscription } from "react-native";
 
 export type DataAvailableCallback = (itemId: string, value: any, itemName?: string) => void;
-export interface IHealthhManager {
+export interface IHealthManager {
     startScan(onDeviceFound: (device: IHealthDevice) => void): void,
     stopScan(): void,
     connect(deviceId: string): Promise<IHealthDevice>

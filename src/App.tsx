@@ -8,6 +8,7 @@ import { StatusBar } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import Main from './screens/main';
 import AuthProvider from './contexts/auth';
+import UIProvider from './contexts/ui';
 
 enableScreens();
 
@@ -56,12 +57,14 @@ export default function App() {
         <PaperProvider theme={theme}>
             <AuthProvider>
                 <ConfigProvider>
-                    <NavigationContainer>
-                        <StatusBar backgroundColor='#00B1FF' />
-                        <Login />
-                        <Registration />
-                        <Main />
-                    </NavigationContainer>
+                    <UIProvider>
+                        <NavigationContainer>
+                            <StatusBar backgroundColor='#00B1FF' />
+                            <Login />
+                            <Registration />
+                            <Main />
+                        </NavigationContainer>
+                    </UIProvider>
                 </ConfigProvider>
             </AuthProvider>
         </PaperProvider>)

@@ -1,44 +1,37 @@
-import React, { useContext } from 'react';
+import React, { useContext, memo, useRef } from 'react';
 import { Appbar } from 'react-native-paper';
 import { Platform } from 'react-native';
-import { Route } from '@react-navigation/routers';
-import { Scene } from '@react-navigation/stack/lib/typescript/src/types';
-import { NavigationProperty, RouteParams } from '../types';
-import { ConfigContext } from '../contexts/config';
+import { UIContext } from '../contexts/ui';
 
 export interface IAppBarProps {
-    scene?: Scene<RouteParams<string>>,
-    previous?: Scene<RouteParams<string>>,
-    navigation: NavigationProperty
+    title: string,
+    hasPrevious?: boolean,
+    goBack: (count?: number) => void
 }
 
-export default function ApplicationBar(props: IAppBarProps) {
-    const { scene, previous, navigation } = props;
-    const { state: configState, dispatch: configDispatch } = useContext(ConfigContext);
+const ApplicationBar = memo(function (props: IAppBarProps) {
+    const { title, hasPrevious, goBack } = props;
+    const { state: uiState } = useContext(UIContext);
     let leftIcon = 'menu';
-    let leftAction = configState.headersActions?.left;
-    let rightAction = configState.headersActions?.right;
-    let title = scene?.route.name;
-
-    if (previous) {
+    let leftAction = uiState.headersActions?.left;
+    let rightAction = uiState.headersActions?.right;
+    if (hasPrevious) {
         leftIcon = 'arrow-left';
         leftAction = function () {
-            navigation.pop();
+            goBack();
         };
     }
-    if (scene && scene.route.params) {
-        title = scene.route.params.title;
-    }
-
     const rightIcon = Platform.select({
         android: 'dots-vertical',
         ios: 'dots-horizontal'
     }) as string;
-
 
     return (<Appbar.Header>
         <Appbar.Action icon={leftIcon} onPress={leftAction} />
         <Appbar.Content title={title} />
         <Appbar.Action icon={rightIcon} onPress={rightAction} />
     </Appbar.Header>)
-}
+});
+
+
+export default ApplicationBar

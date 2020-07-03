@@ -1,18 +1,13 @@
 import React, { useReducer } from "react";
 import { IIoTCClient } from "react-native-azure-iotcentral-client";
-import { IHealthhManager, IHealthDevice } from "../models";
+import { IHealthManager, IHealthDevice } from "../models";
 import { ChartUpdateCallback } from "../types";
 
-interface HeadersActions {
-    left?(): void,
-    right?(): void
-}
 
 export interface IConfigState {
     device: IHealthDevice | null,
     centralClient: IIoTCClient | null | undefined,
-    healthManager: IHealthhManager | null,
-    headersActions: HeadersActions | null,
+    healthManager: IHealthManager | null,
     insightUpdate: ChartUpdateCallback | null
 }
 
@@ -22,21 +17,16 @@ type IIoTCAction = {
 }
 type IHealthAction = {
     type: 'ACTIVATE' | 'UNACTIVATE',
-    payload: IHealthhManager | null
+    payload: IHealthManager | null
 }
 
 type IDeviceAction = {
-    type: 'REGISTER' | 'UNREGISTER',
+    type: 'HEALTH_CONNECT' | 'HEALTH_DISCONNECT',
     payload: IHealthDevice | null
 }
 
-type IHeaderAction = {
-    type: 'SET',
-    payload: HeadersActions
-}
 
-
-type IConfigAction = IDeviceAction | IHeaderAction | IHealthAction | IIoTCAction;
+type IConfigAction = IDeviceAction | IHealthAction | IIoTCAction;
 
 export type IConfigContext = {
     state: IConfigState,
@@ -48,11 +38,9 @@ export const configReducer = (state: IConfigState, action: IConfigAction) => {
         case 'CONNECT':
         case 'DISCONNECT':
             return { ...state, centralClient: action.payload }
-        case 'REGISTER':
-        case 'UNREGISTER':
+        case 'HEALTH_CONNECT':
+        case 'HEALTH_DISCONNECT':
             return { ...state, device: action.payload };
-        case 'SET':
-            return { ...state, headersActions: { ...state.headersActions, ...action.payload } };
         case 'ACTIVATE':
         case 'UNACTIVATE':
             return { ...state, healthManager: action.payload };
@@ -65,7 +53,6 @@ export const configReducer = (state: IConfigState, action: IConfigAction) => {
 const initialState: IConfigState = {
     device: null,
     centralClient: undefined,
-    headersActions: null,
     healthManager: null,
     insightUpdate: null
 }

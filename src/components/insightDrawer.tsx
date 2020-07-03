@@ -33,7 +33,10 @@ export default function InsightDrawer(props: DrawerProps) {
      * since we're storing the refs in array, items gets appended. cleaning the array with the latest refs only
      */
     useEffect(() => {
-        if (state.device && state.device.items && switchRefs.current.length > 0) {
+        if (!state.device) {
+            return;
+        }
+        if (state.device.items && switchRefs.current.length > 0) {
             switchRefs.current = switchRefs.current.slice(Math.max(switchRefs.current.length - state.device.items.length, 1));
         }
         switchRefs.current.forEach(switchEl => {
@@ -93,7 +96,7 @@ export default function InsightDrawer(props: DrawerProps) {
                             await item.enable(current);
                             // dispatch is needed to update state of device items
                             dispatch({
-                                type: 'REGISTER',
+                                type: 'HEALTH_CONNECT',
                                 payload: state.device
                             });
                         }} />
