@@ -26,5 +26,5 @@ ManufacturerMap.addManufacturer('MyDevice', ['0000180f-0000-1000-8000-00805f9b34
 
 The BleManager will create specific device instances based on available services. A list of service ids must be provided to the Manufacturers Map in order to create the right device instance.
 
-However multiple devices can provide the same service with different data format. To overcome this issue just create one custom virtual device and put separation logic into the _getValue_ function.
+However multiple devices can provide the same service with different data format. To overcome this issue just create one custom virtual device and put logic into the _getValue_ function.
 

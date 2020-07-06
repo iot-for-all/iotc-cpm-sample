@@ -83,6 +83,8 @@ From the root folder, run `yarn run android` or  `yarn run ios`.
 4. Select operation (scan BLE devices, Google Fit or Apple Health).
 5. Data is available in the chart. Items can be enabled or disabled through the sync option menu. (see [Insight docs](docs/INSIGHT.md))
 
+More details available in the walkthrough documentation. (see [Walkthrough](docs/WALKTHROUGH.md))
+
 
 ## Data Format
 By default, the application only converts raw data to standard integers or floating point number using usual conversion from bytes.
