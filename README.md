@@ -81,9 +81,9 @@ From the root folder, run `yarn run android` or  `yarn run ios`.
 2. Generate a QRCode or a numeric code for an IoTCentral device using the credentials portal.
 3. Scan the obtained QRCode or insert the numeric code.
 4. Select operation (scan BLE devices, Google Fit or Apple Health).
-5. Data is available in the chart. Items can be enabled or disabled through the sync option menu. (see [Insight docs](docs/INSIGHT.md))
+5. Data is available in the chart. Items can be enabled or disabled through the sync option menu. (see [Insight docs](docs/insight.md))
 
-More details available in the walkthrough documentation. (see [Walkthrough](docs/WALKTHROUGH.md))
+More details available in the walkthrough documentation. (see [Walkthrough](docs/walkthrough.md))
 
 
 ## Data Format
@@ -97,7 +97,7 @@ However some manufacturers have custom data encoding mainly to include extra inf
 >e.g. 
 Device sends 3 byte for an integer. The first 2 bytes represent a timestamp and the 3rd one is the real value.
 
-More details and implementations suggestion [here](docs/DATA_FORMAT.md)
+More details and implementations suggestion [here](docs/data_format.md)
 
 
 ## Disable health providers
