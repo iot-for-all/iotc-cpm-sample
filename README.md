@@ -163,7 +163,9 @@ A sample model definition is available [here](assets/HealthDevice.json). You can
 ### Generate credentials
 User can generate both a QRCode and a numeric code to be used for connecting to IoTCentral.
 Just go to http://cpm-cred-server.azurewebsites.net and generate codes by inserting IoT Central data in the form.
-The patientId must be the equal to the password used to login into the mobile app since it works as encryption key for QRCode data.
+The encryption key must be the equal to the password specified during login into the mobile app since it is used to secure QRCode data.
+
+More details [here](docs/credentials.md).
 
 
 
