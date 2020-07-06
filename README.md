@@ -12,18 +12,9 @@ master: [![Build status](https://build.appcenter.ms/v0.1/apps/1148f61e-3a5b-479b
 ## What is this?
 In Continuous Patient Monitoring scenarios, most medical wearable devices are Bluetooth Low Energy (BLE) devices, which means they need a gateway in order to connect and send data to IoT Central. This phone app can act as that gateway, and would be used by a patient who has no access to or knowledge of Azure IoT Central.
 
-<table>
-<tr>
-<td>
-<h3>Android</h3>
-<img src='assets/android.gif' style="height:600px"/>
-</td>
-<td>
-<h3>iOS</h3>
-<img src='assets/ios.gif' style="height:500px"/>
-</td>
-</tr>
-</table>
+Android                    |  iOS
+:-------------------------:|:-------------------------:
+![](./assets/android.gif)  |  ![](./assets/ios.gif)
 
 ## Features
 The main features of the app are:
