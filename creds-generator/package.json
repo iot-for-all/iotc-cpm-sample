@@ -1,0 +1,21 @@
+{
+  "name": "creds-generator",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "watch": "./node_modules/.bin/tsc -w",
+    "build": "./node_modules/.bin/tsc",
+    "live-server": "./node_modules/.bin/live-server"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/react": "^16.9.41",
+    "@types/react-dom": "^16.9.8",
+    "csstype": "^2.6.11",
+    "live-server": "^1.2.1"
+  },
+  "dependencies": {}
+}
