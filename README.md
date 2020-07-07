@@ -149,7 +149,12 @@ where *ITEM_ID* is the UUID of the bluetooth characteristic to read. It can't co
 UUID="00002A35-0000-1000-8000-00805f9b34fb"<br/>
 IOTC_FIELD="ble00002A3500001000800000805f9b34fb"
 
-A sample model definition is available [here](assets/HealthDevice.json). You can directly import it into the IoT Central application and run with simulated BLE devices or use it as a reference. 
+A sample model definition is available [here](assets/HealthDevice.json). You can directly import it into the IoT Central application and run with simulated BLE devices or use it as a reference.
+
+Sample model definitions for AppleHealth and Google Fit are also available for testing purposes. These only includes items directly available on phone (e.g. steps) and not ones captured from external wearable devices like heart rate or blood pressure.
+
+- [Google Fit](./assets/Google_Fit.json)
+- [Apple Health](./assets/Apple_HealthKit.json)
 
 ### Generate credentials
 User can generate both a QRCode and a numeric code to be used for connecting to IoTCentral.
