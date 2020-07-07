@@ -4,7 +4,7 @@ import { camelToName, dottedToName, snakeToName } from "../utils";
 import { PermissionsAndroid } from "react-native";
 import { GoogleFitStepResult } from '../types';
 import { DATA_AVAILABLE_EVENT } from "./ble";
-import {EventEmitter} from 'events';
+import { EventEmitter } from 'events';
 
 const SCOPES = [Scopes.FITNESS_ACTIVITY_READ, Scopes.FITNESS_BODY_READ, Scopes.FITNESS_BODY_TEMPERATURE_READ, Scopes.FITNESS_BLOOD_PRESSURE_READ];
 enum GOOGLE_ITEMS {
@@ -110,7 +110,7 @@ export class GoogleFitDevice implements IHealthDevice {
             // sometimes setInterval gets typings from node instead of react-native
             this.enabled[item.id] = setInterval(async () => {
                 if (item.value) {
-                    this.eventEmitter.emit(DATA_AVAILABLE_EVENT,  { itemId: item.id, value: item.value, itemName: item.name });
+                    this.eventEmitter.emit(DATA_AVAILABLE_EVENT, { itemId: item.id, value: item.value, itemName: item.name });
                 }
                 else {
                     // get current value for the item
@@ -120,12 +120,13 @@ export class GoogleFitDevice implements IHealthDevice {
                     switch (item.id) {
                         case GOOGLE_ITEMS.STEPS:
                             const results = await GoogleFit.getDailyStepCountSamples({ startDate: startDate.toISOString(), endDate: new Date().toISOString() }) as GoogleFitStepResult[];
+                            console.log(JSON.stringify(results));
                             results.forEach(result => {
                                 if (result.steps && result.steps.length > 0) {
                                     item.value = result.steps[result.steps.length - 1].value;
                                 }
                             });
-                            this.eventEmitter.emit(DATA_AVAILABLE_EVENT,  { itemId: item.id, value: item.value, itemName: item.name });
+                            this.eventEmitter.emit(DATA_AVAILABLE_EVENT, { itemId: item.id, value: item.value, itemName: item.name });
                             break;
                         default:
                             break;

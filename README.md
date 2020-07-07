@@ -14,7 +14,7 @@ In Continuous Patient Monitoring scenarios, most medical wearable devices are Bl
 
 Android                    |  iOS
 :-------------------------:|:-------------------------:
-![](./assets/android.gif)  |  ![](./assets/ios.gif)
+<img src='./assets/android.gif' height=600/>  |  <img src='./assets/ios.gif' height=600/>
 
 ## Features
 The main features of the app are:
@@ -81,7 +81,7 @@ More details available in the walkthrough documentation. (see [Walkthrough](docs
 By default, the application only converts raw data to standard integers or floating point number using usual conversion from bytes.
 
 >e.g. 
-Device sends 1 byte with value 0x32. This will result in a telemetry field with value 50.
+Device sends 1 byte with value 0x32. This will result in a telemetry item with value 50.
 
 However some manufacturers have custom data encoding mainly to include extra information when targeting propertary platforms.
 

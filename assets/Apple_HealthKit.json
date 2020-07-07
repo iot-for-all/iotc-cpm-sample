@@ -1,0 +1,83 @@
+{
+  "@id": "urn:cpm:AppleHealthKit_5rt:1",
+  "@type": "CapabilityModel",
+  "implements": [
+    {
+      "@id": "urn:cpm:AppleHealthKit_5rt:480u2qoun:1",
+      "@type": "InterfaceInstance",
+      "displayName": {
+        "en": "Interface"
+      },
+      "name": "health_telemetry",
+      "schema": {
+        "@id": "urn:cpm:HealthData:1",
+        "@type": "Interface",
+        "displayName": {
+          "en": "Interface"
+        },
+        "contents": [
+          {
+            "@id": "urn:cpm:HealthData:BodyTemperature:1",
+            "@type": [
+              "Telemetry",
+              "SemanticType/Temperature"
+            ],
+            "displayName": {
+              "en": "Body Temperature"
+            },
+            "name": "BodyTemperature",
+            "schema": "double"
+          },
+          {
+            "@id": "urn:cpm:HealthData:HeartRate:1",
+            "@type": "Telemetry",
+            "displayName": {
+              "en": "Heart Rate"
+            },
+            "name": "HeartRate",
+            "schema": "integer"
+          },
+          {
+            "@id": "urn:cpm:HealthData:BloodPressureDiastolic:1",
+            "@type": [
+              "Telemetry",
+              "SemanticType/Pressure"
+            ],
+            "displayName": {
+              "en": "Blood Pressure Diastolic"
+            },
+            "name": "BloodPressureDiastolic",
+            "schema": "double"
+          },
+          {
+            "@id": "urn:cpm:HealthData:BloodPressureSystolic:1",
+            "@type": [
+              "Telemetry",
+              "SemanticType/Pressure"
+            ],
+            "displayName": {
+              "en": "Blood Pressure Systolic"
+            },
+            "name": "BloodPressureSystolic",
+            "schema": "double"
+          },
+          {
+            "@id": "urn:cpm:HealthData:StepCount:1",
+            "@type": "Telemetry",
+            "displayName": {
+              "en": "StepCount"
+            },
+            "name": "StepCount",
+            "schema": "integer"
+          }
+        ]
+      }
+    }
+  ],
+  "displayName": {
+    "en": "Apple HealthKit"
+  },
+  "@context": [
+    "http://azureiot.com/v1/contexts/IoTModel.json"
+  ]
+}

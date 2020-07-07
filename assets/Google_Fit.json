@@ -1,0 +1,38 @@
+{
+  "@id": "urn:cpm:GoogleFit_2j4:1",
+  "@type": "CapabilityModel",
+  "implements": [
+    {
+      "@id": "urn:cpm:GoogleFit_2j4:fuqq0g8ns:1",
+      "@type": "InterfaceInstance",
+      "displayName": {
+        "en": "Interface"
+      },
+      "name": "GoogleFit_22t",
+      "schema": {
+        "@id": "urn:cpm:GoogleFit_22t:1",
+        "@type": "Interface",
+        "displayName": {
+          "en": "Interface"
+        },
+        "contents": [
+          {
+            "@id": "urn:cpm:GoogleFit_22t:Steps:1",
+            "@type": "Telemetry",
+            "displayName": {
+              "en": "Steps"
+            },
+            "name": "Steps",
+            "schema": "integer"
+          }
+        ]
+      }
+    }
+  ],
+  "displayName": {
+    "en": "Google Fit"
+  },
+  "@context": [
+    "http://azureiot.com/v1/contexts/IoTModel.json"
+  ]
+}
