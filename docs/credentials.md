@@ -4,6 +4,7 @@ In order to send telemetry to Azure IoT Central, the application needs to be aut
 Authorization can be via QR code or numeric code.
 
 The credentials portal at [cpm-cred-server.azurewebsites.net](https://cpm-cred-server.azurewebsites.net) helps generating authorization codes.
+The source code for the website is available under the _creds-generator_ folder as a reference.
 
 ![creds_generator](../assets/creds_generator_1.png)
 ![creds_generator](../assets/creds_generator_2.png)
