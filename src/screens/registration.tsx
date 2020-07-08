@@ -48,6 +48,7 @@ export function Registration() {
         }
         const creds = DecryptCredentials(data, user.id);
         setLoading(true);
+        console.log(JSON.stringify(creds));
         // connect to IoTCentral before passing over
         let iotc = new IoTCClient(creds.deviceId, creds.scopeId, IOTC_CONNECT.DEVICE_KEY, creds.deviceKey);
         iotc.setModelId(creds.modelId);
@@ -143,7 +144,7 @@ function NumericCode(props: IRegistrationProps) {
 function QRCode(props: IRegistrationProps) {
     const { screen, orientation } = useScreenDimensions();
     return (
-        <View style={{ ...style.container, flex: 2, position: 'relative'}}>
+        <View style={{ ...style.container, flex: 2, position: 'relative' }}>
             <IconButton icon='arrow-left' onPress={props.onClose} size={30} color='white' style={{ position: 'absolute', alignSelf: 'flex-start', top: 40, zIndex: 2 }} />
             <QRCodeScanner onRead={async (e: Event) => {
                 await props.onVerify(e.data);

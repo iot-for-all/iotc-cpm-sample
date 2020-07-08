@@ -1,0 +1,8 @@
+# node
+node_modules/
+server/**/*.js
+server/**/*.json
+server/**/*.d.ts
+
+# vscode
+.vscode

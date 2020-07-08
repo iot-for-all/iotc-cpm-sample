@@ -1,14 +1,56 @@
 import CSS from 'csstype';
 declare var React: any;
 declare var ReactDOM: any;
+declare var QRCode: any;
+declare var CryptoJS: any;
 
 type ReactDispatch<T> = React.Dispatch<React.SetStateAction<T>>;
+type CredentialsObject = {
+    deviceId: string,
+    modelId: string,
+    deviceKey: string,
+    patientId: string,
+    scopeId: string,
+    types: number
+}
+
 
 function Credentials() {
     const [formState, setFormState] = React.useState({})
     const [existing, setExisting] = React.useState(true);
     const [authType, setAuthType] = React.useState(null);
     const [valid, setValid] = React.useState(false);
+    const [creds, setCreds] = React.useState(null);
+
+    const submit = async function () {
+        if (!valid) {
+            return;
+        }
+        let deviceKey = formState['device-key'];
+        if (!existing && formState['group-key'] && formState['device-id']) {
+            deviceKey = await deriveKey(formState['group-key'], formState['device-id']);
+            console.log(deviceKey);
+        }
+        const credsObj: CredentialsObject = {
+            deviceId: formState['device-id'],
+            deviceKey,
+            patientId: formState['encryption-key'],
+            scopeId: formState['scope-id'],
+            modelId: formState['model-id'],
+            types: 3
+        };
+
+        const res = await (await fetch('creds', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(credsObj)
+        })).json();
+
+        setCreds(res);
+
+    }
 
     const onChange = function (e: React.ChangeEvent<HTMLInputElement>) {
         setAuthType(e.currentTarget.value);
@@ -22,7 +64,16 @@ function Credentials() {
         if (formState['device-id'] && formState['scope-id'] && formState['encryption-key'] && (formState['device-key'] || formState['group-key'])) {
             setValid(true);
         }
-    }, [formState])
+        if (creds) {
+            const codeDiv = document.getElementById('code-div') as HTMLElement;
+            if (authType == 'qr') {
+                codeDiv.innerHTML = `<img src='${creds.qrCode}'/>`;
+            }
+            else if (authType == 'numeric') {
+                codeDiv.innerHTML = `<p style='font-size:30px'>${creds.numeric}</p>`;
+            }
+        }
+    }, [formState, creds, authType])
 
     return (<div style={style.container}>
         <div style={style.box}>
@@ -43,9 +94,9 @@ function Credentials() {
                 <div>
                     <input type='radio' name='cred-type' value={'qr'} onChange={onChange} />QR Code
                     <input type='radio' name='cred-type' value={'numeric'} onChange={onChange} />Numeric Code
-                    <div style={{ width: '300px', height: '300px', border: '1px solid black', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                    <div id='code-div' style={{ width: '300px', height: '300px', border: '1px solid black', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                         {authType === null && <p>Please select authorization type</p>}
-                        {authType !== null && <button disabled={!valid}>Generate</button>}
+                        {authType !== null && <button disabled={!valid} onClick={submit}>Generate</button>}
                     </div>
 
                 </div>
@@ -77,14 +128,17 @@ function ModelDetails(props: { onChange: (value: any) => void }) {
     const [selected, setSelected] = React.useState('knee');
     const [defaultValue, setDefaultValue] = React.useState(undefined);
 
+
     const onChange = function (e: React.ChangeEvent<HTMLInputElement>) {
         setSelected(e.currentTarget.value);
     };
     const getValue = function () {
         switch (selected) {
             case 'knee':
+                onModelChange('urn:continuousPatientMonitoringTemplate:Smart_Knee_Brace_5k3:1');
                 return 'urn:continuousPatientMonitoringTemplate:Smart_Knee_Brace_5k3:1';
             case 'vitals':
+                onModelChange('urn:continuousPatientMonitoringTemplate:Smart_Vitals_Patch_220:1')
                 return 'urn:continuousPatientMonitoringTemplate:Smart_Vitals_Patch_220:1';
             default:
                 return undefined;
@@ -92,7 +146,6 @@ function ModelDetails(props: { onChange: (value: any) => void }) {
     };
 
     React.useEffect(() => {
-        debugger
         setDefaultValue(getValue());
     }, [selected])
 
@@ -102,7 +155,7 @@ function ModelDetails(props: { onChange: (value: any) => void }) {
             <input type='radio' name='model-group' value={'knee'} checked={selected === 'knee'} onChange={onChange} />Smart Knee Brace
             <input type='radio' name='model-group' value={'vitals'} checked={selected === 'vitals'} onChange={onChange} />Smart Vitals Patch
             <input type='radio' name='model-group' value={'custom'} checked={selected === 'custom'} onChange={onChange} />Custom
-            <FormItem id='model-id' value={defaultValue} label='Model Id' helpText='Id of the model to which assign device to.' onChange={onModelChange.bind(null, 'model-id')} />
+            <FormItem id='model-id' value={defaultValue} label='Model Id' helpText='Id of the model to which assign device to.' onChange={onModelChange} />
         </div>
     )
 }
@@ -154,6 +207,17 @@ function FormItem(props: { id: string, value?: string, label: string, helpText: 
     </div>)
 }
 
+async function deriveKey(groupKey: string, deviceId: string): Promise<string> {
+    const key = Uint8Array.from(atob(groupKey), c => c.charCodeAt(0));
+    const message = Uint8Array.from(deviceId, c => c.charCodeAt(0));
+    const cryptoKey = await crypto.subtle.importKey(
+        'raw', key, { name: 'HMAC', hash: 'SHA-256' },
+        true, ['sign']
+    );
+    const sig = await crypto.subtle.sign('HMAC', cryptoKey, message);
+    return btoa(String.fromCharCode(...new Uint8Array(sig)));
+
+}
 
 
 const style: { [styleId: string]: any } = {
