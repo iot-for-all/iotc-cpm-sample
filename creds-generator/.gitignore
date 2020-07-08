@@ -1,7 +1,7 @@
 # node
 node_modules/
 server/**/*.js
-server/**/*.json
+server/**/db.json
 server/**/*.d.ts
 
 # vscode
