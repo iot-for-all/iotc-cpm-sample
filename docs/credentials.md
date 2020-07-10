@@ -1,6 +1,6 @@
 # Credentials Generation
 
-In order to send telemetry to Azure IoT Central, the application needs to be authorized as a Central device.
+In order to send telemetry to Azure IoT Central, the application needs to be authorized as an IoT Central device.
 Authorization can be via QR code or numeric code.
 
 The credentials portal at [cpm-cred-server.azurewebsites.net](https://cpm-cred-server.azurewebsites.net) helps generating authorization codes.
@@ -11,8 +11,8 @@ The source code for the website is available under the _creds-generator_ folder 
 
 Required fields are:
 - __Device Id__: the unique id of the device inside the application. If creating a new device this will also be used as display name that can be changed from inside the Central site.
-- __Scope Id__: unique id of the IoT Central application inside provisioning service
-- __Encryption key__: passphrase for encrypting generated credentials. This is the same value of user login password used inside the mobile application. Encryption key is mandatory to secure credentials transmission to the mobile app.
+- __Id Scope__: unique Id of the IoT Central application used by the Device Provisioning Service (DPS)
+- __Encryption key__: passphrase for encrypting generated credentials. This is the same value of user's password used inside the mobile application at login. Encryption key is mandatory to secure credentials transmission to the mobile app.
 - __Device Key__: Symmetric primary key to use when authenticating device to IoT Central.
 
 For new devices:
@@ -27,6 +27,7 @@ For existing devices, connection details are accessible through the "Connect" ta
 ![device_connect_1](../assets/device_connect_1.png)
 ![device_connect_2](../assets/device_connect_2.png)
 
+//this UI just changed, need to take new screenshots
 For new devices, these are available from the "Administration" page under the "Device Connection" section. Make sure "Auto approve" and "SAS tokens" are available and click on "View Keys" to show the Group enrollment primary key.
 ![device_connect_3](../assets/device_connect_3.png)
 
