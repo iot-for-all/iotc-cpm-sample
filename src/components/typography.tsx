@@ -10,6 +10,12 @@ export function Headline(props: Props) {
     const { children, style, ...textProps } = props;
     return (<Text style={[style, { fontSize: 20, fontWeight: 'bold' }]}>{props.children}</Text>)
 }
+
+export function CPMText(props: Props) {
+    const { children, style, ...textProps } = props;
+    return (<Text style={[style, { fontSize: 12, fontStyle: 'normal', letterSpacing: 1.15 }]}>{props.children}</Text>)
+}
+
 export function Name(props: Props) {
     const { children, style, ...textProps } = props;
     return (<Text style={[style, { fontSize: 14, fontWeight: 'bold', fontStyle: 'normal', letterSpacing: 1.15 }]}>{props.children}</Text>)

@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { View, StyleSheet, BackHandler, Dimensions, ViewStyle } from "react-native";
-import { Text, Button, TextInput, IconButton, ActivityIndicator, Dialog } from 'react-native-paper';
+import { Button, TextInput, IconButton, ActivityIndicator, Text } from 'react-native-paper';
 import { Footer } from '../components/footer';
 import QRCodeScanner, { Event } from 'react-native-qrcode-scanner'
 import { ConfigContext } from '../contexts/config';
@@ -9,7 +9,7 @@ import { DecryptCredentials, IoTCClient, IOTC_CONNECT, IOTC_LOGGING } from 'reac
 import { Loading, ErrorDialog } from '../components/utils';
 import { getCredentialsFromNumericCode } from '../api/central';
 import QRCodeMask from '../components/qrcodeMask';
-import { Headline, Name } from '../components/typography';
+import { Headline } from '../components/typography';
 import { useScreenDimensions } from '../hooks/layout';
 import { CPMButton } from '../components/buttons';
 
@@ -78,7 +78,7 @@ export function Registration() {
     if (loading) {
         return (<View style={style.loading}>
             <ActivityIndicator size='large' style={{ marginVertical: 30 }} />
-            <Headline>Connecting to Azure IoTCentral ...</Headline>
+            <Headline>Connecting to Azure IoT Central ...</Headline>
         </View>);
     }
 
@@ -90,7 +90,7 @@ export function Registration() {
     }
     return (<View style={{ flex: 4, ...style.container }}>
         <View style={{ flex: 1, justifyContent: 'center' }}>
-            <Name style={style.title}>{title}</Name>
+            <Text style={style.title}>{title}</Text>
         </View>
         <View style={{ flex: 1, justifyContent: 'center' }}>
             <Text style={style.instructions}>{instructions}</Text>
@@ -150,7 +150,7 @@ function QRCode(props: IRegistrationProps) {
                 await props.onVerify(e.data);
             }}
                 customMarker={
-                    <View>
+                    <View style={{ marginTop: -(screen.width / 2) }}>
                         <QRCodeMask />
                         <Text style={{ ...style.qrtext, ...style.center }}>Move closer to scan</Text>
                     </View>
