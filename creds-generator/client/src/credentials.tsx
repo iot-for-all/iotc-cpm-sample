@@ -22,6 +22,8 @@ function Credentials() {
     const [valid, setValid] = React.useState(false);
     const [creds, setCreds] = React.useState(null);
 
+    const mobilePortrait = window.innerHeight > window.innerWidth;
+
     const submit = async function () {
         if (!valid) {
             return;
@@ -78,7 +80,7 @@ function Credentials() {
     return (<div style={style.container}>
         <div style={style.box}>
             <Title>CPM Credentials Generator</Title>
-            <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-around' }}>
+            <div style={{ display: 'flex', flexDirection: mobilePortrait ? 'column' : 'row', justifyContent: 'space-around', alignItems: mobilePortrait ? 'center' : undefined }}>
                 <div>
                     <FormItem id='device-id' label='Device Id' helpText='The device unique Id' onChange={onItemChange.bind(null, 'device-id')} />
                     <FormItem id='scope-id' label='Scope Id' helpText='Application scope Id' onChange={onItemChange.bind(null, 'scope-id')} />
@@ -226,9 +228,10 @@ const style: { [styleId: string]: any } = {
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundImage: 'url("../assets/background.jpg")',
-        backgroundRepeat: 'no-repeat',
-        backgroundSize: 'cover'
+        // backgroundImage: 'url("./assets/background.jpg")',
+        // backgroundRepeat: 'no-repeat',
+        // backgroundSize: 'cover'
+        background: 'linear-gradient(0deg, rgba(66,179,179,1) 47%, rgba(0,177,255,1) 100%)'
     },
     box: {
         display: 'flex',
@@ -248,7 +251,7 @@ const style: { [styleId: string]: any } = {
         marginBottom: '5px'
     },
     input: {
-        width: '300px',
+        width: '70%',
         paddingTop: '20px',
         border: 'none',
         borderBottom: '1px solid #9E9E9E',
@@ -257,7 +260,7 @@ const style: { [styleId: string]: any } = {
     help: {
         position: 'absolute',
         textAlign: 'center',
-        width: '200px',
+        width: '20%',
         border: '1px solid gray',
         backgroundColor: 'white',
         padding: '20px'
