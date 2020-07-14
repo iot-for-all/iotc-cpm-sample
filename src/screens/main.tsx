@@ -5,7 +5,7 @@ import { Text, IconButton } from "react-native-paper";
 import { Footer } from "../components/footer";
 import DefaultStyles from "../styles";
 import ApplicationBar from "../components/appbar";
-import { Detail } from "../components/typography";
+import { Detail, CPMText } from "../components/typography";
 import { useUser } from "../hooks/auth";
 import { createStackNavigator, TransitionPresets } from '@react-navigation/stack';
 import ConnectedLogo from '../assets/home_connected_logo.svg';
@@ -20,6 +20,7 @@ import Providers from "./providers";
 import { GetConnectedHeader } from "../components/utils";
 import { useEnv, useHeaderTitle } from "../hooks/common";
 import { Scene } from "@react-navigation/stack/lib/typescript/src/types";
+import { normalize } from "../utils";
 
 
 const instructions = 'Start seeing insights by pairing a bluetooth device or syncing data from your health app.'
@@ -117,7 +118,7 @@ function Home() {
             <View style={{ ...DefaultStyles.elevated, ...style.box }}>
                 <GetConnectedHeader />
                 <ConnectedLogo width='100%' height={250} style={{ justifyContent: 'center' }} />
-                <Text style={{ padding: 20 }}>{instructions}</Text>
+                <CPMText style={{ paddingHorizontal: 20, paddingVertical: normalize(10) }}>{instructions}</CPMText>
                 <Options />
             </View>
         </View>
@@ -137,7 +138,7 @@ function Options() {
             navigation.setParams({ title: 'Devices' });
         }}>
             <IconButton icon='bluetooth' size={30} style={{ marginRight: -5 }} />
-            <Text>PAIR DEVICE</Text>
+            <CPMText>PAIR DEVICE</CPMText>
         </TouchableOpacity>
         {
             (Platform.OS === 'android' && envs['GoogleFit'])
@@ -147,7 +148,7 @@ function Options() {
                     navigation.navigate(CONSTANTS.Screens.PROVIDERS_SCREEN);
                 }}>
                     <IconButton icon='sync' size={30} style={{ marginRight: -5 }} />
-                    <Text>{sync}</Text>
+                    <CPMText>{sync}</CPMText>
                 </TouchableOpacity> : <></>}
     </View>)
 }
