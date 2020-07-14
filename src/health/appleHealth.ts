@@ -194,7 +194,7 @@ export class AppleHealthDevice implements IHealthDevice {
         let fetchedItems: any[] = Object.keys(HealthRealTimeData).concat(OBSERVABLES).map(perm => ({
             id: perm,
             name: camelToName(perm),
-            enabled: false,
+            enabled: true,
             value: undefined
         }));
         fetchedItems.map(i => {
@@ -203,6 +203,11 @@ export class AppleHealthDevice implements IHealthDevice {
             }.bind(this);
         }, this);
         this.items = fetchedItems;
+        this.items.forEach(item => {
+            if (item.enabled) {
+                item.enable(true);
+            }
+        });
     }
 
     public async disconnect() {

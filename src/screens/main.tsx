@@ -112,12 +112,14 @@ function Home() {
     const navigation = useNavigation();
     useHeaderTitle('Home');
 
-    return (<View style={{ flex: 4 }}>
-        <View style={{ ...DefaultStyles.elevated, ...style.box }}>
-            <GetConnectedHeader />
-            <ConnectedLogo width='100%' height={250} style={{ justifyContent: 'center' }} />
-            <Text style={{ padding: 20 }}>{instructions}</Text>
-            <Options />
+    return (<View style={{ flex: 1 }}>
+        <View style={{ flex: 3 }}>
+            <View style={{ ...DefaultStyles.elevated, ...style.box }}>
+                <GetConnectedHeader />
+                <ConnectedLogo width='100%' height={250} style={{ justifyContent: 'center' }} />
+                <Text style={{ padding: 20 }}>{instructions}</Text>
+                <Options />
+            </View>
         </View>
         <Footer text='If you choose to pair a BLE device, you can use a real device or a simulated device. You can also choose to access your phone’s health data' />
     </View>);
@@ -153,7 +155,6 @@ function Options() {
 const style = StyleSheet.create({
     box: {
         backgroundColor: 'white',
-        flex: 3,
         marginTop: 20,
         marginHorizontal: 10
     }

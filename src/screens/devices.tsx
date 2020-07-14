@@ -12,7 +12,7 @@ import { IHealthDevice, IHealthManager } from '../models';
 import { Loading, GetConnectedHeader } from '../components/utils';
 import { BleManager, DATA_AVAILABLE_EVENT } from '../health/ble';
 import { SimulatedHealthManager } from '../health/simulated';
-import { usePrevious, useHeaderTitle } from '../hooks/common';
+import { useHeaderTitle } from '../hooks/common';
 import { CPMButton } from '../components/buttons';
 import { isSimulated } from '../hooks/bluetoothHooks';
 import { sendTelemetryData } from '../api/central';

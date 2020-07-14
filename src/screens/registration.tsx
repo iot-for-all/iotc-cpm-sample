@@ -48,7 +48,6 @@ export function Registration() {
         }
         const creds = DecryptCredentials(data, user.id);
         setLoading(true);
-        console.log(JSON.stringify(creds));
         // connect to IoTCentral before passing over
         let iotc = new IoTCClient(creds.deviceId, creds.scopeId, IOTC_CONNECT.DEVICE_KEY, creds.deviceKey);
         iotc.setModelId(creds.modelId);
@@ -117,12 +116,12 @@ function NumericCode(props: IRegistrationProps) {
             setErrorVisible(true);
         }
     };
-    return (<View style={{ flex: 3, ...style.container }}>
+    return (<View style={{ flex: 1, ...style.container }}>
         <IconButton icon='arrow-left' onPress={props.onClose} size={30} style={{ marginTop: 40, alignSelf: 'flex-start' }} />
-        <View style={{ flex: 1, marginTop: 50 }}>
+        <View style={{ flex: 1, marginTop: '5%' }}>
             <Text style={style.instructions}>{numeric.instructions}</Text>
         </View>
-        <View style={{ flex: 1, justifyContent: 'center', width: '80%' }}>
+        <View style={{ flex: 2, width: '80%' }}>
             <TextInput placeholder={numeric.placeholder}
                 value={data}
                 onChangeText={setData}
@@ -130,8 +129,10 @@ function NumericCode(props: IRegistrationProps) {
                 onSubmitEditing={verify}></TextInput>
             <CPMButton mode='contained' style={style.button} onPress={verify}>{numeric.button}</CPMButton>
         </View>
-        <View style={{ flex: 1 }}>
+        <View style={{ flex: 2 }}>
             <SimulatedButton />
+        </View>
+        <View style={{ flex: 1 }}>
             <Footer text={footerText} />
         </View>
         <ErrorDialog title='Error' text='Failed to parse inserted code. Try again or use a simulated connection' visible={errorVisible} setVisible={setErrorVisible} />
