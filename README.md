@@ -6,6 +6,7 @@ languages:
 products:
 - azure
 - azure-iot-central
+urlFragment: "iotc-cpm-sample"
 ---
 
 # Continuous Patient Monitoring Sample
