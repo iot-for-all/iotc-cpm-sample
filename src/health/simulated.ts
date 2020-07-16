@@ -1,4 +1,4 @@
-import { IHealthDevice, IHealthItem, IHealthManager, DataAvailableCallback, DeviceType } from "../models";
+import { IHealthDevice, IHealthItem, IHealthManager, DataAvailableCallback, DeviceType, isHealthService } from "../models";
 import { EventEmitter } from "events";
 import { DATA_AVAILABLE_EVENT } from "./ble";
 
@@ -105,21 +105,21 @@ export class SimulatedDevice implements Omit<IHealthDevice, 'fetch'> {
             id: '00002A1C-0000-1000-8000-00805f9b34fb',
             name: 'Temperature',
             parentId: '00001809-0000-1000-8000-00805f9b34fb',
-            enabled: false,
+            enabled: isHealthService('00001809-0000-1000-8000-00805f9b34fb'),
             value: undefined
         },
         {
             id: '00002A37-0000-1000-8000-00805f9b34fb',
             parentId: '0000180D-0000-1000-8000-00805f9b34fb',
             name: 'Heart Rate',
-            enabled: false,
+            enabled: isHealthService('0000180D-0000-1000-8000-00805f9b34fb'),
             value: undefined
         },
         {
             id: '00002A35-0000-1000-8000-00805f9b34fb',
             name: 'Blood pressure',
             parentId: '00001810-0000-1000-8000-00805f9b34fb',
-            enabled: false,
+            enabled: isHealthService('00001810-0000-1000-8000-00805f9b34fb'),
             value: undefined
         }];
         fetchedItems.map(i => {
@@ -128,6 +128,11 @@ export class SimulatedDevice implements Omit<IHealthDevice, 'fetch'> {
             }.bind(this);
         }, this);
         this.items = fetchedItems;
+        this.items.forEach(item => {
+            if (item.enabled) {
+                item.enable(true);
+            }
+        });
     }
     public async disconnect() {
         // loop through listeners
@@ -154,7 +159,7 @@ export class SmartKneeBraceDevice extends SimulatedDevice implements IHealthDevi
                 id: 'Acceleration',
                 name: 'Acceleration',
                 parentId: '00001809-0000-1000-8000-00805f9b34fb',
-                enabled: false,
+                enabled: isHealthService('00001809-0000-1000-8000-00805f9b34fb'),
                 value: undefined,
                 getData: function () {
                     return {
@@ -168,7 +173,7 @@ export class SmartKneeBraceDevice extends SimulatedDevice implements IHealthDevi
                 id: 'RangeOfMotion',
                 parentId: '0000180D-0000-1000-8000-00805f9b34fb',
                 name: 'Range of motion',
-                enabled: false,
+                enabled: isHealthService('0000180D-0000-1000-8000-00805f9b34fb'),
                 value: undefined,
                 getData: function () {
                     return Math.floor(Math.random() * 40)
@@ -178,7 +183,7 @@ export class SmartKneeBraceDevice extends SimulatedDevice implements IHealthDevi
                 id: 'KneeBend',
                 name: 'Knee bend',
                 parentId: '00001810-0000-1000-8000-00805f9b34fb',
-                enabled: false,
+                enabled: isHealthService('00001810-0000-1000-8000-00805f9b34fb'),
                 value: undefined,
                 getData: function () {
                     return Math.floor(Math.random() * 40)
@@ -190,6 +195,11 @@ export class SmartKneeBraceDevice extends SimulatedDevice implements IHealthDevi
             }.bind(this);
         }, this);
         this.items = fetchedItems;
+        this.items.forEach(item => {
+            if (item.enabled) {
+                item.enable(true);
+            }
+        });
     }
 }
 
@@ -200,7 +210,7 @@ export class SmartVitalsPatchDevice extends SimulatedDevice implements IHealthDe
             id: 'HeartRate',
             name: 'Heart Rate',
             parentId: '00001809-0000-1000-8000-00805f9b34fb',
-            enabled: false,
+            enabled: isHealthService('00001809-0000-1000-8000-00805f9b34fb'),
             value: undefined,
             getData: function () {
                 return Math.floor(Math.random() * 40)
@@ -210,7 +220,7 @@ export class SmartVitalsPatchDevice extends SimulatedDevice implements IHealthDe
             id: 'RespiratoryRate',
             parentId: '0000180D-0000-1000-8000-00805f9b34fb',
             name: 'Respiratory Rate',
-            enabled: false,
+            enabled: isHealthService('0000180D-0000-1000-8000-00805f9b34fb'),
             value: undefined,
             getData: function () {
                 return Math.floor(Math.random() * 40)
@@ -220,7 +230,7 @@ export class SmartVitalsPatchDevice extends SimulatedDevice implements IHealthDe
             id: 'HeartRateVariability',
             name: 'Heart rate variability',
             parentId: '00001810-0000-1000-8000-00805f9b34fb',
-            enabled: false,
+            enabled: isHealthService('00001810-0000-1000-8000-00805f9b34fb'),
             value: undefined,
             getData: function () {
                 return Math.floor(Math.random() * 40)
@@ -230,7 +240,7 @@ export class SmartVitalsPatchDevice extends SimulatedDevice implements IHealthDe
             id: 'BodyTemperature',
             name: 'Body temperature',
             parentId: '00001810-0000-1000-8000-00805f9b34fb',
-            enabled: false,
+            enabled: isHealthService('00001810-0000-1000-8000-00805f9b34fb'),
             value: undefined,
             getData: function () {
                 return Math.random() * 40
@@ -242,6 +252,11 @@ export class SmartVitalsPatchDevice extends SimulatedDevice implements IHealthDe
             }.bind(this);
         }, this);
         this.items = fetchedItems;
+        this.items.forEach(item => {
+            if (item.enabled) {
+                item.enable(true);
+            }
+        });
     }
 }
 

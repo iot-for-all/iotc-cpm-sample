@@ -2,6 +2,7 @@ import React from 'react';
 import { View, StyleSheet, ViewStyle } from "react-native";
 import { Text, IconButton } from 'react-native-paper';
 import { useState } from "react";
+import { CPMText } from './typography';
 
 const defaultTitle = 'Learn more about this technology';
 export interface IFooterProps {
@@ -16,7 +17,7 @@ export function Footer(props: IFooterProps) {
         <IconButton icon={expanded ? 'chevron-down' : 'chevron-up'} onPress={() => {
             setExpanded(current => (!current));
         }} size={20} color={props.textColor} />
-        {expanded ? <Text style={{ textAlign: 'center', ...(props.textColor ? { color: props.textColor } : {}) }}>{props.text}</Text> : <Text style={(props.textColor ? { color: props.textColor } : {})}>{props.title ? props.title : defaultTitle}</Text>}
+        {expanded ? <CPMText style={{ textAlign: 'center', ...(props.textColor ? { color: props.textColor } : {}) }}>{props.text}</CPMText> : <CPMText style={(props.textColor ? { color: props.textColor } : {})}>{props.title ? props.title : defaultTitle}</CPMText>}
     </View>)
 }
 
