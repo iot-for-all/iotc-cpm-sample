@@ -152,7 +152,7 @@ export class GoogleFitDevice implements IHealthDevice {
             return {
                 id: name,
                 name: snakeToName(dottedToName(name)),
-                enabled: false,
+                enabled: true,
                 value: undefined
             }
         });
@@ -162,6 +162,11 @@ export class GoogleFitDevice implements IHealthDevice {
             }.bind(this);
         }, this);
         this.items = fetchedItems;
+        this.items.forEach(item => {
+            if (item.enabled) {
+                item.enable(true);
+            }
+        });
     }
 
     public async disconnect() {
