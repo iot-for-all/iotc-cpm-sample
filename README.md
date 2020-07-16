@@ -1,6 +1,6 @@
 ---
 page_type: sample
-description: "A sample mobile application written in React-Native to connect BLE(Bluetooth Low-Energy) medical devices to Azure IoT Central."
+description: "A sample mobile application written in React-Native to connect BLE (Bluetooth Low-Energy) medical devices to Azure IoT Central."
 name: "IoT Central CPM"
 languages:
 - typescript
@@ -11,7 +11,7 @@ urlFragment: "iotc-cpm-sample"
 ---
 
 # Continuous Patient Monitoring Sample
-A sample application written in React-Native to connect BLE(Bluetooth Low-Energy) devices to Azure IoT Central.
+A sample application written in React-Native to connect BLE (Bluetooth Low-Energy) devices to Azure IoT Central.
 
 **Android**   
 
@@ -22,7 +22,7 @@ master: [![Build status](https://build.appcenter.ms/v0.1/apps/040cd15e-3452-4dd2
 master: [![Build status](https://build.appcenter.ms/v0.1/apps/1148f61e-3a5b-479b-ad42-f1634f0c199b/branches/master/badge)](https://appcenter.ms) develop: [![Build status](https://build.appcenter.ms/v0.1/apps/1148f61e-3a5b-479b-ad42-f1634f0c199b/branches/develop/badge)](https://appcenter.ms)
 
 ## What is this?
-In Continuous Patient Monitoring scenarios, most medical wearable devices are Bluetooth Low Energy (BLE) devices, which means they need a gateway in order to connect and send data to IoT Central. This phone app can act as that gateway, and would be used by a patient who has no access to or knowledge of Azure IoT Central.
+In Continuous Patient Monitoring (CPM) scenarios, most medical wearable devices are Bluetooth Low Energy (BLE) devices, which means they need a gateway in order to connect and send data to IoT Central. This phone app can act as that gateway, and would be used by a patient who has no access to or knowledge of Azure IoT Central.
 
 Android                    |  iOS
 :-------------------------:|:-------------------------:
@@ -80,9 +80,9 @@ From the root folder, run `yarn run android` or  `yarn run ios`.
 3. Start Debug
 
 ## Getting started
-1. Login with username and password. Login is just simulated and it's not doing any credentials processing. Use an easy password as it will be needed when generating credentials codes. (see [#Generate Credentials](#generate-credentials))
-2. Generate a QRCode or a numeric code for an IoTCentral device using the credentials portal.
-3. Scan the obtained QRCode or insert the numeric code.
+1. Login with username and password. Login is just simulated and it's not doing any credentials processing. Use an easy password as it will be needed when generating credentials codes. (see [Generate Credentials](#generate-credentials))
+2. Generate a QR Code or a numeric code for an IoT Central device using the credentials portal.
+3. Scan the obtained QR Code or insert the numeric code.
 4. Select operation (scan BLE devices, Google Fit or Apple Health).
 5. Data is available in the chart. Items can be enabled or disabled through the sync option menu. (see [Insight docs](docs/insight.md))
 
@@ -142,10 +142,10 @@ The capability is enabled by default. If you want to disable Health Kit feature,
 ![](https://i.imgur.com/eOCCCyv.png "Xcode Capabilities Section")
 
 ## Connect to Azure IoT Central
-When not running in simulated mode, the mobile application connects to an Azure IoTCentral application and sends telemetry message to specific device. After login you can choose to authenticate through a QRCode or a numeric code.
+When not running in simulated mode, the mobile application connects to an Azure IoT Central application and sends telemetry message to specific device. After login you can choose to authenticate through a QR Code or a numeric code.
 
-Simulated devices available in this sample, map models in the IoT Central CPM template.
-CPM applications ca be created from the IoT Central home page or directly from [https://apps.azureiotcentral.com/build/new/continuous-patient-monitoring](https://apps.azureiotcentral.com/build/new/continuous-patient-monitoring)
+Simulated devices available in this sample map to device models in the IoT Central Continous Patient Monitoring (CPM) template.
+CPM applications can be created from the IoT Central home page or directly from [https://apps.azureiotcentral.com/build/new/continuous-patient-monitoring](https://apps.azureiotcentral.com/build/new/continuous-patient-monitoring)
 
 If you need to define your own custom model read basic instructions at [https://docs.microsoft.com/en-us/azure/iot-central/core/howto-set-up-template](https://docs.microsoft.com/en-us/azure/iot-central/core/howto-set-up-template), and follow details below for preparing a compatible model.
 
@@ -155,7 +155,7 @@ For each bluetooth item, the telemetry Id to use in model has the following synt
 
 `ble<ITEM_ID>`
 
-where *ITEM_ID* is the UUID of the bluetooth characteristic to read. It can't contain hyphens and . The app code automatically "normalize" the UUID.
+where *ITEM_ID* is the UUID of the bluetooth characteristic to read. It can't contain hyphens (-)or periods (.) The app code automatically "normalize" the UUID.
 
 > e.g.<br/>
 UUID="00002A35-0000-1000-8000-00805f9b34fb"<br/>
@@ -169,9 +169,9 @@ Sample model definitions for AppleHealth and Google Fit are also available for t
 - [Apple Health](./assets/Apple_HealthKit.json)
 
 ### Generate credentials
-User can generate both a QRCode and a numeric code to be used for connecting to IoTCentral.
+User can generate both a QR Code and a numeric code to be used for connecting to IoT Central.
 Just go to http://cpm-cred-server.azurewebsites.net and generate codes by inserting IoT Central data in the form.
-The encryption key must be the equal to the password specified during login into the mobile app since it is used to secure QRCode data.
+The encryption key must be the equal to the password specified during login into the mobile app since it is used to secure QR Code data.
 
 More details [here](docs/credentials.md).
 
