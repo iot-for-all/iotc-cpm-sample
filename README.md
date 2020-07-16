@@ -1,6 +1,7 @@
 ---
 page_type: sample
 description: "A sample mobile application written in React-Native to connect BLE(Bluetooth Low-Energy) medical devices to Azure IoT Central."
+name: "IoT Central CPM"
 languages:
 - typescript
 products:
