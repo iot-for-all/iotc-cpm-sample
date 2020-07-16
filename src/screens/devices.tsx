@@ -3,7 +3,7 @@ import { View, ScrollView, StyleSheet, RefreshControl } from "react-native";
 import { Button, Text, IconButton, ActivityIndicator } from 'react-native-paper';
 import { Footer } from '../components/footer';
 import DefaultStyles from '../styles';
-import { Detail, Headline, Action, Name } from '../components/typography';
+import { Detail, Headline, Action, Name, CPMText } from '../components/typography';
 import { NavigationProperty, CONSTANTS } from '../types';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { useNavigation, useIsFocused } from '@react-navigation/native';
@@ -12,7 +12,7 @@ import { IHealthDevice, IHealthManager } from '../models';
 import { Loading, GetConnectedHeader } from '../components/utils';
 import { BleManager, DATA_AVAILABLE_EVENT } from '../health/ble';
 import { SimulatedHealthManager } from '../health/simulated';
-import { usePrevious, useHeaderTitle } from '../hooks/common';
+import { useHeaderTitle } from '../hooks/common';
 import { CPMButton } from '../components/buttons';
 import { isSimulated } from '../hooks/bluetoothHooks';
 import { sendTelemetryData } from '../api/central';
@@ -233,11 +233,11 @@ function NotFound(props: { retry: () => void }) {
             <IconButton icon='alert' size={60} />
         </View>
         <View style={{ ...DefaultStyles.centerFragment, ...{ justifyContent: 'space-evenly', marginHorizontal: 20 } }}>
-            <Text style={DefaultStyles.header}>{NOT_FOUND_TITLE}</Text>
-            <Text style={{ textAlign: 'center' }}>{NOT_FOUND_TEXT}</Text>
+            <CPMText style={DefaultStyles.header}>{NOT_FOUND_TITLE}</CPMText>
+            <CPMText style={{ textAlign: 'center' }}>{NOT_FOUND_TEXT}</CPMText>
         </View>
         <View style={DefaultStyles.centerFragment}>
-            <Button mode='contained' style={{ ...DefaultStyles.centeredButton, ...DefaultStyles.elevated }} onPress={props.retry}><Text>TRY AGAIN</Text></Button>
+            <Button mode='contained' style={{ ...DefaultStyles.centeredButton, ...DefaultStyles.elevated }} onPress={props.retry}><CPMText>TRY AGAIN</CPMText></Button>
             <SimulatedButton refresh={props.retry} />
         </View>
     </View>)
@@ -261,7 +261,7 @@ function SimulatedButton(props: { refresh: () => void }) {
             type: 'ACTIVATE',
             payload: simManager
         });
-    }}><Text>USE SIMULATED DEVICES</Text></CPMButton>)
+    }}>USE SIMULATED DEVICES</CPMButton>)
 }
 
 

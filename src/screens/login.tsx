@@ -7,6 +7,7 @@ import LinearGradient from 'react-native-linear-gradient';
 import { login } from '../api/auth';
 import { useUser } from '../hooks/auth';
 import { ReactDispatch } from '../types';
+import { CPMText } from '../components/typography';
 
 const footerText = 'This generates and stores the patient ID information that will be mapped to a device in the Azure API for FHIR.';
 const forgot_passord = 'Forgot password?'
@@ -47,7 +48,7 @@ function Form(props: { onSubmit: (user: string, password: string) => void | Prom
     return (<View style={style.form}>
         <Input name='Username' value={username} setValue={setUsername} />
         <Input name='Password' hidden={true} value={password} setValue={setPassword} />
-        <Text style={{ ...style.forgot, ...style.text }}>{forgot_passord}</Text>
+        <CPMText style={{ ...style.forgot, ...style.text }}>{forgot_passord}</CPMText>
         <Button mode='outlined' style={style.button} onPress={() => props.onSubmit(username, password)}>Login</Button>
     </View>)
 }
@@ -70,7 +71,8 @@ const style = StyleSheet.create({
     },
     logoSub: {
         fontSize: 20,
-        fontWeight: 'bold'
+        fontWeight: 'bold',
+        color: 'white'
     },
     form: {
         width: '80%',

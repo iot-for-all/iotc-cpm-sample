@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { View, processColor } from 'react-native';
 import { ActivityIndicator, Text, Portal, Dialog, Button } from 'react-native-paper';
-import { Detail } from './typography';
+import { Detail, Headline } from './typography';
 import DefaultStyles from '../styles';
 import GetConnected from '../assets/home_connected_icon.svg';
 import { ReactDispatch } from '../types';
@@ -36,7 +36,7 @@ export function GetConnectedHeader() {
         <View style={{ flexDirection: 'row', padding: 10, alignItems: 'center' }}>
             <GetConnected style={{ marginHorizontal: 16, marginVertical: 10 }} />
             <View style={{ flexDirection: 'column' }}>
-                <Text style={DefaultStyles.header}>{header}</Text>
+                <Headline style={DefaultStyles.header}>{header}</Headline>
                 <Detail>{sub}</Detail>
             </View>
         </View>)
