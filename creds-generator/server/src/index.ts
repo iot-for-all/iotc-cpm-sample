@@ -22,7 +22,7 @@ export type Credentials = {
 
 
 const app = Express();
-const port = process.env.PORT;
+const port = process.env.PORT || 3700;
 const dbPath = path.join(__dirname, '../db.json');
 if (!fs.existsSync(dbPath)) {
     fs.writeFileSync(dbPath, '{}');

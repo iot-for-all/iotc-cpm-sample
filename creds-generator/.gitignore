@@ -6,3 +6,4 @@ server/**/*.d.ts
 
 # vscode
 .vscode
+.deployment

@@ -1,4 +1,4 @@
-import { IHealthManager, IHealthDevice, IHealthItem, DeviceType } from "../models";
+import { IHealthManager, IHealthDevice, IHealthItem, DeviceType, isHealthService } from "../models";
 import { BleManager as NativeManager, State, Device, Subscription, Characteristic } from 'react-native-ble-plx';
 import { Platform, PermissionsAndroid } from "react-native";
 import { EventEmitter } from 'events';
@@ -169,7 +169,7 @@ export class BleDevice implements IHealthDevice {
                     id: characteristic.uuid,
                     parentId: characteristic.serviceUUID,
                     name: characteristic.uuid,
-                    enabled: false,
+                    enabled: isHealthService(characteristic.serviceUUID),
                     value: undefined
                 };
                 c.enable = function (this: BleDevice, status: boolean) {
@@ -178,6 +178,12 @@ export class BleDevice implements IHealthDevice {
                 return c;
             }, this)), this
         ))).reduce((a, b) => (a.concat(b)))
+
+        this.items.forEach(item => {
+            if (item.enabled) {
+                item.enable(true);
+            }
+        });
     }
 
 

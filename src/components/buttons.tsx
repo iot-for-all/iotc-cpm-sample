@@ -18,7 +18,7 @@ export function CPMButton(props: CPMButtonProps) {
     return (
         <Button onPress={onPress} mode={mode}
             color='#75FBFD'
-            style={[style, { justifyContent: 'center' }, (mode === 'outlined' ? { borderColor: '#75FBFD', ...DefaultStyles.elevated } : {})]}
+            style={[style, { justifyContent: 'center' }, (mode === 'outlined' ? { borderColor: '#75FBFD', borderWidth: 2, ...DefaultStyles.elevated } : {})]}
             labelStyle={{ color: textColor }}>
             {children}
         </Button>)

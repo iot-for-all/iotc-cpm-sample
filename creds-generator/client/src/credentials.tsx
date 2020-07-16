@@ -16,11 +16,21 @@ type CredentialsObject = {
 
 
 function Credentials() {
-    const [formState, setFormState] = React.useState({})
+    const [formState, setFormState] = React.useState({
+        'device-id': '',
+        'scope-id': '',
+        'encryption-key': '',
+        'device-key': '',
+        'group-key': '',
+        'model-id': ''
+
+    })
     const [existing, setExisting] = React.useState(true);
     const [authType, setAuthType] = React.useState(null);
     const [valid, setValid] = React.useState(false);
     const [creds, setCreds] = React.useState(null);
+
+    const mobilePortrait = window.innerHeight > window.innerWidth;
 
     const submit = async function () {
         if (!valid) {
@@ -29,7 +39,6 @@ function Credentials() {
         let deviceKey = formState['device-key'];
         if (!existing && formState['group-key'] && formState['device-id']) {
             deviceKey = await deriveKey(formState['group-key'], formState['device-id']);
-            console.log(deviceKey);
         }
         const credsObj: CredentialsObject = {
             deviceId: formState['device-id'],
@@ -52,6 +61,15 @@ function Credentials() {
 
     }
 
+    const clear = function () {
+        setValid(false);
+        setCreds(null);
+        setFormState((current: any) => {
+            Object.keys(current).forEach(k => current[k] = '');
+            return current;
+        })
+    }
+
     const onChange = function (e: React.ChangeEvent<HTMLInputElement>) {
         setAuthType(e.currentTarget.value);
     };
@@ -64,8 +82,8 @@ function Credentials() {
         if (formState['device-id'] && formState['scope-id'] && formState['encryption-key'] && (formState['device-key'] || formState['group-key'])) {
             setValid(true);
         }
+        const codeDiv = document.getElementById('code-div') as HTMLElement;
         if (creds) {
-            const codeDiv = document.getElementById('code-div') as HTMLElement;
             if (authType == 'qr') {
                 codeDiv.innerHTML = `<img src='${creds.qrCode}'/>`;
             }
@@ -73,32 +91,36 @@ function Credentials() {
                 codeDiv.innerHTML = `<p style='font-size:30px'>${creds.numeric}</p>`;
             }
         }
+        else {
+            codeDiv.innerHTML = `<p>Please select authorization type</p>`;
+        }
     }, [formState, creds, authType])
 
     return (<div style={style.container}>
         <div style={style.box}>
             <Title>CPM Credentials Generator</Title>
-            <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-around' }}>
+            <div style={{ display: 'flex', flexDirection: mobilePortrait ? 'column' : 'row', justifyContent: 'space-around', alignItems: mobilePortrait ? 'center' : undefined }}>
                 <div>
-                    <FormItem id='device-id' label='Device Id' helpText='The device unique Id' onChange={onItemChange.bind(null, 'device-id')} />
-                    <FormItem id='scope-id' label='Scope Id' helpText='Application scope Id' onChange={onItemChange.bind(null, 'scope-id')} />
-                    <FormItem id='encryption-key' label='Encryption Key' helpText='Encryption Key for generated credentials. This is the same value of user login password used inside the mobile application.' onChange={onItemChange.bind(null, 'encryption-key')} />
+                    <FormItem id='device-id' value={formState['device-id']} label='Device Id' helpText='The device's unique Id. For existing devices this can be found when clicking in the 'Connect' button within the device's detail page.' onChange={onItemChange.bind(null, 'device-id')} />
+                    <FormItem id='scope-id' label='Scope Id' value={formState['scope-id']} helpText='Application Id Scope. This can be found in the administration section of the app, or under the 'Connect' button within the device's detail page.' onChange={onItemChange.bind(null, 'scope-id')} />
+                    <FormItem id='encryption-key' label='Encryption Key' value={formState['encryption-key']} helpText='Encryption key for generated credentials. This is the same value of the user's password used during login inside the mobile application.' onChange={onItemChange.bind(null, 'encryption-key')} />
 
                     {/* <FormItem id='device-id' label='Device Id' /> */}
                     <DeviceCredentials setExisting={setExisting} />
-                    {existing && <FormItem id='device-key' label='Device Key' helpText='Connection key for the device' onChange={onItemChange.bind(null, 'device-key')} />}
+                    {existing && <FormItem id='device-key' label='Device Key' value={formState['device-key']} helpText='This is the SAS primary or secondary key provided by IoT Central to authenticate the device. This can be found under the 'Connect' button within the device's detail page.' onChange={onItemChange.bind(null, 'device-key')} />}
                     {!existing && <>
-                        <FormItem id='group-key' label='Group Key' helpText='Connection key for the application' onChange={onItemChange.bind(null, 'group-key')} />
-                        <ModelDetails onChange={onItemChange.bind(null, 'model-id')} /></>}
+                        <FormItem id='group-key' label='Group Key' value={formState['group-key']} helpText='This is the SAS primary or secondary key provided by IoT Central to authenticate a group of devices. This can be found in the Admin section under the 'Device connection' tab.' onChange={onItemChange.bind(null, 'group-key')} />
+                        <ModelDetails value={formState['model-id']} onChange={onItemChange.bind(null, 'model-id')} /></>}
                 </div>
                 <div>
                     <input type='radio' name='cred-type' value={'qr'} onChange={onChange} />QR Code
                     <input type='radio' name='cred-type' value={'numeric'} onChange={onChange} />Numeric Code
                     <div id='code-div' style={{ width: '300px', height: '300px', border: '1px solid black', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-                        {authType === null && <p>Please select authorization type</p>}
-                        {authType !== null && <button disabled={!valid} onClick={submit}>Generate</button>}
                     </div>
-
+                    <div style={{ display: 'flex', justifyContent: 'space-evenly', marginTop: '20px' }}>
+                        <button disabled={!valid || creds} onClick={submit}>Generate</button>
+                        <button disabled={!creds} onClick={clear}>Clear</button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -123,10 +145,9 @@ function DeviceCredentials(props: { setExisting: ReactDispatch<boolean> }) {
 }
 
 
-function ModelDetails(props: { onChange: (value: any) => void }) {
-    const { onChange: onModelChange } = props;
+function ModelDetails(props: { value: string, onChange: (value: any) => void }) {
+    const { onChange: onModelChange, value } = props;
     const [selected, setSelected] = React.useState('knee');
-    const [defaultValue, setDefaultValue] = React.useState(undefined);
 
 
     const onChange = function (e: React.ChangeEvent<HTMLInputElement>) {
@@ -141,12 +162,12 @@ function ModelDetails(props: { onChange: (value: any) => void }) {
                 onModelChange('urn:continuousPatientMonitoringTemplate:Smart_Vitals_Patch_220:1')
                 return 'urn:continuousPatientMonitoringTemplate:Smart_Vitals_Patch_220:1';
             default:
-                return undefined;
+                return '';
         }
     };
 
     React.useEffect(() => {
-        setDefaultValue(getValue());
+        onModelChange(getValue());
     }, [selected])
 
     return (
@@ -155,7 +176,8 @@ function ModelDetails(props: { onChange: (value: any) => void }) {
             <input type='radio' name='model-group' value={'knee'} checked={selected === 'knee'} onChange={onChange} />Smart Knee Brace
             <input type='radio' name='model-group' value={'vitals'} checked={selected === 'vitals'} onChange={onChange} />Smart Vitals Patch
             <input type='radio' name='model-group' value={'custom'} checked={selected === 'custom'} onChange={onChange} />Custom
-            <FormItem id='model-id' value={defaultValue} label='Model Id' helpText='Id of the model to which assign device to.' onChange={onModelChange} />
+            <FormItem id='model-id' value={defaultValue} label='Model Id' helpText='Id of the device model that this device will use. This can be found the device templates section of IoT Central under the 'View identity' button in the device template.' onChange={onModelChange} />
+            <FormItem id='model-id' value={value} label='Model Id' helpText='Id of the device model that this device will use. This can be found the device templates section of IoT Central under the 'View identity' button in the device template.' readonly={['knee', 'vitals'].indexOf(selected) >= 0} onChange={onModelChange} />
         </div>
     )
 }
@@ -171,9 +193,8 @@ function Help(props: { text: string, position: DOMRect }) {
 }
 
 
-function FormItem(props: { id: string, value?: string, label: string, helpText: string, onChange: (value: any) => void }) {
-    const { id, label, onChange } = props;
-    const [value, setValue] = React.useState('');
+function FormItem(props: { id: string, value: string, readonly?: boolean, label: string, helpText: string, onChange: (value: any) => void }) {
+    const { id, label, value, readonly, onChange } = props;
     const [showHelp, setShowHelp] = React.useState(false);
     const [position, setPosition] = React.useState(null);
 
@@ -199,8 +220,7 @@ function FormItem(props: { id: string, value?: string, label: string, helpText: 
             setShowHelp((current: boolean) => (!current));
         }}>help_outline</i></p>
         {showHelp && <Help text={props.helpText} position={position} />}
-        <input style={style.input} id={id} value={props.value ? props.value : value} readOnly={!!props.value} onChange={e => {
-            setValue(e.target.value);
+        <input style={style.input} id={id} value={value} readOnly={readonly} onChange={e => {
             onChange(e.target.value);
         }
         } />
@@ -226,9 +246,7 @@ const style: { [styleId: string]: any } = {
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundImage: 'url("../assets/background.jpg")',
-        backgroundRepeat: 'no-repeat',
-        backgroundSize: 'cover'
+        background: 'linear-gradient(0deg, rgba(66,179,179,1) 47%, rgba(0,177,255,1) 100%)'
     },
     box: {
         display: 'flex',
@@ -248,7 +266,7 @@ const style: { [styleId: string]: any } = {
         marginBottom: '5px'
     },
     input: {
-        width: '300px',
+        width: '70%',
         paddingTop: '20px',
         border: 'none',
         borderBottom: '1px solid #9E9E9E',
@@ -257,7 +275,7 @@ const style: { [styleId: string]: any } = {
     help: {
         position: 'absolute',
         textAlign: 'center',
-        width: '200px',
+        width: '20%',
         border: '1px solid gray',
         backgroundColor: 'white',
         padding: '20px'

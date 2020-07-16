@@ -1,13 +1,20 @@
 import React from 'react';
 import { View } from 'react-native';
+import { useScreenDimensions } from '../hooks/layout';
 export default function QRCodeMask() {
-    return (<View style={{ position: 'relative', width: 250, height: 250 }}>
+    const { screen } = useScreenDimensions();
+
+    const markerWidth = Math.floor(screen.width / 2);
+    const sectorWidth = Math.floor(markerWidth / 5);
+    console.log(`Marker ${markerWidth}`);
+    console.log(`Sector ${sectorWidth}`);
+    return (<View style={{ position: 'relative', width: markerWidth + sectorWidth, height: markerWidth + sectorWidth }}>
         <View style={{
             position: 'absolute',
             top: 0,
             left: 0,
-            height: 50,
-            width: 50,
+            height: sectorWidth,
+            width: sectorWidth,
             borderColor: 'black',
             borderLeftWidth: 5,
             borderTopWidth: 5,
@@ -15,29 +22,29 @@ export default function QRCodeMask() {
         <View style={{
             position: 'absolute',
             top: 0,
-            left: 200,
-            height: 50,
-            width: 50,
+            left: markerWidth,
+            height: sectorWidth,
+            width: sectorWidth,
             borderColor: 'black',
             borderRightWidth: 5,
             borderTopWidth: 5,
         }}></View>
         <View style={{
             position: 'absolute',
-            top: 200,
+            top: markerWidth,
             left: 0,
-            height: 50,
-            width: 50,
+            height: sectorWidth,
+            width: sectorWidth,
             borderColor: 'black',
             borderLeftWidth: 5,
             borderBottomWidth: 5,
         }}></View>
         <View style={{
             position: 'absolute',
-            top: 200,
-            left: 200,
-            height: 50,
-            width: 50,
+            top: markerWidth,
+            left: markerWidth,
+            height: sectorWidth,
+            width: sectorWidth,
             borderColor: 'black',
             borderRightWidth: 5,
             borderBottomWidth: 5,

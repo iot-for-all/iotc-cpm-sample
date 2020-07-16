@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { View, StyleSheet, BackHandler, Dimensions, ViewStyle } from "react-native";
-import { Text, Button, TextInput, IconButton, ActivityIndicator, Dialog } from 'react-native-paper';
+import { Button, TextInput, IconButton, ActivityIndicator, Text } from 'react-native-paper';
 import { Footer } from '../components/footer';
 import QRCodeScanner, { Event } from 'react-native-qrcode-scanner'
 import { ConfigContext } from '../contexts/config';
@@ -9,7 +9,7 @@ import { DecryptCredentials, IoTCClient, IOTC_CONNECT, IOTC_LOGGING } from 'reac
 import { Loading, ErrorDialog } from '../components/utils';
 import { getCredentialsFromNumericCode } from '../api/central';
 import QRCodeMask from '../components/qrcodeMask';
-import { Headline, Name } from '../components/typography';
+import { Headline, CPMText, Name } from '../components/typography';
 import { useScreenDimensions } from '../hooks/layout';
 import { CPMButton } from '../components/buttons';
 
@@ -48,7 +48,6 @@ export function Registration() {
         }
         const creds = DecryptCredentials(data, user.id);
         setLoading(true);
-        console.log(JSON.stringify(creds));
         // connect to IoTCentral before passing over
         let iotc = new IoTCClient(creds.deviceId, creds.scopeId, IOTC_CONNECT.DEVICE_KEY, creds.deviceKey);
         iotc.setModelId(creds.modelId);
@@ -78,7 +77,7 @@ export function Registration() {
     if (loading) {
         return (<View style={style.loading}>
             <ActivityIndicator size='large' style={{ marginVertical: 30 }} />
-            <Headline>Connecting to Azure IoTCentral ...</Headline>
+            <Headline>Connecting to Azure IoT Central ...</Headline>
         </View>);
     }
 
@@ -93,7 +92,7 @@ export function Registration() {
             <Name style={style.title}>{title}</Name>
         </View>
         <View style={{ flex: 1, justifyContent: 'center' }}>
-            <Text style={style.instructions}>{instructions}</Text>
+            <Name style={style.instructions}>{instructions}</Name>
         </View>
         <View style={{ flex: 2 }}>
             <CPMButton mode='outlined' style={style.button} onPress={() => setNumeric(true)}>{code}</CPMButton>
@@ -117,12 +116,12 @@ function NumericCode(props: IRegistrationProps) {
             setErrorVisible(true);
         }
     };
-    return (<View style={{ flex: 3, ...style.container }}>
+    return (<View style={{ flex: 1, ...style.container }}>
         <IconButton icon='arrow-left' onPress={props.onClose} size={30} style={{ marginTop: 40, alignSelf: 'flex-start' }} />
-        <View style={{ flex: 1, marginTop: 50 }}>
-            <Text style={style.instructions}>{numeric.instructions}</Text>
+        <View style={{ flex: 1, marginTop: '5%' }}>
+            <CPMText style={style.instructions}>{numeric.instructions}</CPMText>
         </View>
-        <View style={{ flex: 1, justifyContent: 'center', width: '80%' }}>
+        <View style={{ flex: 2, width: '80%' }}>
             <TextInput placeholder={numeric.placeholder}
                 value={data}
                 onChangeText={setData}
@@ -130,8 +129,10 @@ function NumericCode(props: IRegistrationProps) {
                 onSubmitEditing={verify}></TextInput>
             <CPMButton mode='contained' style={style.button} onPress={verify}>{numeric.button}</CPMButton>
         </View>
-        <View style={{ flex: 1 }}>
+        <View style={{ flex: 2 }}>
             <SimulatedButton />
+        </View>
+        <View style={{ flex: 1 }}>
             <Footer text={footerText} />
         </View>
         <ErrorDialog title='Error' text='Failed to parse inserted code. Try again or use a simulated connection' visible={errorVisible} setVisible={setErrorVisible} />
@@ -150,9 +151,9 @@ function QRCode(props: IRegistrationProps) {
                 await props.onVerify(e.data);
             }}
                 customMarker={
-                    <View>
+                    <View style={{ marginTop: -(screen.width / 2) }}>
                         <QRCodeMask />
-                        <Text style={{ ...style.qrtext, ...style.center }}>Move closer to scan</Text>
+                        <CPMText style={{ ...style.qrtext, ...style.center }}>Move closer to scan</CPMText>
                     </View>
                 }
                 showMarker={true}
@@ -175,7 +176,7 @@ function SimulatedButton(props: { textColor?: string }) {
     const viewStyle: ViewStyle = orientation == 'portrait' ? {} : {};
     return (
         <View style={{ alignItems: 'center', ...viewStyle }}>
-            <Text style={props.textColor ? { color: props.textColor } : {}}>Don't have a code?</Text>
+            <CPMText style={props.textColor ? { color: props.textColor } : {}}>Don't have a code?</CPMText>
             <CPMButton style={style.button} mode='contained' onPress={() => {
                 // set simulation. data will not be sent to IoTCentral
                 dispatch({
