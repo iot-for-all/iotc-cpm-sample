@@ -101,15 +101,15 @@ function Credentials() {
             <Title>CPM Credentials Generator</Title>
             <div style={{ display: 'flex', flexDirection: mobilePortrait ? 'column' : 'row', justifyContent: 'space-around', alignItems: mobilePortrait ? 'center' : undefined }}>
                 <div>
-                    <FormItem id='device-id' value={formState['device-id']} label='Device Id' helpText='The device unique Id' onChange={onItemChange.bind(null, 'device-id')} />
-                    <FormItem id='scope-id' label='Scope Id' value={formState['scope-id']} helpText='Application scope Id' onChange={onItemChange.bind(null, 'scope-id')} />
-                    <FormItem id='encryption-key' label='Encryption Key' value={formState['encryption-key']} helpText='Encryption Key for generated credentials. This is the same value of user login password used inside the mobile application.' onChange={onItemChange.bind(null, 'encryption-key')} />
+                    <FormItem id='device-id' value={formState['device-id']} label='Device Id' helpText='The device's unique Id. For existing devices this can be found when clicking in the 'Connect' button within the device's detail page.' onChange={onItemChange.bind(null, 'device-id')} />
+                    <FormItem id='scope-id' label='Scope Id' value={formState['scope-id']} helpText='Application Id Scope. This can be found in the administration section of the app, or under the 'Connect' button within the device's detail page.' onChange={onItemChange.bind(null, 'scope-id')} />
+                    <FormItem id='encryption-key' label='Encryption Key' value={formState['encryption-key']} helpText='Encryption key for generated credentials. This is the same value of the user's password used during login inside the mobile application.' onChange={onItemChange.bind(null, 'encryption-key')} />
 
                     {/* <FormItem id='device-id' label='Device Id' /> */}
                     <DeviceCredentials setExisting={setExisting} />
-                    {existing && <FormItem id='device-key' label='Device Key' value={formState['device-key']} helpText='Connection key for the device' onChange={onItemChange.bind(null, 'device-key')} />}
+                    {existing && <FormItem id='device-key' label='Device Key' value={formState['device-key']} helpText='This is the SAS primary or secondary key provided by IoT Central to authenticate the device. This can be found under the 'Connect' button within the device's detail page.' onChange={onItemChange.bind(null, 'device-key')} />}
                     {!existing && <>
-                        <FormItem id='group-key' label='Group Key' value={formState['group-key']} helpText='Connection key for the application' onChange={onItemChange.bind(null, 'group-key')} />
+                        <FormItem id='group-key' label='Group Key' value={formState['group-key']} helpText='This is the SAS primary or secondary key provided by IoT Central to authenticate a group of devices. This can be found in the Admin section under the 'Device connection' tab.' onChange={onItemChange.bind(null, 'group-key')} />
                         <ModelDetails value={formState['model-id']} onChange={onItemChange.bind(null, 'model-id')} /></>}
                 </div>
                 <div>
@@ -176,7 +176,8 @@ function ModelDetails(props: { value: string, onChange: (value: any) => void }) 
             <input type='radio' name='model-group' value={'knee'} checked={selected === 'knee'} onChange={onChange} />Smart Knee Brace
             <input type='radio' name='model-group' value={'vitals'} checked={selected === 'vitals'} onChange={onChange} />Smart Vitals Patch
             <input type='radio' name='model-group' value={'custom'} checked={selected === 'custom'} onChange={onChange} />Custom
-            <FormItem id='model-id' value={value} label='Model Id' helpText='Id of the model to which assign device to.' readonly={['knee', 'vitals'].indexOf(selected) >= 0} onChange={onModelChange} />
+            <FormItem id='model-id' value={defaultValue} label='Model Id' helpText='Id of the device model that this device will use. This can be found the device templates section of IoT Central under the 'View identity' button in the device template.' onChange={onModelChange} />
+            <FormItem id='model-id' value={value} label='Model Id' helpText='Id of the device model that this device will use. This can be found the device templates section of IoT Central under the 'View identity' button in the device template.' readonly={['knee', 'vitals'].indexOf(selected) >= 0} onChange={onModelChange} />
         </div>
     )
 }
@@ -245,9 +246,6 @@ const style: { [styleId: string]: any } = {
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
-        // backgroundImage: 'url("./assets/background.jpg")',
-        // backgroundRepeat: 'no-repeat',
-        // backgroundSize: 'cover'
         background: 'linear-gradient(0deg, rgba(66,179,179,1) 47%, rgba(0,177,255,1) 100%)'
     },
     box: {
