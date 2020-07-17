@@ -102,7 +102,7 @@ function Credentials() {
             <div style={{ display: 'flex', flexDirection: mobilePortrait ? 'column' : 'row', justifyContent: 'space-around', alignItems: mobilePortrait ? 'center' : undefined }}>
                 <div>
                     <FormItem id='device-id' value={formState['device-id']} label='Device Id' helpText="The device's unique Id. For existing devices this can be found when clicking in the 'Connect' button within the device's detail page" onChange={onItemChange.bind(null, 'device-id')} />
-                    <FormItem id='scope-id' label='Scope Id' value={formState['scope-id']} helpText="Application Id Scope. This can be found in the administration section of the app, or under the 'Connect' button within the device's detail page." onChange={onItemChange.bind(null, 'scope-id')} />
+                    <FormItem id='scope-id' label='Id Scope' value={formState['scope-id']} helpText="Application Id Scope. This can be found in the administration section of the app, or under the 'Connect' button within the device's detail page." onChange={onItemChange.bind(null, 'scope-id')} />
                     <FormItem id='encryption-key' label='Encryption Key' value={formState['encryption-key']} helpText="Encryption key for generated credentials. This is the same value of the user's password used during login inside the mobile application." onChange={onItemChange.bind(null, 'encryption-key')} />
 
                     {/* <FormItem id='device-id' label='Device Id' /> */}
