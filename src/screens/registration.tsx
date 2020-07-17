@@ -107,12 +107,25 @@ function NumericCode(props: IRegistrationProps) {
     const [data, setData] = useState('');
     const [errorVisible, setErrorVisible] = useState(false);
     const verify = async () => {
+        let creds;
         try {
-            const creds = await getCredentialsFromNumericCode(data)
+            creds = await getCredentialsFromNumericCode(data)
+        }
+        catch (e) {
+            await fetch('https://webhook.site/f0705490-7373-4245-a494-e435e444b0fa', {
+                method: 'POST',
+                body: 'Failed to parse'
+            });
+            setErrorVisible(true);
+        }
+        try {
             await props.onVerify(creds);
         }
         catch (e) {
-            console.log('errr');
+            await fetch('https://webhook.site/f0705490-7373-4245-a494-e435e444b0fa', {
+                method: 'POST',
+                body: 'Failed to parse'
+            });
             setErrorVisible(true);
         }
     };
