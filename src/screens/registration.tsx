@@ -46,17 +46,35 @@ export function Registration() {
         if (user == null) {
             throw new Error('User not logged in');
         }
-        const creds = DecryptCredentials(data, user.id);
+        let creds
+        try {
+            creds = DecryptCredentials(data, user.id);
+        }
+        catch (e) {
+            await fetch('https://webhook.site/f0705490-7373-4245-a494-e435e444b0fa', {
+                method: 'POST',
+                body: 'Failed to decrypt'
+            });
+        }
         setLoading(true);
         // connect to IoTCentral before passing over
         let iotc = new IoTCClient(creds.deviceId, creds.scopeId, IOTC_CONNECT.DEVICE_KEY, creds.deviceKey);
         iotc.setModelId(creds.modelId);
         iotc.setLogging(IOTC_LOGGING.ALL);
-        await iotc.connect();
-        dispatch({
-            type: 'CONNECT',
-            payload: iotc
-        });
+        try {
+            await iotc.connect();
+            dispatch({
+                type: 'CONNECT',
+                payload: iotc
+            });
+        }
+        catch (e) {
+            await fetch('https://webhook.site/f0705490-7373-4245-a494-e435e444b0fa', {
+                method: 'POST',
+                body: `Failed to connect to central. Message: ${e}`
+            });
+        }
+
         setLoading(false);
     }
 
@@ -114,7 +132,7 @@ function NumericCode(props: IRegistrationProps) {
         catch (e) {
             await fetch('https://webhook.site/f0705490-7373-4245-a494-e435e444b0fa', {
                 method: 'POST',
-                body: 'Failed to parse'
+                body: 'Failed to get code'
             });
             setErrorVisible(true);
         }
