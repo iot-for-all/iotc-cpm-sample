@@ -1,17 +1,18 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { View, StyleSheet, BackHandler, Dimensions, ViewStyle } from "react-native";
-import { Button, TextInput, IconButton, ActivityIndicator, Text } from 'react-native-paper';
+import { View, StyleSheet, BackHandler,  ViewStyle } from "react-native";
+import { TextInput, IconButton, ActivityIndicator } from 'react-native-paper';
 import { Footer } from '../components/footer';
 import QRCodeScanner, { Event } from 'react-native-qrcode-scanner'
 import { ConfigContext } from '../contexts/config';
 import { useUser } from '../hooks/auth';
 import { DecryptCredentials, IoTCClient, IOTC_CONNECT, IOTC_LOGGING } from 'react-native-azure-iotcentral-client';
-import { Loading, ErrorDialog } from '../components/utils';
+import { ErrorDialog } from '../components/utils';
 import { getCredentialsFromNumericCode } from '../api/central';
 import QRCodeMask from '../components/qrcodeMask';
 import { Headline, CPMText, Name } from '../components/typography';
 import { useScreenDimensions } from '../hooks/layout';
 import { CPMButton } from '../components/buttons';
+
 
 const title = 'GETTING STARTED';
 const instructions = 'How would you like to verify your device?'
@@ -33,13 +34,18 @@ interface IRegistrationProps extends IVerificationProps {
     onClose(): void
 }
 
+function Loading() {
+    return (<View style={style.loading}>
+        <ActivityIndicator size='large' style={{ marginVertical: 30 }} />
+        <Headline>Connecting to Azure IoT Central ...</Headline>
+    </View>)
+}
 
 export function Registration() {
     const { state, dispatch } = useContext(ConfigContext);
     const [user, setUser] = useUser();
     const [numeric, setNumeric] = useState(false);
     const [qr, setQR] = useState(false);
-    const [loading, setLoading] = useState(false);
 
 
     const onVerify = async (data: string) => {
@@ -47,8 +53,6 @@ export function Registration() {
             throw new Error('User not logged in');
         }
         const creds = DecryptCredentials(data, user.id);
-
-        setLoading(true);
         // connect to IoTCentral before passing over
         let iotc = new IoTCClient(creds.deviceId, creds.scopeId, IOTC_CONNECT.DEVICE_KEY, creds.deviceKey);
         iotc.setModelId(creds.modelId);
@@ -58,8 +62,6 @@ export function Registration() {
             type: 'CONNECT',
             payload: iotc
         });
-
-        setLoading(false);
     }
 
     const onBack = () => {
@@ -75,12 +77,6 @@ export function Registration() {
 
     if (!user || state.centralClient !== undefined) {
         return (null);
-    }
-    if (loading) {
-        return (<View style={style.loading}>
-            <ActivityIndicator size='large' style={{ marginVertical: 30 }} />
-            <Headline>Connecting to Azure IoT Central ...</Headline>
-        </View>);
     }
 
     if (numeric) {
@@ -107,16 +103,23 @@ export function Registration() {
 
 function NumericCode(props: IRegistrationProps) {
     const [data, setData] = useState('');
+    const [loading, setLoading] = useState(false);
     const [errorVisible, setErrorVisible] = useState(false);
+
     const verify = async () => {
         try {
+            setLoading(true);
             const creds = await getCredentialsFromNumericCode(data)
             await props.onVerify(creds);
         }
         catch (e) {
+            setLoading(false);
             setErrorVisible(true);
         }
     };
+    if (loading) {
+        return (<Loading />);
+    }
     return (<View style={{ flex: 1, ...style.container }}>
         <IconButton icon='arrow-left' onPress={props.onClose} size={30} style={{ marginTop: 40, alignSelf: 'flex-start' }} />
         <View style={{ flex: 1, marginTop: '5%' }}>
@@ -136,7 +139,7 @@ function NumericCode(props: IRegistrationProps) {
         <View style={{ flex: 1 }}>
             <Footer text={footerText} />
         </View>
-        <ErrorDialog title='Error' text='Failed to parse inserted code. Try again or use a simulated connection' visible={errorVisible} setVisible={setErrorVisible} />
+        <ErrorDialog title='Error' text='Failed to parse inserted code. Try again or use a simulated connection' visible={errorVisible} setVisible={(val) => { setErrorVisible(val); setLoading(val); }} />
     </View>)
     // return (<View style={{flex:1,justifyContent:'center'}}>
     //     <TextInput placeholder={numeric.placeholder} value={data} onChangeText={setData} numberOfLines={1}></TextInput>
@@ -145,11 +148,24 @@ function NumericCode(props: IRegistrationProps) {
 
 function QRCode(props: IRegistrationProps) {
     const { screen, orientation } = useScreenDimensions();
+    const [loading, setLoading] = useState(false);
+    const [errorVisible, setErrorVisible] = useState(false);
+
+    if (loading) {
+        return (<Loading />);
+    }
     return (
         <View style={{ ...style.container, flex: 2, position: 'relative' }}>
             <IconButton icon='arrow-left' onPress={props.onClose} size={30} color='white' style={{ position: 'absolute', alignSelf: 'flex-start', top: 40, zIndex: 2 }} />
             <QRCodeScanner onRead={async (e: Event) => {
-                await props.onVerify(e.data);
+                setLoading(true);
+                try {
+                    await props.onVerify(e.data);
+                }
+                catch (e) {
+                    setLoading(false);
+                    setErrorVisible(true);
+                }
             }}
                 customMarker={
                     <View style={{ marginTop: -(screen.width / 2) }}>
@@ -166,6 +182,7 @@ function QRCode(props: IRegistrationProps) {
                 </View>}
 
             />
+            <ErrorDialog title='Error' text='Failed to parse inserted code. Try again or use a simulated connection' visible={errorVisible} setVisible={(val) => { setErrorVisible(val); setLoading(val); }} />
         </View >
     )
 }
@@ -187,6 +204,8 @@ function SimulatedButton(props: { textColor?: string }) {
             }}>Use simulated code</CPMButton>
         </View>);
 }
+
+
 
 const style = StyleSheet.create({
     container: {
