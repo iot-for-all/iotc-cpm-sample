@@ -46,34 +46,18 @@ export function Registration() {
         if (user == null) {
             throw new Error('User not logged in');
         }
-        let creds
-        try {
-            creds = DecryptCredentials(data, user.id);
-        }
-        catch (e) {
-            await fetch('https://webhook.site/f0705490-7373-4245-a494-e435e444b0fa', {
-                method: 'POST',
-                body: 'Failed to decrypt'
-            });
-        }
+        const creds = DecryptCredentials(data, user.id);
+
         setLoading(true);
         // connect to IoTCentral before passing over
         let iotc = new IoTCClient(creds.deviceId, creds.scopeId, IOTC_CONNECT.DEVICE_KEY, creds.deviceKey);
         iotc.setModelId(creds.modelId);
         iotc.setLogging(IOTC_LOGGING.ALL);
-        try {
-            await iotc.connect();
-            dispatch({
-                type: 'CONNECT',
-                payload: iotc
-            });
-        }
-        catch (e) {
-            await fetch('https://webhook.site/f0705490-7373-4245-a494-e435e444b0fa', {
-                method: 'POST',
-                body: `Failed to connect to central. Message: ${e}`
-            });
-        }
+        await iotc.connect();
+        dispatch({
+            type: 'CONNECT',
+            payload: iotc
+        });
 
         setLoading(false);
     }
@@ -125,25 +109,11 @@ function NumericCode(props: IRegistrationProps) {
     const [data, setData] = useState('');
     const [errorVisible, setErrorVisible] = useState(false);
     const verify = async () => {
-        let creds;
         try {
-            creds = await getCredentialsFromNumericCode(data)
-        }
-        catch (e) {
-            await fetch('https://webhook.site/f0705490-7373-4245-a494-e435e444b0fa', {
-                method: 'POST',
-                body: 'Failed to get code'
-            });
-            setErrorVisible(true);
-        }
-        try {
+            const creds = await getCredentialsFromNumericCode(data)
             await props.onVerify(creds);
         }
         catch (e) {
-            await fetch('https://webhook.site/f0705490-7373-4245-a494-e435e444b0fa', {
-                method: 'POST',
-                body: 'Failed to parse'
-            });
             setErrorVisible(true);
         }
     };

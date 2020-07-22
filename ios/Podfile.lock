@@ -333,7 +333,7 @@ PODS:
     - React
   - RNSVG (11.0.1):
     - React
-  - RNVectorIcons (6.7.0):
+  - RNVectorIcons (6.6.0):
     - React
   - SwiftyJSON (5.0.0)
   - Yoga (1.14.0)
@@ -556,7 +556,7 @@ SPEC CHECKSUMS:
   RNReanimated: b5ccb50650ba06f6e749c7c329a1bc3ae0c88b43
   RNScreens: c526239bbe0e957b988dacc8d75ac94ec9cb19da
   RNSVG: 67f1f12dae2cef6ed59a42cae74a6b8f5a9e7b46
-  RNVectorIcons: 368d6d8b8301224e5ffb6254191f4f8876c2be0d
+  RNVectorIcons: 0bb4def82230be1333ddaeee9fcba45f0b288ed4
   SwiftyJSON: 36413e04c44ee145039d332b4f4e2d3e8d6c4db7
   Yoga: 3ebccbdd559724312790e7742142d062476b698e
   YogaKit: f782866e155069a2cca2517aafea43200b01fd5a
