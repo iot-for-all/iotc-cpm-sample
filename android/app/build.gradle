@@ -134,7 +134,7 @@ android {
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
-        versionName "1.0"
+        versionName project.VERSION_NAME
         missingDimensionStrategy 'react-native-camera', 'general'
     }
     splits {
@@ -234,6 +234,29 @@ dependencies {
 task copyDownloadableDepsToLibs(type: Copy) {
     from configurations.compile
     into 'libs'
+}
+
+task increment{
+    task ->
+    doFirst{
+        println android.defaultConfig.versionName
+    }
+    doLast {
+        def propertyFile = file'../gradle.properties'
+        def props = new Properties()
+        propertyFile.withReader { props.load(it) }
+        String current = props.getProperty('VERSION_NAME')
+        println current
+        String[] ver = current.split('\\.');
+        project.version=ver[0]+"."+ver[1]+"."+(ver[2].toInteger()+1)
+        println "New version: "+project.version
+        props.setProperty('VERSION_NAME', project.version)
+        propertyFile.withWriter { props.store(it,null) }
+    }
+}
+
+task printVersion{
+    print android.defaultConfig.versionName
 }
 
 apply from: file("../../node_modules/@react-native-community/cli-platform-android/native_modules.gradle"); applyNativeModulesAppBuildGradle(project)
