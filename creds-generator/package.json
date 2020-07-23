@@ -10,7 +10,7 @@
     "build::client": "./node_modules/.bin/tsc -p client/tsconfig.json",
     "build::server": "./node_modules/.bin/tsc -p server/tsconfig.json",
     "build": "npm run build::client && npm run build::server",
-    "start":"node server/dist/index.js",
+    "start": "node server/dist/index.js",
     "prepare": "npm run build",
     "live-server": "./node_modules/.bin/live-server"
   },
