@@ -26,7 +26,7 @@ In Continuous Patient Monitoring (CPM) scenarios, most medical wearable devices 
 
 Android                    |  iOS
 :-------------------------:|:-------------------------:
-<img src='./assets/android.gif' height=600/>  |  <img src='./assets/ios.gif' height=600/>
+<img src='./media/android.gif' height=600/>  |  <img src='./media/ios.gif' height=600/>
 
 ## Features
 The main features of the app are:
@@ -161,12 +161,12 @@ where *ITEM_ID* is the UUID of the bluetooth characteristic to read. It can't co
 UUID="00002A35-0000-1000-8000-00805f9b34fb"<br/>
 IOTC_FIELD="ble00002A3500001000800000805f9b34fb"
 
-A sample model definition is available [here](assets/HealthDevice.json). You can directly import it into the IoT Central application and run with simulated BLE devices or use it as a reference.
+A sample model definition is available [here](media/HealthDevice.json). You can directly import it into the IoT Central application and run with simulated BLE devices or use it as a reference.
 
 Sample model definitions for AppleHealth and Google Fit are also available for testing purposes. These only includes items directly available on phone (e.g. steps) and not ones captured from external wearable devices like heart rate or blood pressure.
 
-- [Google Fit](./assets/Google_Fit.json)
-- [Apple Health](./assets/Apple_HealthKit.json)
+- [Google Fit](./media/Google_Fit.json)
+- [Apple Health](./media/Apple_HealthKit.json)
 
 ### Generate credentials
 User can generate both a QR Code and a numeric code to be used for connecting to IoT Central.
@@ -182,7 +182,7 @@ If seeing issues with various NPM packages, often deleting the node_modules and 
 
 If running from VSCode and seeing error "Error while executing command 'react-native.cmd run-android --no-packager' (error code 101)", stop the current instance using button on the bottom bar (see image below) or killing adb and nodejs processes (from taskmanager or equivalent) and start debug again.
 
-![packager](./assets/packager.jpg)
+![packager](./media/packager.jpg)
 
 ## License
 This samples is licensed with the MIT license. For more information, see [LICENSE](./LICENSE)
