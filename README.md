@@ -26,7 +26,7 @@ In Continuous Patient Monitoring (CPM) scenarios, most medical wearable devices 
 
 Android                    |  iOS
 :-------------------------:|:-------------------------:
-<img src='./media/android.gif' height=600/>  |  <img src='./media/ios.gif' height=600/>
+![android](./media/android.gif)  |  ![ios](./media/ios.gif)
 
 ## Features
 The main features of the app are:
