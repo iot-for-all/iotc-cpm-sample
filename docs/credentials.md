@@ -6,8 +6,8 @@ Authorization can be via QR code or numeric code.
 The credentials portal at [cpm-cred-server.azurewebsites.net](https://cpm-cred-server.azurewebsites.net) helps generating authorization codes.
 The source code for the website is available under the _creds-generator_ folder as a reference.
 
-![creds_generator](../assets/creds_generator_1.png)
-![creds_generator](../assets/creds_generator_2.png)
+![creds_generator](../media/creds_generator_1.png)
+![creds_generator](../media/creds_generator_2.png)
 
 Required fields are:
 - __Device Id__: the unique id of the device inside the application. If creating a new device this will also be used as display name that can be changed from inside the Central site.
@@ -24,14 +24,14 @@ For new devices:
 ## Retrieve Ids
 For existing devices, connection details are accessible through the "Connect" tab under device view.
 
-![device_connect_1](../assets/device_connect_1.png)
-![device_connect_2](../assets/device_connect_2.png)
+![device_connect_1](../media/device_connect_1.png)
+![device_connect_2](../media/device_connect_2.png)
 
 For new devices, these are available from the "Administration" page under the "Device Connection" section. Make sure "Auto approve" is enabled and open available enrollment of type "Shared access signature (SAS)".
-![device_connect_3](../assets/device_connect_3.png)
+![device_connect_3](../media/device_connect_3.png)
 
 The group type must be "IoT devices", edge devices are not currently supported. If not, open a different enrollment from the list in previous screen until found a vald one or create a new one for devices.
-![device_connect_4](../assets/device_connect_4.png)
+![device_connect_4](../media/device_connect_4.png)
 
 
 
@@ -42,7 +42,7 @@ By providing template id during credentials generation, user doesn't need to man
 
 In order to get the unique identifier, open configuration page for required model under "Device templates" section.
 
-![model_1](../assets/modelid_1.png)
+![model_1](../media/modelid_1.png)
 
 Click on "View Identity" and in next screen copy model urn.
-![model_2](../assets/modelid_2.png)
+![model_2](../media/modelid_2.png)
