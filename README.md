@@ -68,7 +68,7 @@ yarn install ( or 'npm install' if using npm)
 
 ```
 
-## Quickly run on device/emulator
+## Quickly run on device/simulator
 This sample is ready to run to quickly have a demonstration of its features without any customizations. However some tweaks may be required to read data from particular devices (see [Data Format](#data-format)).
 
 ### From the Command Line
@@ -145,6 +145,8 @@ The capability is enabled by default. If you want to disable Health Kit feature,
 
 ## Connect to Azure IoT Central
 When not running in simulated mode, the mobile application connects to an Azure IoT Central application and sends telemetry message to specific device. After login you can choose to authenticate through a QR Code or a numeric code.
+
+Connection to Azure IoT Central is implemented through the [react-native-azure-iotcentral-client](https://www.npmjs.com/package/react-native-azure-iotcentral-client) library.
 
 Simulated devices available in this sample map to device models in the IoT Central Continous Patient Monitoring (CPM) template.
 CPM applications can be created from the IoT Central home page or directly from [https://apps.azureiotcentral.com/build/new/continuous-patient-monitoring](https://apps.azureiotcentral.com/build/new/continuous-patient-monitoring)
