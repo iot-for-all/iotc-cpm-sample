@@ -1,5 +1,5 @@
 # Simulation
-This application comes with a simulation feature that allows a complete experience without a physical BLE device or a real connection to IoT Central. Due to their limitations, this is the only option to have the application working on Android or iOS simulators.
+This application comes with a simulation feature that allows a complete experience without a physical BLE device or a real connection to IoT Central. Due to their limitations, this is a good option when testing on Android or iOS simulators.
 
 ## Simulate BLE device
 Two types of simulated devices are available in the application: "Smart Knee Brace" and "Smart Vitals Patch". This models reflect default models in the Azure IoT Central CPM application template (read more on Continuous Patient Monitoring [here](https://docs.microsoft.com/en-gb/azure/iot-central/healthcare/overview-iot-central-healthcare#what-is-continuous-patient-monitoring-template)).
