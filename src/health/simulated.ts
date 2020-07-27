@@ -188,6 +188,26 @@ export class SmartKneeBraceDevice extends SimulatedDevice implements IHealthDevi
                 getData: function () {
                     return Math.floor(Math.random() * 40)
                 }
+            },
+            {
+                id: 'DeviceTemperature',
+                name: 'Device Temperature',
+                parentId: '00001810-0000-1000-8000-00805f9b34fb',
+                enabled: isHealthService('00001810-0000-1000-8000-00805f9b34fb'),
+                value: undefined,
+                getData: function () {
+                    return Math.floor(Math.random() * 40)
+                }
+            },
+            {
+                id: 'BatteryLevel',
+                name: 'Battery Level',
+                parentId: '00001810-0000-1000-8000-00805f9b34fb',
+                enabled: isHealthService('00001810-0000-1000-8000-00805f9b34fb'),
+                value: undefined,
+                getData: function () {
+                    return Math.floor(Math.random() * 40)
+                }
             }];
         fetchedItems.map(i => {
             i.enable = function (this: SmartKneeBraceDevice, status: boolean) {
@@ -239,6 +259,26 @@ export class SmartVitalsPatchDevice extends SimulatedDevice implements IHealthDe
         {
             id: 'BodyTemperature',
             name: 'Body temperature',
+            parentId: '00001810-0000-1000-8000-00805f9b34fb',
+            enabled: isHealthService('00001810-0000-1000-8000-00805f9b34fb'),
+            value: undefined,
+            getData: function () {
+                return Math.random() * 40
+            }
+        },
+        {
+            id: 'DeviceTemperature',
+            name: 'Device Temperature',
+            parentId: '00001810-0000-1000-8000-00805f9b34fb',
+            enabled: isHealthService('00001810-0000-1000-8000-00805f9b34fb'),
+            value: undefined,
+            getData: function () {
+                return Math.random() * 40
+            }
+        },
+        {
+            id: 'BatteryLevel',
+            name: 'Battery Level',
             parentId: '00001810-0000-1000-8000-00805f9b34fb',
             enabled: isHealthService('00001810-0000-1000-8000-00805f9b34fb'),
             value: undefined,
