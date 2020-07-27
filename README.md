@@ -41,6 +41,8 @@ The main features of the app are:
 The application is available for both Android and iOS.
 It can be run on emulators as well (Android Studio or Xcode required). The "simulated" options appearing during the application flow can be used to simulate the full experience since camera and bluetooth are not available in these environments.
 
+See [Running with simulation](./docs/simulation.md) to get more details on the simulation feature.
+
 ### Required tools
 See [React Native Getting Started](https://facebook.github.io/react-native/docs/0.59/getting-started)
 and click on React Native CLI Quickstart for more detailed instructions.

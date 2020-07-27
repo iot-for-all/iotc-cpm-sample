@@ -46,3 +46,21 @@ In order to get the unique identifier, open configuration page for required mode
 
 Click on "View Identity" and in next screen copy model urn.
 ![model_2](../media/modelid_2.png)
+
+
+## Run custom credentials generator site
+Source code of the sample credentials generator web site is available in the [creds-generator](../creds-generator) folder.
+You can take it as an example and create your own web site or just deploy it as is.
+When deploying current sample site, make sure host supports **Node.JS 10+**.
+
+### Build and run
+```shell
+npm install # automatically build project
+npm run start
+```
+Other commands are available to ease local debug (_npm run \[cmd\]_)
+
+-   **live-server**: runs a local web server
+-   **watch:client**: compiles typescript client code in watch mode
+-   **watch:server**: compiles typescript server code in watch mode
+-   **build**: compiles both client and server code
