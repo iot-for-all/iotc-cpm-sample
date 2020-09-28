@@ -80,7 +80,7 @@ function Credentials() {
     }
 
     React.useEffect(() => {
-        if (formState['device-id'] && formState['scope-id'] && formState['encryption-key'] && (formState['device-key'] || formState['group-key'])) {
+        if (formState['device-id'] && formState['scope-id'] && (formState['device-key'] || formState['group-key'])) {
             setValid(true);
         }
         const codeDiv = document.getElementById('code-div') as HTMLElement;
