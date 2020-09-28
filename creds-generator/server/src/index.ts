@@ -47,8 +47,7 @@ app.post('/creds', async (req, res) => {
     let credType = +creds.types;
     const { types, ...credentials } = creds;
     let cr = CryptoJS.enc.Base64.stringify(CryptoJS.enc.Utf8.parse(JSON.stringify(credentials)));
-    const encrypted = CryptoJS.AES.encrypt(cr, creds.patientId);
-    const codeStr = encrypted.toString();
+    const codeStr = creds.patientId ? CryptoJS.AES.encrypt(cr, creds.patientId).toString() : cr;
     if (credType == CredentialTypes.ALL.valueOf() || credType == CredentialTypes.QRCODE.valueOf()) {
         response['qrCode'] = await QRCode.toDataURL(codeStr);
     }
