@@ -1,6 +1,12 @@
 #!/usr/bin/env bash
+if [ "$APPCENTER_BRANCH" != "master" ]; then
+    echo "Not on master. Exiting..."
+    exit 1
+fi
+
 if [ "$AGENT_JOBSTATUS" == "Succeeded" ]; then
     cd android
+    ./gradlew -q increment
     VERSION=`./gradlew -q printVersion | tail -n 1`
     echo $VERSION
     git config user.email "$GIT_EMAIL"

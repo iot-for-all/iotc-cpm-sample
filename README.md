@@ -26,7 +26,7 @@ In Continuous Patient Monitoring (CPM) scenarios, most medical wearable devices 
 
 Android                    |  iOS
 :-------------------------:|:-------------------------:
-<img src='./assets/android.gif' height=600/>  |  <img src='./assets/ios.gif' height=600/>
+![android](./media/android.gif)  |  ![ios](./media/ios.gif)
 
 ## Features
 The main features of the app are:
@@ -40,6 +40,8 @@ The main features of the app are:
 
 The application is available for both Android and iOS.
 It can be run on emulators as well (Android Studio or Xcode required). The "simulated" options appearing during the application flow can be used to simulate the full experience since camera and bluetooth are not available in these environments.
+
+See [Running with simulation](./docs/simulation.md) to get more details on the simulation feature.
 
 ### Required tools
 See [React Native Getting Started](https://facebook.github.io/react-native/docs/0.59/getting-started)
@@ -66,7 +68,7 @@ yarn install ( or 'npm install' if using npm)
 
 ```
 
-## Quickly run on device/emulator
+## Quickly run on device/simulator
 This sample is ready to run to quickly have a demonstration of its features without any customizations. However some tweaks may be required to read data from particular devices (see [Data Format](#data-format)).
 
 ### From the Command Line
@@ -144,6 +146,8 @@ The capability is enabled by default. If you want to disable Health Kit feature,
 ## Connect to Azure IoT Central
 When not running in simulated mode, the mobile application connects to an Azure IoT Central application and sends telemetry message to specific device. After login you can choose to authenticate through a QR Code or a numeric code.
 
+Connection to Azure IoT Central is implemented through the [react-native-azure-iotcentral-client](https://www.npmjs.com/package/react-native-azure-iotcentral-client) library.
+
 Simulated devices available in this sample map to device models in the IoT Central Continous Patient Monitoring (CPM) template.
 CPM applications can be created from the IoT Central home page or directly from [https://apps.azureiotcentral.com/build/new/continuous-patient-monitoring](https://apps.azureiotcentral.com/build/new/continuous-patient-monitoring)
 
@@ -161,12 +165,12 @@ where *ITEM_ID* is the UUID of the bluetooth characteristic to read. It can't co
 UUID="00002A35-0000-1000-8000-00805f9b34fb"<br/>
 IOTC_FIELD="ble00002A3500001000800000805f9b34fb"
 
-A sample model definition is available [here](assets/HealthDevice.json). You can directly import it into the IoT Central application and run with simulated BLE devices or use it as a reference.
+A sample model definition is available [here](media/HealthDevice.json). You can directly import it into the IoT Central application and run with simulated BLE devices or use it as a reference.
 
 Sample model definitions for AppleHealth and Google Fit are also available for testing purposes. These only includes items directly available on phone (e.g. steps) and not ones captured from external wearable devices like heart rate or blood pressure.
 
-- [Google Fit](./assets/Google_Fit.json)
-- [Apple Health](./assets/Apple_HealthKit.json)
+- [Google Fit](./media/Google_Fit.json)
+- [Apple Health](./media/Apple_HealthKit.json)
 
 ### Generate credentials
 User can generate both a QR Code and a numeric code to be used for connecting to IoT Central.
@@ -182,7 +186,7 @@ If seeing issues with various NPM packages, often deleting the node_modules and 
 
 If running from VSCode and seeing error "Error while executing command 'react-native.cmd run-android --no-packager' (error code 101)", stop the current instance using button on the bottom bar (see image below) or killing adb and nodejs processes (from taskmanager or equivalent) and start debug again.
 
-![packager](./assets/packager.jpg)
+![packager](./media/packager.jpg)
 
 ## License
 This samples is licensed with the MIT license. For more information, see [LICENSE](./LICENSE)
