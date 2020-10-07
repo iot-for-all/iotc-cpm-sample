@@ -26,9 +26,10 @@ function Credentials() {
 
     })
     const [existing, setExisting] = React.useState(true);
-    const [authType, setAuthType] = React.useState(null);
+    const [authType, setAuthType] = React.useState('qr');
     const [valid, setValid] = React.useState(false);
     const [creds, setCreds] = React.useState(null);
+
 
     const mobilePortrait = window.innerHeight > window.innerWidth;
 
@@ -79,7 +80,7 @@ function Credentials() {
     }
 
     React.useEffect(() => {
-        if (formState['device-id'] && formState['scope-id'] && formState['encryption-key'] && (formState['device-key'] || formState['group-key'])) {
+        if (formState['device-id'] && formState['scope-id'] && (formState['device-key'] || formState['group-key'])) {
             setValid(true);
         }
         const codeDiv = document.getElementById('code-div') as HTMLElement;
@@ -92,7 +93,7 @@ function Credentials() {
             }
         }
         else {
-            codeDiv.innerHTML = `<p>Please select authorization type</p>`;
+            codeDiv.innerHTML = `<p style='padding:20px'>Click on "Generate" button below to generate a code</p>`;
         }
     }, [formState, creds, authType])
 
@@ -113,8 +114,8 @@ function Credentials() {
                         <ModelDetails value={formState['model-id']} onChange={onItemChange.bind(null, 'model-id')} /></>}
                 </div>
                 <div>
-                    <input type='radio' name='cred-type' value={'qr'} onChange={onChange} />QR Code
-                    <input type='radio' name='cred-type' value={'numeric'} onChange={onChange} />Numeric Code
+                    <input type='radio' name='cred-type' value={'qr'} checked={authType === 'qr'} onChange={onChange} />QR Code
+                    <input type='radio' name='cred-type' value={'numeric'} checked={authType === 'numeric'} onChange={onChange} />Numeric Code
                     <div id='code-div' style={{ width: '300px', height: '300px', border: '1px solid black', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                     </div>
                     <div style={{ display: 'flex', justifyContent: 'space-evenly', marginTop: '20px' }}>
