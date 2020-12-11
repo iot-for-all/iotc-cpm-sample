@@ -6,8 +6,6 @@ export default function QRCodeMask() {
 
     const markerWidth = Math.floor(screen.width / 2);
     const sectorWidth = Math.floor(markerWidth / 5);
-    console.log(`Marker ${markerWidth}`);
-    console.log(`Sector ${sectorWidth}`);
     return (<View style={{ position: 'relative', width: markerWidth + sectorWidth, height: markerWidth + sectorWidth }}>
         <View style={{
             position: 'absolute',
