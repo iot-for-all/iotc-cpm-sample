@@ -141,9 +141,6 @@ function NumericCode(props: IRegistrationProps) {
         </View>
         <ErrorDialog title='Error' text='Failed to parse inserted code. Try again or use a simulated connection' visible={errorVisible} setVisible={(val) => { setErrorVisible(val); setLoading(val); }} />
     </View>)
-    // return (<View style={{flex:1,justifyContent:'center'}}>
-    //     <TextInput placeholder={numeric.placeholder} value={data} onChangeText={setData} numberOfLines={1}></TextInput>
-    // </View>)
 }
 
 function QRCode(props: IRegistrationProps) {

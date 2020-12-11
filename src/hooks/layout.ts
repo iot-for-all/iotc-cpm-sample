@@ -20,7 +20,6 @@ export function useScreenDimensions() {
     };
 
     useEffect(() => {
-        console.log(`Orientation: ${orientation}`);
         Dimensions.addEventListener('change', onChange);
         return () => {
             Dimensions.removeEventListener('change', onChange);
