@@ -60,10 +60,6 @@
     "react-test-renderer": "16.11.0",
     "typescript": "^3.8.2"
   },
-  "resolutions": {
-    "**/lodash": "^4.17.19",
-    "**/node-fetch": "^2.6.1"
-  },
   "jest": {
     "preset": "react-native",
     "transform": {
