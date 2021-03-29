@@ -1,8 +1,9 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { View, StyleSheet, BackHandler,  ViewStyle } from "react-native";
+import { View, StyleSheet, BackHandler, ViewStyle } from "react-native";
 import { TextInput, IconButton, ActivityIndicator } from 'react-native-paper';
 import { Footer } from '../components/footer';
-import QRCodeScanner, { Event } from 'react-native-qrcode-scanner'
+import QRCodeScanner from 'react-native-qrcode-scanner';
+import { BarCodeReadEvent } from 'react-native-camera';
 import { ConfigContext } from '../contexts/config';
 import { useUser } from '../hooks/auth';
 import { DecryptCredentials, IoTCClient, IOTC_CONNECT, IOTC_LOGGING } from 'react-native-azure-iotcentral-client';
@@ -13,6 +14,7 @@ import { Headline, CPMText, Name } from '../components/typography';
 import { useScreenDimensions } from '../hooks/layout';
 import { CPMButton } from '../components/buttons';
 
+export type Event = BarCodeReadEvent;
 
 const title = 'GETTING STARTED';
 const instructions = 'How would you like to verify your device?'
