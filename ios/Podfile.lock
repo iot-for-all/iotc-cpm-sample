@@ -5,7 +5,7 @@ PODS:
   - Charts (3.3.0):
     - Charts/Core (= 3.3.0)
   - Charts/Core (3.3.0)
-  - CocoaAsyncSocket (7.6.4)
+  - CocoaAsyncSocket (7.6.5)
   - CocoaLibEvent (1.0.0)
   - DoubleConversion (1.1.6)
   - FBLazyVector (0.62.2)
@@ -20,16 +20,16 @@ PODS:
     - Flipper-Folly (~> 2.1)
     - Flipper-RSocket (~> 1.0)
   - Flipper-DoubleConversion (1.1.7)
-  - Flipper-Folly (2.2.0):
+  - Flipper-Folly (2.4.0):
     - boost-for-react-native
     - CocoaLibEvent (~> 1.0)
     - Flipper-DoubleConversion
     - Flipper-Glog
-    - OpenSSL-Universal (= 1.0.2.19)
+    - OpenSSL-Universal (= 1.1.180)
   - Flipper-Glog (0.3.6)
   - Flipper-PeerTalk (0.0.4)
-  - Flipper-RSocket (1.1.0):
-    - Flipper-Folly (~> 2.2)
+  - Flipper-RSocket (1.2.0):
+    - Flipper-Folly (~> 2.4)
   - FlipperKit (0.33.1):
     - FlipperKit/Core (= 0.33.1)
   - FlipperKit/Core (0.33.1):
@@ -72,11 +72,9 @@ PODS:
     - DoubleConversion
     - glog
   - glog (0.3.5)
-  - MultiplatformBleAdapter (0.1.6)
-  - OpenSSL-Universal (1.0.2.19):
-    - OpenSSL-Universal/Static (= 1.0.2.19)
-  - OpenSSL-Universal/Static (1.0.2.19)
-  - Permission-Camera (2.1.5):
+  - MultiplatformBleAdapter (0.1.7)
+  - OpenSSL-Universal (1.1.180)
+  - Permission-Camera (2.2.2):
     - RNPermissions
   - RCTAppleHealthKit (0.8.0):
     - React
@@ -243,19 +241,19 @@ PODS:
     - React-cxxreact (= 0.62.2)
     - React-jsi (= 0.62.2)
   - React-jsinspector (0.62.2)
-  - react-native-ble-plx (2.0.1):
-    - MultiplatformBleAdapter (= 0.1.6)
+  - react-native-ble-plx (2.0.2):
+    - MultiplatformBleAdapter (= 0.1.7)
     - React
-  - react-native-camera (3.32.0):
-    - React
-    - react-native-camera/RCT (= 3.32.0)
-    - react-native-camera/RN (= 3.32.0)
-  - react-native-camera/RCT (3.32.0):
-    - React
-  - react-native-camera/RN (3.32.0):
-    - React
-  - react-native-get-random-values (1.4.0):
-    - React
+  - react-native-camera (3.43.1):
+    - React-Core
+    - react-native-camera/RCT (= 3.43.1)
+    - react-native-camera/RN (= 3.43.1)
+  - react-native-camera/RCT (3.43.1):
+    - React-Core
+  - react-native-camera/RN (3.43.1):
+    - React-Core
+  - react-native-get-random-values (1.6.0):
+    - React-Core
   - react-native-safe-area-context (0.7.3):
     - React
   - React-RCTActionSheet (0.62.2):
@@ -323,14 +321,14 @@ PODS:
     - SwiftyJSON (= 5.0)
   - RNCMaskedView (0.1.10):
     - React
-  - RNGestureHandler (1.6.1):
-    - React
-  - RNPermissions (2.1.5):
-    - React
-  - RNReanimated (1.9.0):
-    - React
-  - RNScreens (2.9.0):
-    - React
+  - RNGestureHandler (1.10.3):
+    - React-Core
+  - RNPermissions (2.2.2):
+    - React-Core
+  - RNReanimated (1.13.3):
+    - React-Core
+  - RNScreens (2.18.1):
+    - React-Core
   - RNSVG (11.0.1):
     - React
   - RNVectorIcons (6.6.0):
@@ -508,23 +506,23 @@ SPEC CHECKSUMS:
   boost-for-react-native: 39c7adb57c4e60d6c5479dd8623128eb5b3f0f2c
   BVLinearGradient: e3aad03778a456d77928f594a649e96995f1c872
   Charts: e0dd4cd8f257bccf98407b58183ddca8e8d5b578
-  CocoaAsyncSocket: 694058e7c0ed05a9e217d1b3c7ded962f4180845
+  CocoaAsyncSocket: 065fd1e645c7abab64f7a6a2007a48038fdc6a99
   CocoaLibEvent: 2fab71b8bd46dd33ddb959f7928ec5909f838e3f
   DoubleConversion: 5805e889d232975c086db112ece9ed034df7a0b2
   FBLazyVector: 4aab18c93cd9546e4bfed752b4084585eca8b245
   FBReactNativeSpec: 5465d51ccfeecb7faa12f9ae0024f2044ce4044e
   Flipper: 6c1f484f9a88d30ab3e272800d53688439e50f69
   Flipper-DoubleConversion: 38631e41ef4f9b12861c67d17cb5518d06badc41
-  Flipper-Folly: c12092ea368353b58e992843a990a3225d4533c3
+  Flipper-Folly: ac90e2debaad40c347b90058feb263a80a3ba657
   Flipper-Glog: 1dfd6abf1e922806c52ceb8701a3599a79a200a6
   Flipper-PeerTalk: 116d8f857dc6ef55c7a5a75ea3ceaafe878aadc9
-  Flipper-RSocket: 64e7431a55835eb953b0bf984ef3b90ae9fdddd7
+  Flipper-RSocket: a4adba0851ba12c1b011a320b2d99c93ce4e77f9
   FlipperKit: 6dc9b8f4ef60d9e5ded7f0264db299c91f18832e
   Folly: 30e7936e1c45c08d884aa59369ed951a8e68cf51
   glog: 1f3da668190260b06b429bb211bfbee5cd790c28
-  MultiplatformBleAdapter: 652f47ecd7f5036756517cf66833210709a72eab
-  OpenSSL-Universal: 8b48cc0d10c1b2923617dfe5c178aa9ed2689355
-  Permission-Camera: afad27bf90337684d4a86f3825112d648c8c4d3b
+  MultiplatformBleAdapter: 975cfb2a333b2c42b7a11628bd100ccb61872da2
+  OpenSSL-Universal: 1aa4f6a6ee7256b83db99ec1ccdaa80d10f9af9b
+  Permission-Camera: 5d2aaf95592660b6dcb5e8d1d90ed5d0156cad02
   RCTAppleHealthKit: bbb19a33c922d0c36631cd571680eed68e78c63a
   RCTRequired: cec6a34b3ac8a9915c37e7e4ad3aa74726ce4035
   RCTTypeSafety: 93006131180074cffa227a1075802c89a49dd4ce
@@ -535,9 +533,9 @@ SPEC CHECKSUMS:
   React-jsi: b6dc94a6a12ff98e8877287a0b7620d365201161
   React-jsiexecutor: 1540d1c01bb493ae3124ed83351b1b6a155db7da
   React-jsinspector: 512e560d0e985d0e8c479a54a4e5c147a9c83493
-  react-native-ble-plx: d8dcca81ecc617eda824a4ace85f7ffd55d90c6c
-  react-native-camera: aab3472d01b1434aa4879ece2ca96e1e01315a22
-  react-native-get-random-values: 2b7500cdb68066aba87cdccd97067c29e16ffe95
+  react-native-ble-plx: caac53ee98151ec81198239d591c203809a1ed6e
+  react-native-camera: 7aeaef71f5c13a4940fe4767b9814664f02de986
+  react-native-get-random-values: f0fc24a5887a3341589515a86282a574407b59e4
   react-native-safe-area-context: e200d4433aba6b7e60b52da5f37af11f7a0b0392
   React-RCTActionSheet: f41ea8a811aac770e0cc6e0ad6b270c644ea8b7c
   React-RCTAnimation: 49ab98b1c1ff4445148b72a3d61554138565bad0
@@ -551,10 +549,10 @@ SPEC CHECKSUMS:
   ReactCommon: ed4e11d27609d571e7eee8b65548efc191116eb3
   RNCharts: d364ca2085e24edb9ee0390d3fb7209257daa44c
   RNCMaskedView: 5a8ec07677aa885546a0d98da336457e2bea557f
-  RNGestureHandler: 8f09cd560f8d533eb36da5a6c5a843af9f056b38
-  RNPermissions: ad71dd4f767ec254f2cd57592fbee02afee75467
-  RNReanimated: b5ccb50650ba06f6e749c7c329a1bc3ae0c88b43
-  RNScreens: c526239bbe0e957b988dacc8d75ac94ec9cb19da
+  RNGestureHandler: a479ebd5ed4221a810967000735517df0d2db211
+  RNPermissions: 5df468064df661a4c8c017e2791ce90d7695eea5
+  RNReanimated: 514a11da3a2bcc6c3dfd9de32b38e2b9bf101926
+  RNScreens: f7ad633b2e0190b77b6a7aab7f914fad6f198d8d
   RNSVG: 67f1f12dae2cef6ed59a42cae74a6b8f5a9e7b46
   RNVectorIcons: 0bb4def82230be1333ddaeee9fcba45f0b288ed4
   SwiftyJSON: 36413e04c44ee145039d332b4f4e2d3e8d6c4db7
@@ -563,4 +561,4 @@ SPEC CHECKSUMS:
 
 PODFILE CHECKSUM: 39a1ec8950dbc587b5ca35219151ba78c8430b3f
 
-COCOAPODS: 1.9.3
+COCOAPODS: 1.10.1
