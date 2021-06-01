@@ -59,6 +59,7 @@ jobs:
   variables:
     rootPath: '$(System.DefaultWorkingDirectory)'
     exportPath: '$(rootPath)/output/package'
+    xcodeDeveloperDir: '/Applications/Xcode_$(Xcode_Version).app/Contents/Developer'
 
   steps:
   - task: NodeTool@0
@@ -105,6 +106,7 @@ jobs:
       signingIdentity: '$(APPLE_CERTIFICATE_SIGNING_IDENTITY)'
       provisioningProfileUuid: '$(APPLE_PROV_PROFILE_UUID)'
       xcodeVersion: 'specifyPath'
+      xcodeDeveloperDir: '$(xcodeDeveloperDir)'
 
   - task: PublishBuildArtifacts@1
     displayName: "Publish Dogfood Ipa"
