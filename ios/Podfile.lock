@@ -607,7 +607,7 @@ SPEC CHECKSUMS:
   libevent: 4049cae6c81cdb3654a443be001fb9bdceff7913
   MultiplatformBleAdapter: 975cfb2a333b2c42b7a11628bd100ccb61872da2
   OpenSSL-Universal: 1aa4f6a6ee7256b83db99ec1ccdaa80d10f9af9b
-  Permission-Camera: 375576c57ea625c88137d2cc52ba6dfeb21db036
+  Permission-Camera: 5d2aaf95592660b6dcb5e8d1d90ed5d0156cad02
   RCT-Folly: 0dd9e1eb86348ecab5ba76f910b56f4b5fef3c46
   RCTAppleHealthKit: bbb19a33c922d0c36631cd571680eed68e78c63a
   RCTRequired: 472fdbee2116e50e07e5d9f6f57c2dcc0b1f8a76
@@ -621,9 +621,9 @@ SPEC CHECKSUMS:
   React-jsiexecutor: 60ec3f896ea8be397d0e74cbe9f023c996507415
   React-jsinspector: 8c816d196de1e106aca03a2afc7a1c1f231165c0
   react-native-ble-plx: caac53ee98151ec81198239d591c203809a1ed6e
-  react-native-camera: fefef39fcd20850d17c3780638b04f741e0ccaae
+  react-native-camera: b8cc03e2feec0c04403d0998e37cf519d8fd4c6f
   react-native-get-random-values: 237bffb1c7e05fb142092681531810a29ba53015
-  react-native-safe-area-context: 8260e5157617df4b72865f44006797f895b2ada7
+  react-native-safe-area-context: e200d4433aba6b7e60b52da5f37af11f7a0b0392
   React-perflogger: ac9993fb3dfc18617b5a3ed2aa52c687188b0b48
   React-RCTActionSheet: d2244dbb3d22f8e3097727ee54f7e154c9d86169
   React-RCTAnimation: ae081f798207e1e5b1d719aebd8892838620e35b
@@ -636,10 +636,10 @@ SPEC CHECKSUMS:
   React-RCTVibration: 059f6ca86faefd17af2b35ff81eb5d337ac759ea
   React-runtimeexecutor: 6a4f07b51fae7760bf30a2adc22104835870a1c4
   ReactCommon: 180ff5ccf259754ce705063e8e93df72189ccc9f
-  RNCharts: e9461314e1930516d6c986d1be00440aeb26d5f2
-  RNCMaskedView: f127cd9652acfa31b91dcff613e07ba18b774db6
+  RNCharts: d364ca2085e24edb9ee0390d3fb7209257daa44c
+  RNCMaskedView: 0e1bc4bfa8365eba5fbbb71e07fbdc0555249489
   RNGestureHandler: a479ebd5ed4221a810967000735517df0d2db211
-  RNPermissions: 067727df624665d4a6c8e2cffcc172ba608b96ed
+  RNPermissions: 5df468064df661a4c8c017e2791ce90d7695eea5
   RNReanimated: 7245c2ff6dca3b42b6f77e800adf85ce68532759
   RNScreens: f7ad633b2e0190b77b6a7aab7f914fad6f198d8d
   RNSVG: 67f1f12dae2cef6ed59a42cae74a6b8f5a9e7b46
