@@ -12,7 +12,7 @@
     "build": "npm run build::client && npm run build::server",
     "start": "node server/dist/index.js",
     "prepare": "npm run build",
-    "live-server": "./node_modules/.bin/live-server"
+    "live-server": "five-server"
   },
   "author": "",
   "license": "ISC",
@@ -23,7 +23,7 @@
     "@types/react": "^16.9.41",
     "@types/react-dom": "^16.9.8",
     "csstype": "^2.6.11",
-    "live-server": "^1.2.1",
+    "five-server": "0.0.28",
     "typescript": "^3.9.6"
   },
   "dependencies": {
