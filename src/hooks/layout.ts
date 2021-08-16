@@ -20,9 +20,9 @@ export function useScreenDimensions() {
     };
 
     useEffect(() => {
-        Dimensions.addEventListener('change', onChange);
+        const changeListener = Dimensions.addEventListener('change', onChange);
         return () => {
-            Dimensions.removeEventListener('change', onChange);
+            changeListener.remove();
         }
     }, [orientation]);
     return { screen: screenData, orientation };
