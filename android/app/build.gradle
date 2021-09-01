@@ -153,6 +153,9 @@ android {
     buildTypes {
         debug {
             signingConfig signingConfigs.debug
+            if (System.env.CPM_DEBUG_PROJECT_NAME) {
+                archivesBaseName = "${System.env.CPM_DEBUG_PROJECT_NAME}"
+            }
         }
         betaRelease{
             signingConfig signingConfigs.betaRelease
