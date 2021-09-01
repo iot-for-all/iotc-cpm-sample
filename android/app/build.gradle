@@ -79,7 +79,7 @@ import com.android.build.OutputFile
 
 project.ext.react = [
     entryFile: "index.js",
-    enableHermes: false,  // clean and rebuild if changing
+    enableHermes: true,  // clean and rebuild if changing. true for react-native-reanimated@2.2.0-alpha
 ]
 
 apply from: "../../node_modules/react-native/react.gradle"
@@ -141,12 +141,6 @@ android {
         }
     }
     signingConfigs {
-        debug {
-            storeFile file('debug.keystore')
-            storePassword 'android'
-            keyAlias 'androiddebugkey'
-            keyPassword 'android'
-        }
         betaRelease{
             if (project.hasProperty('CPM_BETARELEASE_STORE_FILE')) {
                 storeFile file(CPM_BETARELEASE_STORE_FILE)
