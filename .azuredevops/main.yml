@@ -6,6 +6,8 @@ pool:
 variables:
   - name: isMaster
     value: $[eq(variables['Build.SourceBranch'], 'refs/heads/master')]
+  - name: CPM_DEBUG_PROJECT_NAME
+    value: $(Project_Name)
 
 name: $(Date:yyyyMMdd)$(Rev:.r)
 jobs:
