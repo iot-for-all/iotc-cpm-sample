@@ -1,0 +1,42 @@
+trigger:
+  - develop/*
+pool:
+  vmImage: 'macos-latest'
+
+variables:
+  - name: isMaster
+    value: $[eq(variables['Build.SourceBranch'], 'refs/heads/master')]
+
+name: $(Date:yyyyMMdd)$(Rev:.r)
+jobs:
+  - job: Android_Develop
+    condition: and(succeeded(), eq(variables.isMaster, false))
+    steps:
+      - task: NodeTool@0
+        inputs:
+          versionSpec: '12.18.4'
+        displayName: 'Install Node'
+
+      - script: npm install
+        workingDirectory: .
+        displayName: 'Install node dependencies'
+
+      - script: npm version prerelease --preid "$(Build.BuildNumber)" --no-git-tag-version
+        workingDirectory: .
+        displayName: 'Increment version in package.json'
+
+      - task: Gradle@2
+        inputs:
+          workingDirectory: 'android'
+          gradleWrapperFile: 'android/gradlew'
+          gradleOptions: '-Xmx3072m'
+          publishJUnitResults: false
+          testResultsFiles: '**/TEST-*.xml'
+          tasks: 'assembleDebug'
+
+      - task: PublishBuildArtifacts@1
+        displayName: 'Publish Build Artifact'
+        inputs:
+          PathtoPublish: 'android/app/build/outputs/apk/debug/$(Project_Name)-debug.apk'
+          ArtifactName: 'android'
+          publishLocation: 'Container'
