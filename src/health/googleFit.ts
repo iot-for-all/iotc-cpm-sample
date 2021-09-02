@@ -2,11 +2,10 @@ import {
   IHealthManager,
   IHealthDevice,
   IHealthItem,
-  DataAvailableCallback,
   DeviceType,
 } from '../models';
 import GoogleFit, {Scopes} from 'react-native-google-fit';
-import {camelToName, dottedToName, snakeToName} from '../utils';
+import {dottedToName, snakeToName} from '../utils';
 import {PermissionsAndroid} from 'react-native';
 import {GoogleFitStepResult} from '../types';
 import {DATA_AVAILABLE_EVENT} from './ble';
@@ -21,7 +20,6 @@ const SCOPES = [
 enum GOOGLE_ITEMS {
   STEPS = 'Steps',
 }
-const GOOGLE_PREFIX = 'https://www.googleapis.com/auth/fitness.';
 
 export class GoogleFitManager implements IHealthManager {
   private device: IHealthDevice | null;
@@ -148,7 +146,8 @@ export class GoogleFitDevice implements IHealthDevice {
               results.forEach(result => {
                 if (result.steps && result.steps.length > 0) {
                   item.value = result.steps[result.steps.length - 1].value;
-                } else { // if no steps are provided just emit 0
+                } else {
+                  // if no steps are provided just emit 0
                   item.value = 0;
                 }
               });
@@ -186,7 +185,7 @@ export class GoogleFitDevice implements IHealthDevice {
       };
     });
     fetchedItems.map(i => {
-      i.enable = function(this: GoogleFitDevice, status: boolean) {
+      i.enable = function (this: GoogleFitDevice, status: boolean) {
         return this.enableItem(i, status);
       }.bind(this);
     }, this);
