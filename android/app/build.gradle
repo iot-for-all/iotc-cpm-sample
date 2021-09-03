@@ -79,7 +79,7 @@ import com.android.build.OutputFile
 
 project.ext.react = [
     entryFile: "index.js",
-    enableHermes: false,  // clean and rebuild if changing
+    enableHermes: true,  // clean and rebuild if changing. true for react-native-reanimated@2.2.0-alpha
 ]
 
 apply from: "../../node_modules/react-native/react.gradle"
@@ -141,42 +141,33 @@ android {
         }
     }
     signingConfigs {
-        debug {
-            storeFile file('debug.keystore')
-            storePassword 'android'
-            keyAlias 'androiddebugkey'
-            keyPassword 'android'
-        }
-        betaRelease{
-            if (project.hasProperty('CPM_BETARELEASE_STORE_FILE')) {
-                storeFile file(CPM_BETARELEASE_STORE_FILE)
-                storePassword CPM_BETARELEASE_STORE_PASSWORD
-                keyAlias CPM_BETARELEASE_KEY_ALIAS
-                keyPassword CPM_BETARELEASE_KEY_PASSWORD
+        release{
+            if (project.hasProperty('CPM_RELEASE_STORE_FILE')) {
+                storeFile file(CPM_RELEASE_STORE_FILE)
+                storePassword CPM_RELEASE_STORE_PASSWORD
+                keyAlias CPM_RELEASE_KEY_ALIAS
+                keyPassword CPM_RELEASE_KEY_PASSWORD
             }
         }
     }
     buildTypes {
         debug {
             signingConfig signingConfigs.debug
+            if (System.env.CPM_DEBUG_PROJECT_NAME) {
+                archivesBaseName = "${System.env.CPM_DEBUG_PROJECT_NAME}"
+            }
         }
-        betaRelease{
-            signingConfig signingConfigs.betaRelease
+        release{
+            signingConfig signingConfigs.release
             ndk {
                 abiFilters "arm64-v8a", "armeabi-v7a"
             }
-            matchingFallbacks = ['debug','release']
-            
-            if (System.env.CPM_BETARELEASE_PROJECT_NAME) {
-                archivesBaseName = "${System.env.CPM_BETARELEASE_PROJECT_NAME}"
-            }
-        }
-        release {
-            // Caution! In production, you need to generate your own keystore file.
-            // see https://facebook.github.io/react-native/docs/signed-apk-android.
-            signingConfig signingConfigs.debug
             minifyEnabled enableProguardInReleaseBuilds
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
+            
+            if (System.env.CPM_RELEASE_PROJECT_NAME) {
+                archivesBaseName = "${System.env.CPM_RELEASE_PROJECT_NAME}"
+            }
         }
     }
 
