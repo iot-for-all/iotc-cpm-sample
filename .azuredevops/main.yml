@@ -85,6 +85,6 @@ jobs:
       - task: PublishBuildArtifacts@1
         displayName: 'Publish Build Artifact'
         inputs:
-          PathtoPublish: 'android/app/build/outputs/apk/debug/$(Project_Name)-release.apk'
+          PathtoPublish: 'android/app/build/outputs/apk/release/$(Project_Name)-release.apk'
           ArtifactName: 'android'
           publishLocation: 'Container'
