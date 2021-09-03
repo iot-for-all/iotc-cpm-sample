@@ -9,6 +9,8 @@ variables:
     value: $[eq(variables['Build.SourceBranch'], 'refs/heads/master')]
   - name: CPM_DEBUG_PROJECT_NAME
     value: $(Project_Name)
+  - name: CPM_RELEASE_PROJECT_NAME
+    value: $(Project_Name)
 
 name: $(Date:yyyyMMdd)$(Rev:.r)
 jobs:
@@ -59,6 +61,17 @@ jobs:
       - script: npm version prerelease --preid "$(Build.BuildNumber)" --no-git-tag-version
         workingDirectory: .
         displayName: 'Increment version in package.json'
+
+      - task: DownloadSecureFile@1
+        name: androidKeystore
+        inputs:
+          secureFile: iotc-cpm-release.keystore
+
+      - bash: |
+          CPM_RELEASE_VERSION_CODE=$(echo $(Build.BuildNumber) | sed 's/\.//')
+          echo "##vso[task.setvariable variable=CPM_RELEASE_VERSION_CODE]$CPM_RELEASE_VERSION_CODE"
+          cp $(androidKeystore.secureFilePath) android/app/$CPM_RELEASE_STORE_FILE
+          ls -l android/app/$CPM_RELEASE_STORE_FILE
 
       - task: Gradle@2
         inputs:

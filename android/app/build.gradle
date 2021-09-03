@@ -128,8 +128,9 @@ android {
         applicationId "com.cpm"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 1
-        versionName project.VERSION_NAME
+        versionCode 2
+        versionName '2.0.0'
+        archivesBaseName = "$applicationId-v$versionCode($versionName)"
         missingDimensionStrategy 'react-native-camera', 'general'
     }
     splits {
@@ -182,6 +183,11 @@ android {
             if (abi != null) {  // null for the universal-debug, universal-release variants
                 output.versionCodeOverride =
                         defaultConfig.versionCode * 1000 + versionCodes.get(abi)
+            }
+
+            if (variant.buildType.name == 'release') {
+                output.versionCodeOverride = System.env.CPM_RELEASE_VERSION_CODE ? System.env.CPM_RELEASE_VERSION_CODE.toInteger() : 2
+                output.versionNameOverride = System.env.CPM_RELEASE_VERSION_NAME ? System.env.CPM_RELEASE_VERSION_NAME.toString() : '2.0.0'
             }
 
         }
