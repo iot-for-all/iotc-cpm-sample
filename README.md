@@ -13,13 +13,13 @@ urlFragment: "iotc-cpm-sample"
 # Continuous Patient Monitoring Sample
 A sample application written in React-Native to connect BLE (Bluetooth Low-Energy) devices to Azure IoT Central.
 
-**Android**   
+<!-- **Android**   
 
 master: [![Build status](https://build.appcenter.ms/v0.1/apps/040cd15e-3452-4dd2-8d74-40ee61ea608f/branches/master/badge)](https://appcenter.ms) develop: [![Build status](https://build.appcenter.ms/v0.1/apps/040cd15e-3452-4dd2-8d74-40ee61ea608f/branches/develop/badge)](https://appcenter.ms)
 
 **iOS** 
 
-master: [![Build status](https://build.appcenter.ms/v0.1/apps/1148f61e-3a5b-479b-ad42-f1634f0c199b/branches/master/badge)](https://appcenter.ms) develop: [![Build status](https://build.appcenter.ms/v0.1/apps/1148f61e-3a5b-479b-ad42-f1634f0c199b/branches/develop/badge)](https://appcenter.ms)
+master: [![Build status](https://build.appcenter.ms/v0.1/apps/1148f61e-3a5b-479b-ad42-f1634f0c199b/branches/master/badge)](https://appcenter.ms) develop: [![Build status](https://build.appcenter.ms/v0.1/apps/1148f61e-3a5b-479b-ad42-f1634f0c199b/branches/develop/badge)](https://appcenter.ms) -->
 
 ## What is this?
 In Continuous Patient Monitoring (CPM) scenarios, most medical wearable devices are Bluetooth Low Energy (BLE) devices, which means they need a gateway in order to connect and send data to IoT Central. This phone app can act as that gateway, and would be used by a patient who has no access to or knowledge of Azure IoT Central.
@@ -54,7 +54,6 @@ developer setup. If you are developing on Windows for Android you will need:
 1. Python 2.7+/3.7+
 1. Android Studio
 1. React Native command line interface
-1. Yarn (optional)
 
 To set up a real device for development, follow the instructions for device setup [here.](https://facebook.github.io/react-native/docs/0.59/running-on-device)
 
@@ -64,7 +63,7 @@ git clone https://github.com/lucadruda/cpm-poc
 
 cd cpm-poc
 
-yarn install ( or 'npm install' if using npm)
+npm install
 
 ```
 
@@ -72,7 +71,7 @@ yarn install ( or 'npm install' if using npm)
 This sample is ready to run to quickly have a demonstration of its features without any customizations. However some tweaks may be required to read data from particular devices (see [Data Format](#data-format)).
 
 ### From the Command Line
-From the root folder, run `yarn run android` or  `yarn run ios`.
+From the root folder, run `npm run android` or  `npm run ios`.
 
 >NOTE: Application can also run directly with `react-native` cli commands.
 
