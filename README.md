@@ -59,9 +59,9 @@ To set up a real device for development, follow the instructions for device setu
 
 ## Installation
 ```shell
-git clone https://github.com/lucadruda/cpm-poc
+git clone https://github.com/iot-for-all/iotc-cpm-sample.git
 
-cd cpm-poc
+cd iotc-cpm-sample
 
 npm install
 
