@@ -44,7 +44,7 @@ It can be run on emulators as well (Android Studio or Xcode required). The "simu
 See [Running with simulation](./docs/simulation.md) to get more details on the simulation feature.
 
 ### Required tools
-See [React Native Getting Started](https://facebook.github.io/react-native/docs/0.59/getting-started)
+See [React Native Getting Started](https://reactnative.dev/docs/getting-started)
 and click on React Native CLI Quickstart for more detailed instructions.
 "Installing dependencies" is the section that explains
 developer setup. If you are developing on Windows for Android you will need:
