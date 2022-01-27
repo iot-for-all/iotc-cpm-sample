@@ -1,5 +1,5 @@
-import { useState, useEffect, useCallback } from 'react';
-import { Dimensions, ScaledSize } from 'react-native';
+import {useState, useEffect, useCallback} from 'react';
+import {Dimensions, ScaledSize} from 'react-native';
 
 type Orientation = 'portrait' | 'landscape';
 function getOrientation(width: number, height: number): Orientation {
@@ -16,7 +16,7 @@ export function useScreenDimensions() {
   );
 
   const onChange = useCallback(
-    (result: { window: ScaledSize; screen: ScaledSize }) => {
+    (result: {window: ScaledSize; screen: ScaledSize}) => {
       setScreenData(result.screen);
       setOrientation(getOrientation(result.screen.width, result.screen.height));
     },
@@ -28,8 +28,8 @@ export function useScreenDimensions() {
     return () => {
       // @ts-ignore
       // typings for 0.65.x not available yet
-      dimsub?.remove()
+      dimsub?.remove();
     };
   }, [orientation, onChange]);
-  return { screen: screenData, orientation };
+  return {screen: screenData, orientation};
 }
