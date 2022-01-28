@@ -148,17 +148,17 @@ android {
     }
     signingConfigs {
         release{
-            if (project.hasProperty('CPM_RELEASE_STORE_FILE')) {
-                storeFile file(CPM_RELEASE_STORE_FILE)
-                storePassword CPM_RELEASE_STORE_PASSWORD
-                keyAlias CPM_RELEASE_KEY_ALIAS
-                keyPassword CPM_RELEASE_KEY_PASSWORD
-            }
-            else if (System.env.CPM_RELEASE_STORE_FILE) {
+            if (System.env.CPM_RELEASE_STORE_FILE) {
                 storeFile file(System.env.CPM_RELEASE_STORE_FILE)
                 storePassword System.env.CPM_RELEASE_STORE_PASSWORD
                 keyAlias System.env.CPM_RELEASE_KEY_ALIAS
                 keyPassword System.env.CPM_RELEASE_KEY_PASSWORD
+                }
+            else if (project.hasProperty('CPM_RELEASE_STORE_FILE')) {
+                storeFile file(CPM_RELEASE_STORE_FILE)
+                storePassword CPM_RELEASE_STORE_PASSWORD
+                keyAlias CPM_RELEASE_KEY_ALIAS
+                keyPassword CPM_RELEASE_KEY_PASSWORD
             }
         }
     }
