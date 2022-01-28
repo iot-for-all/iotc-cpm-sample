@@ -73,6 +73,8 @@ jobs:
           cp $(androidKeystore.secureFilePath) android/app/$CPM_RELEASE_STORE_FILE
           ls -l android/app/$CPM_RELEASE_STORE_FILE
 
+      - bash: env | sort
+
       - task: Gradle@2
         inputs:
           workingDirectory: 'android'
