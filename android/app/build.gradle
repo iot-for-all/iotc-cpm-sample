@@ -148,11 +148,11 @@ android {
     }
     signingConfigs {
         release{
-            if (System.env.CPM_RELEASE_STORE_FILE) {
-                storeFile file(System.env.CPM_RELEASE_STORE_FILE)
-                storePassword System.env.CPM_RELEASE_STORE_PASSWORD
-                keyAlias System.env.CPM_RELEASE_KEY_ALIAS
-                keyPassword System.env.CPM_RELEASE_KEY_PASSWORD
+            if (System.env.KEYSTORE) {
+                storeFile file(System.env.KEYSTORE)
+                storePassword System.env.KEYSTORE_PASSWORD
+                keyAlias System.env.KEY_ALIAS
+                keyPassword System.env.KEY_PASSWORD
             }
             else if (project.hasProperty('CPM_RELEASE_STORE_FILE')) {
                 storeFile file(CPM_RELEASE_STORE_FILE)
