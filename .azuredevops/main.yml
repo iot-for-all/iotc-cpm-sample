@@ -76,6 +76,11 @@ jobs:
       - bash: env | sort
 
       - task: Gradle@2
+        env:
+          KEYSTORE_PASSWORD: $(CPM_RELEASE_STORE_PASSWORD)
+          KEYSTORE: $(CPM_RELEASE_STORE_FILE)
+          KEY_ALIAS: $(CPM_RELEASE_KEY_ALIAS)
+          KEY_PASSWORD: $(CPM_RELEASE_KEY_PASSWORD)
         inputs:
           workingDirectory: 'android'
           gradleWrapperFile: 'android/gradlew'
