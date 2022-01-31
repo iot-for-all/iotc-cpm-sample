@@ -11,10 +11,6 @@ variables:
     value: $(Project_Name)
   - name: CPM_RELEASE_PROJECT_NAME
     value: $(Project_Name)
-  - name: CPM_RELEASE_STORE_PASSWORD
-    value: $(CPM_RELEASE_STORE_PASSWORD)
-  - name: CPM_RELEASE_KEY_PASSWORD
-    value: $(CPM_RELEASE_KEY_PASSWORD)
 
 name: $(Date:yyyyMMdd)$(Rev:.r)
 jobs:
@@ -80,9 +76,6 @@ jobs:
       - bash: env | sort
 
       - task: Gradle@2
-        env: 
-          CPM_RELEASE_STORE_PASSWORD: $(CPM_RELEASE_STORE_PASSWORD)
-          CPM_RELEASE_KEY_PASSWORD: $(CPM_RELEASE_KEY_PASSWORD)
         inputs:
           workingDirectory: 'android'
           gradleWrapperFile: 'android/gradlew'
