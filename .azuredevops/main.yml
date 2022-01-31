@@ -81,8 +81,8 @@ jobs:
 
       - task: Gradle@2
         env: 
-          CPM_RELEASE_STORE_PASSWORD:$(CPM_RELEASE_STORE_PASSWORD)
-          CPM_RELEASE_KEY_PASSWORD:$(CPM_RELEASE_KEY_PASSWORD)
+          CPM_RELEASE_STORE_PASSWORD: $(CPM_RELEASE_STORE_PASSWORD)
+          CPM_RELEASE_KEY_PASSWORD: $(CPM_RELEASE_KEY_PASSWORD)
         inputs:
           workingDirectory: 'android'
           gradleWrapperFile: 'android/gradlew'
