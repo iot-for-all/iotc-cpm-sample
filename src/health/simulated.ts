@@ -107,7 +107,7 @@ export class SimulatedDevice implements Omit<IHealthDevice, 'fetch'> {
             itemName: item.name,
           });
         }.bind(this),
-        5000,
+        Math.floor(Math.random() * 1000) + 4000,
       );
       item.enabled = true;
       return true;

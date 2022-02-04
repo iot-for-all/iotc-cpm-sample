@@ -214,7 +214,9 @@ function Device(props: {
       }}>
       <TouchableOpacity
         style={{flexDirection: 'column', justifyContent: 'center'}}
-        onPress={() => connect(device.id)}>
+        onPress={async () => {
+          await connect(device.id);
+        }}>
         <Name style={DefaultStyles.itemName}>
           {device.name.length > MAX_NAME_LENGTH
             ? device.name.substring(0, MAX_NAME_LENGTH - 3) + '...'
