@@ -71,7 +71,7 @@ export type DrawerProperty = DrawerNavigationProp<
 export interface ExtendedLineData extends LineData {
   dataSets: {
     itemId: string;
-    values?: Array<number | LineValue>;
+    values?: Array<LineValue>;
     label?: string;
     config?: LineDatasetConfig;
   }[];

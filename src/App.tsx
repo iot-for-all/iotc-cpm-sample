@@ -5,14 +5,15 @@ import {
   DefaultTheme,
   configureFonts,
 } from 'react-native-paper';
-import Login from './screens/login';
-import ConfigProvider from './contexts/config';
-import {Registration} from './screens/registration';
+import Welcome from './screens/welcome';
+import ConfigProvider, {ConfigContext} from './contexts/config';
+import Registration from './screens/registration';
+import Main from './screens/main';
 import {StatusBar} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
-import Main from './screens/main';
 import AuthProvider from './contexts/auth';
 import UIProvider from './contexts/ui';
+import {useContext} from 'react';
 
 enableScreens();
 
@@ -60,9 +61,7 @@ export default function App() {
           <UIProvider>
             <NavigationContainer>
               <StatusBar backgroundColor="#00B1FF" />
-              <Login />
-              <Registration />
-              <Main />
+              <Root />
             </NavigationContainer>
           </UIProvider>
         </ConfigProvider>
@@ -70,3 +69,13 @@ export default function App() {
     </PaperProvider>
   );
 }
+
+const Root = React.memo(() => {
+  const {state} = useContext(ConfigContext);
+  if (state.centralClient !== undefined) {
+    return <Main />;
+  } else if (state.initialized) {
+    return <Registration />;
+  }
+  return <Welcome />;
+});

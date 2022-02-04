@@ -4,11 +4,17 @@ import {IHealthManager, IHealthDevice} from '../models';
 import {ChartUpdateCallback} from '../types';
 
 export interface IConfigState {
+  initialized: boolean;
   device: IHealthDevice | null;
-  centralClient: IIoTCClient | null | undefined;
+  centralClient?: IIoTCClient | null;
   healthManager: IHealthManager | null;
   insightUpdate: ChartUpdateCallback | null;
 }
+
+type CommonAction = {
+  type: 'INIT';
+  payload: boolean;
+};
 
 type IIoTCAction = {
   type: 'CONNECT' | 'DISCONNECT';
@@ -24,7 +30,7 @@ type IDeviceAction = {
   payload: IHealthDevice | null;
 };
 
-type IConfigAction = IDeviceAction | IHealthAction | IIoTCAction;
+type IConfigAction = IDeviceAction | IHealthAction | IIoTCAction | CommonAction;
 
 export type IConfigContext = {
   state: IConfigState;
@@ -33,6 +39,8 @@ export type IConfigContext = {
 
 export const configReducer = (state: IConfigState, action: IConfigAction) => {
   switch (action.type) {
+    case 'INIT':
+      return {...state, initialized: action.payload};
     case 'CONNECT':
     case 'DISCONNECT':
       return {...state, centralClient: action.payload};
@@ -48,6 +56,7 @@ export const configReducer = (state: IConfigState, action: IConfigAction) => {
 };
 
 const initialState: IConfigState = {
+  initialized: false,
   device: null,
   centralClient: undefined,
   healthManager: null,

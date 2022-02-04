@@ -42,9 +42,9 @@ export function Footer(props: IFooterProps) {
 
 const style = StyleSheet.create({
   container: {
-    justifyContent: 'flex-end',
+    justifyContent: 'center',
     alignItems: 'center',
-    marginBottom: 60,
+    marginBottom: 10,
     marginHorizontal: 30,
   },
 });

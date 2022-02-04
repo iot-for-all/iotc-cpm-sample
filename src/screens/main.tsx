@@ -1,12 +1,10 @@
-import React, {useContext} from 'react';
-import {ConfigContext} from '../contexts/config';
+import React from 'react';
 import {View, StyleSheet, Platform} from 'react-native';
 import {IconButton} from 'react-native-paper';
 import {Footer} from '../components/footer';
 import DefaultStyles from '../styles';
 import ApplicationBar from '../components/appbar';
 import {CPMText} from '../components/typography';
-import {useUser} from '../hooks/auth';
 import {createStackNavigator, TransitionPresets} from '@react-navigation/stack';
 import ConnectedLogo from '../assets/home_connected_logo.svg';
 import Devices from './devices';
@@ -94,13 +92,6 @@ function Navigation() {
 }
 
 export default function Main() {
-  const {state} = useContext(ConfigContext);
-  const [user] = useUser();
-
-  if (!user || state.centralClient === undefined) {
-    return null;
-  }
-
   return (
     <React.Fragment>
       <Drawer.Navigator

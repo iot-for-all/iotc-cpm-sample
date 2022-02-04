@@ -58,44 +58,45 @@ export default function Insight() {
           itemName: `${item.itemName}.${i}`,
         }));
       }
-      itemToProcess.forEach(itemdata => {
-        setData(currentDataSet => {
-          let currentItemData = currentDataSet.dataSets.find(
-            d => d.itemId === itemdata.itemId,
+
+      setData(currentDataSet => {
+        let dataSets = currentDataSet.dataSets;
+        itemToProcess.forEach(item => {
+          const itemDataIndex = dataSets.findIndex(
+            d => d.itemId === item.itemId,
           );
-
-          // Current sample time (x-axis) is the difference between current timestamp e the start time of sampling
-          const newSample = {x: Date.now() - start, y: itemdata.value};
-
-          if (!currentItemData) {
+          const newSample = {x: Date.now() - start, y: item.value};
+          if (itemDataIndex === -1) {
             // current item is not in the dataset yet
-            return {
-              ...currentDataSet,
-              dataSets: [
-                ...currentDataSet.dataSets,
-                ...[
-                  {
-                    itemId: itemdata.itemId,
-                    values: [newSample],
-                    label: itemdata.itemName
-                      ? itemdata.itemName
-                      : itemdata.itemId,
-                    config: {color: getRandomColor()},
-                  },
-                ],
-              ],
-            };
+            dataSets = [
+              ...dataSets,
+              {
+                itemId: item.itemId,
+                values: [newSample],
+                label: item.itemName ? item.itemName : item.itemId,
+                config: {color: getRandomColor()},
+              },
+            ];
+            return;
           }
-          return {
-            ...currentDataSet,
-            dataSets: currentDataSet.dataSets.map(({...item}) => {
-              if (item.itemId === itemdata.itemId && item.values) {
-                item.values = [...item.values, ...[newSample]];
-              }
-              return item;
-            }),
-          };
+          if (
+            dataSets[itemDataIndex].values?.some(v => v.x && v.x >= newSample.x)
+          ) {
+            // remove old
+            return {...currentDataSet, dataSets};
+          }
+          dataSets = [
+            ...dataSets.slice(0, itemDataIndex),
+            {
+              ...dataSets[itemDataIndex],
+              values: [...dataSets[itemDataIndex].values!, newSample].splice(
+                -20,
+              ),
+            },
+            ...dataSets.slice(itemDataIndex + 1),
+          ];
         });
+        return {...currentDataSet, dataSets};
       });
     },
     [start],
