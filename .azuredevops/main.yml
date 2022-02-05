@@ -5,8 +5,6 @@ pool:
 
 variables:
   - group: iotc-cpm-android
-  - name: isMaster
-    value: $[eq(variables['Build.SourceBranch'], 'refs/heads/master')]
   - name: CPM_DEBUG_PROJECT_NAME
     value: $(Project_Name)
   - name: CPM_RELEASE_PROJECT_NAME
@@ -14,40 +12,39 @@ variables:
 
 name: $(Date:yyyyMMdd)$(Rev:.r)
 jobs:
-  - job: Android_Develop
-    condition: and(succeeded(), eq(variables.isMaster, false))
-    steps:
-      - task: NodeTool@0
-        inputs:
-          versionSpec: '12.18.4'
-        displayName: 'Install Node'
+  # - job: Android_Develop
+  #   condition: and(succeeded(), eq(variables.isMaster, false))
+  #   steps:
+  #     - task: NodeTool@0
+  #       inputs:
+  #         versionSpec: '12.18.4'
+  #       displayName: 'Install Node'
 
-      - script: npm install
-        workingDirectory: .
-        displayName: 'Install node dependencies'
+  #     - script: npm install
+  #       workingDirectory: .
+  #       displayName: 'Install node dependencies'
 
-      - script: npm version prerelease --preid "$(Build.BuildNumber)" --no-git-tag-version
-        workingDirectory: .
-        displayName: 'Increment version in package.json'
+  #     - script: npm version prerelease --preid "$(Build.BuildNumber)" --no-git-tag-version
+  #       workingDirectory: .
+  #       displayName: 'Increment version in package.json'
 
-      - task: Gradle@2
-        inputs:
-          workingDirectory: 'android'
-          gradleWrapperFile: 'android/gradlew'
-          gradleOptions: '-Xmx3072m'
-          publishJUnitResults: false
-          testResultsFiles: '**/TEST-*.xml'
-          tasks: 'assembleDebug'
+  #     - task: Gradle@2
+  #       inputs:
+  #         workingDirectory: 'android'
+  #         gradleWrapperFile: 'android/gradlew'
+  #         gradleOptions: '-Xmx3072m'
+  #         publishJUnitResults: false
+  #         testResultsFiles: '**/TEST-*.xml'
+  #         tasks: 'assembleDebug'
 
-      - task: PublishBuildArtifacts@1
-        displayName: 'Publish Build Artifact'
-        inputs:
-          PathtoPublish: 'android/app/build/outputs/apk/debug/$(Project_Name)-debug.apk'
-          ArtifactName: 'android'
-          publishLocation: 'Container'
+  #     - task: PublishBuildArtifacts@1
+  #       displayName: 'Publish Build Artifact'
+  #       inputs:
+  #         PathtoPublish: 'android/app/build/outputs/apk/debug/$(Project_Name)-debug.apk'
+  #         ArtifactName: 'android'
+  #         publishLocation: 'Container'
 
   - job: Android_Release
-    condition: and(succeeded(), eq(variables.isMaster, true))
     steps:
       - task: NodeTool@0
         inputs:
