@@ -98,3 +98,11 @@ export type GoogleFitStepResult = {
     value: number;
   }[];
 };
+
+export type GoogleFitBloodPressureResult = {
+  systolic: number;
+  diastolic: number;
+  endDate: string;
+  startDate: string;
+  day: string;
+};
