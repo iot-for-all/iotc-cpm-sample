@@ -4,21 +4,28 @@ import {
   IHealthItem,
   DeviceType,
 } from '../models';
-import GoogleFit, {Scopes} from 'react-native-google-fit';
-import {dottedToName, snakeToName} from '../utils';
-import {PermissionsAndroid} from 'react-native';
-import {GoogleFitStepResult} from '../types';
-import {DATA_AVAILABLE_EVENT} from './ble';
-import {EventEmitter} from 'events';
+import GoogleFit, { Scopes } from 'react-native-google-fit';
+import { dottedToName, snakeToName } from '../utils';
+import { PermissionsAndroid } from 'react-native';
+import { GoogleFitBloodPressureResult, GoogleFitStepResult } from '../types';
+import { DATA_AVAILABLE_EVENT } from './ble';
+import { EventEmitter } from 'events';
 
 const SCOPES = [
   Scopes.FITNESS_ACTIVITY_READ,
   Scopes.FITNESS_BODY_READ,
   Scopes.FITNESS_BODY_TEMPERATURE_READ,
   Scopes.FITNESS_BLOOD_PRESSURE_READ,
+  Scopes.FITNESS_ACTIVITY_WRITE,
+  Scopes.FITNESS_HEART_RATE_READ,
+  Scopes.FITNESS_HEART_RATE_WRITE,
+  Scopes.FITNESS_BLOOD_PRESSURE_WRITE,
+  Scopes.FITNESS_BLOOD_GLUCOSE_READ,
+  Scopes.FITNESS_BLOOD_GLUCOSE_WRITE,
 ];
 enum GOOGLE_ITEMS {
   STEPS = 'Steps',
+  BLOOD_PRESSURE = 'Blood Pressure',
 }
 
 export class GoogleFitManager implements IHealthManager {
@@ -29,7 +36,12 @@ export class GoogleFitManager implements IHealthManager {
 
   startScan(onDeviceFound: (device: IHealthDevice) => void): void {
     (async () => {
-      await GoogleFit.checkIsAuthorized();
+      try {
+        await GoogleFit.checkIsAuthorized();
+      }
+      catch (er) {
+        console.log(er);
+      }
       const granted = await PermissionsAndroid.request(
         PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
         {
@@ -44,7 +56,7 @@ export class GoogleFitManager implements IHealthManager {
         throw new Error('Bluetooth permissions not granted');
       }
       if (!GoogleFit.isAuthorized) {
-        const authResult = await GoogleFit.authorize({scopes: SCOPES});
+        const authResult = await GoogleFit.authorize({ scopes: SCOPES });
         if (authResult.success) {
           GoogleFit.startRecording(
             data => {
@@ -137,9 +149,10 @@ export class GoogleFitDevice implements IHealthDevice {
 
           let startDate = new Date();
           startDate.setDate(startDate.getDate() - 1);
+          let results;
           switch (item.id) {
             case GOOGLE_ITEMS.STEPS:
-              const results = (await GoogleFit.getDailyStepCountSamples({
+              results = (await GoogleFit.getDailyStepCountSamples({
                 startDate: startDate.toISOString(),
                 endDate: new Date().toISOString(),
               })) as GoogleFitStepResult[];
@@ -150,6 +163,25 @@ export class GoogleFitDevice implements IHealthDevice {
                   // if no steps are provided just emit 0
                   item.value = 0;
                 }
+              });
+              this.eventEmitter.emit(DATA_AVAILABLE_EVENT, {
+                itemId: item.id,
+                value: item.value,
+                itemName: item.name,
+              });
+              break;
+            case GOOGLE_ITEMS.BLOOD_PRESSURE:
+              results = (await GoogleFit.getBloodPressureSamples({
+                startDate: startDate.toISOString(),
+                endDate: new Date().toISOString(),
+              })) as GoogleFitBloodPressureResult[];
+              results.forEach(result => {
+                // if (result. && result.steps.length > 0) {
+                //   item.value = result.steps[result.steps.length - 1].value;
+                // } else {
+                //   // if no steps are provided just emit 0
+                //   item.value = 0;
+                // }
               });
               this.eventEmitter.emit(DATA_AVAILABLE_EVENT, {
                 itemId: item.id,
