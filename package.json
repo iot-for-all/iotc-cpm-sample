@@ -25,7 +25,7 @@
     "react": "^17.0.2",
     "react-native": "^0.67.1",
     "react-native-azure-iotcentral-client": "1.1.7",
-    "react-native-ble-plx": "^2.0.2",
+    "react-native-ble-plx": "^2.0.3",
     "react-native-camera": "^4.1.1",
     "react-native-charts-wrapper": "^0.5.7",
     "react-native-gesture-handler": "^2.3.0",
