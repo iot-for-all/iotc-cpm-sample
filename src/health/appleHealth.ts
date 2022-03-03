@@ -4,14 +4,16 @@ import {
   IHealthItem,
   DeviceType,
 } from '../models';
-import HealthKit, {HealthKitPermissions} from 'rn-apple-healthkit';
+import AppleHealthKit, {
+  HealthKitPermissions,
+} from 'react-native-health'
 import {NativeAppEventEmitter} from 'react-native';
 import {camelToName} from '../utils';
 import {HealthRealTimeData} from '../types';
 import {DATA_AVAILABLE_EVENT} from './ble';
 import {EventEmitter} from 'events';
 
-const PERMS = HealthKit.Constants.Permissions;
+const PERMS = AppleHealthKit.Constants.Permissions;
 const OBSERVABLES = [
   PERMS.StepCount,
   PERMS.HeartRate,
@@ -30,7 +32,7 @@ const OPTIONS: HealthKitPermissions = {
 
 async function requestPermissions(): Promise<void> {
   return new Promise<void>((resolve, reject) => {
-    HealthKit.isAvailable((err, result) => {
+    AppleHealthKit.isAvailable((err, result) => {
       if (err) {
         return reject(err);
       }
@@ -48,15 +50,16 @@ export class AppleHealthManager implements IHealthManager {
   startScan(onDeviceFound: (device: IHealthDevice) => void): void {
     // Use start scan to init
     requestPermissions().then(() => {
-      HealthKit.initHealthKit(OPTIONS, (err, results) => {
+      AppleHealthKit.initHealthKit(OPTIONS, (err, results) => {
         if (err) {
-          throw err;
+          console.log(err);
+          // throw err;
         }
-        HealthKit.initStepCountObserver({}, () => {});
+        // AppleHealthKit.initStepCountObserver({}, () => {});
 
-        HealthKit.setObserver({type: HealthRealTimeData.Walking});
-        HealthKit.setObserver({type: HealthRealTimeData.Running});
-        HealthKit.setObserver({type: HealthRealTimeData.Cycling});
+        // HealthKit.setObserver({type: HealthRealTimeData.Walking});
+        // HealthKit.setObserver({type: HealthRealTimeData.Running});
+        // HealthKit.setObserver({type: HealthRealTimeData.Cycling});
         this.device = new AppleHealthDevice('healthKit', 'Apple Health Kit');
         onDeviceFound(this.device);
       });
@@ -90,23 +93,23 @@ export class AppleHealthDevice implements IHealthDevice {
     this.connected = false;
     this.enabled = {};
     this.eventEmitter = new EventEmitter();
-    NativeAppEventEmitter.addListener('change:steps', data => {
-      HealthKit.getStepCount({}, (err, result) => {
-        if (err) {
-          console.log(`Error from Apple HealthKit:\n${(err as any).message}`);
-          return;
-        }
-        if (this.items) {
-          let item = this.items.find(i => i.id === PERMS.StepCount);
-          if (item) {
-            item.value = result.value;
-          }
-        }
-      });
-    });
-    NativeAppEventEmitter.addListener('observer', data => {
-      console.log(`Observer: ${data}`);
-    });
+    // NativeAppEventEmitter.addListener('change:steps', data => {
+    //   AppleHealthKit.getStepCount({}, (err, result) => {
+    //     if (err) {
+    //       console.log(`Error from Apple HealthKit:\n${(err as any).message}`);
+    //       return;
+    //     }
+    //     if (this.items) {
+    //       let item = this.items.find(i => i.id === PERMS.StepCount);
+    //       if (item) {
+    //         item.value = result.value;
+    //       }
+    //     }
+    //   });
+    // });
+    // NativeAppEventEmitter.addListener('observer', data => {
+    //   console.log(`Observer: ${data}`);
+    // });
   }
 
   addListener(
@@ -138,7 +141,7 @@ export class AppleHealthDevice implements IHealthDevice {
         case PERMS.StepCount:
           try {
             item.value = await new Promise((resolve, reject) =>
-              HealthKit.getStepCount({}, (err, result) => {
+            AppleHealthKit.getStepCount({}, (err, result) => {
                 if (err) {
                   reject(
                     `Error from Apple HealthKit:\n${(err as any).message}`,
@@ -155,7 +158,7 @@ export class AppleHealthDevice implements IHealthDevice {
           break;
         case PERMS.HeartRate:
           item.value = await new Promise(r =>
-            HealthKit.getHeartRateSamples(
+            AppleHealthKit.getHeartRateSamples(
               {startDate: startDate.toISOString()},
               (err, result) => {
                 if (result.length > 0) {
@@ -167,7 +170,7 @@ export class AppleHealthDevice implements IHealthDevice {
           break;
         case PERMS.BodyTemperature:
           item.value = await new Promise(r =>
-            HealthKit.getBodyTemperatureSamples(
+            AppleHealthKit.getBodyTemperatureSamples(
               {startDate: startDate.toISOString()},
               (err, result) => {
                 if (result.length > 0) {
@@ -179,7 +182,7 @@ export class AppleHealthDevice implements IHealthDevice {
           break;
         case PERMS.BloodPressureDiastolic:
           item.value = await new Promise(r =>
-            HealthKit.getBloodPressureSamples(
+            AppleHealthKit.getBloodPressureSamples(
               {startDate: startDate.toISOString()},
               (err, result) => {
                 if (result.length > 0) {
@@ -191,7 +194,7 @@ export class AppleHealthDevice implements IHealthDevice {
           break;
         case PERMS.BloodPressureSystolic:
           item.value = await new Promise(r =>
-            HealthKit.getBloodPressureSamples(
+            AppleHealthKit.getBloodPressureSamples(
               {startDate: startDate.toISOString()},
               (err, result) => {
                 if (result.length > 0) {
