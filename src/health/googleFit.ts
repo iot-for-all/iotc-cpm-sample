@@ -6,7 +6,7 @@ import {
 } from '../models';
 import GoogleFit, { Scopes } from 'react-native-google-fit';
 import { dottedToName, snakeToName } from '../utils';
-import { PermissionsAndroid } from 'react-native';
+import {PERMISSIONS,request, RESULTS} from 'react-native-permissions';
 import { GoogleFitBloodPressureResult, GoogleFitStepResult } from '../types';
 import { DATA_AVAILABLE_EVENT } from './ble';
 import { EventEmitter } from 'events';
@@ -43,8 +43,8 @@ export class GoogleFitManager implements IHealthManager {
       catch (er) {
         console.log(er);
       }
-      const granted = await PermissionsAndroid.request(
-        PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
+      let granted = await request(
+        PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION,
         {
           title: 'Location Permission',
           message: `Application would like to use location permissions for distance calculation`,
@@ -53,8 +53,23 @@ export class GoogleFitManager implements IHealthManager {
           buttonPositive: 'OK',
         },
       );
-      if (granted !== PermissionsAndroid.RESULTS.GRANTED) {
+
+      if (granted !== RESULTS.GRANTED) {
         throw new Error('Bluetooth permissions not granted');
+      }
+      granted = await request(
+        PERMISSIONS.ANDROID.ACTIVITY_RECOGNITION,
+        {
+          title: 'Activity Permission',
+          message: `Application would like to use activity permissions.`,
+          buttonNeutral: 'Ask Me Later',
+          buttonNegative: 'Cancel',
+          buttonPositive: 'OK',
+        },
+      );
+
+      if (granted !== RESULTS.GRANTED) {
+        throw new Error('Activity permissions not granted');
       }
       if (!GoogleFit.isAuthorized) {
         try {
