@@ -25,7 +25,8 @@ const SCOPES = [
 ];
 enum GOOGLE_ITEMS {
   STEPS = 'Steps',
-  BLOOD_PRESSURE = 'Blood Pressure',
+  BLOOD_PRESSURE_SYSTOLIC = 'Blood Pressure Systolic',
+  BLOOD_PRESSURE_DIASTOLIC = 'Blood Pressure Diastolic',
 }
 
 export class GoogleFitManager implements IHealthManager {
@@ -170,18 +171,37 @@ export class GoogleFitDevice implements IHealthDevice {
                 itemName: item.name,
               });
               break;
-            case GOOGLE_ITEMS.BLOOD_PRESSURE:
+            case GOOGLE_ITEMS.BLOOD_PRESSURE_SYSTOLIC:
               results = (await GoogleFit.getBloodPressureSamples({
                 startDate: startDate.toISOString(),
                 endDate: new Date().toISOString(),
               })) as GoogleFitBloodPressureResult[];
               results.forEach(result => {
-                // if (result. && result.steps.length > 0) {
-                //   item.value = result.steps[result.steps.length - 1].value;
-                // } else {
-                //   // if no steps are provided just emit 0
-                //   item.value = 0;
-                // }
+                if (result.systolic) {
+                  item.value = result.systolic
+                }
+                else {
+                  item.value = 0
+                }
+              });
+              this.eventEmitter.emit(DATA_AVAILABLE_EVENT, {
+                itemId: item.id,
+                value: item.value,
+                itemName: item.name,
+              });
+              break;
+            case GOOGLE_ITEMS.BLOOD_PRESSURE_DIASTOLIC:
+              results = (await GoogleFit.getBloodPressureSamples({
+                startDate: startDate.toISOString(),
+                endDate: new Date().toISOString(),
+              })) as GoogleFitBloodPressureResult[];
+              results.forEach(result => {
+                if (result.diastolic) {
+                  item.value = result.diastolic
+                }
+                else {
+                  item.value = 0
+                }
               });
               this.eventEmitter.emit(DATA_AVAILABLE_EVENT, {
                 itemId: item.id,
