@@ -57,21 +57,32 @@ export class GoogleFitManager implements IHealthManager {
         throw new Error('Bluetooth permissions not granted');
       }
       if (!GoogleFit.isAuthorized) {
-        const authResult = await GoogleFit.authorize({ scopes: SCOPES });
-        if (authResult.success) {
-          GoogleFit.startRecording(
-            data => {
-              if (data.recording) {
-                this.device = new GoogleFitDevice('googleFit', 'Google Fit');
-                onDeviceFound(this.device);
-              }
-            },
-            ['step', 'distance', 'activity'],
-          );
-        } else {
-          throw new Error(
-            `Google Fit Authorization denied: ${authResult.message}`,
-          );
+        try {
+          const authResult = await GoogleFit.authorize({ scopes: SCOPES });
+          if (authResult.success) {
+            GoogleFit.startRecording(
+              data => {
+                if (data.recording) {
+                  this.device = new GoogleFitDevice('googleFit', 'Google Fit');
+                  onDeviceFound(this.device);
+                }
+              },
+              ['step', 'distance', 'activity'],
+            );
+          }
+          else {
+            console.log(authResult);
+            throw new Error(
+              `Google Fit Authorization denied: ${authResult.message}`,
+            );
+          }
+        } catch (err) {
+          console.log(err);
+        }
+      }
+      else {
+        if (this.device) {
+          onDeviceFound(this.device);
         }
       }
     })();

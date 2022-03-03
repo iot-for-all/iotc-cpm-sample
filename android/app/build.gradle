@@ -147,6 +147,14 @@ android {
         }
     }
     signingConfigs {
+        debug {
+                if (project.hasProperty('CPM_DEBUG_STORE_FILE')) {
+                storeFile file(CPM_DEBUG_STORE_FILE)
+                storePassword CPM_DEBUG_STORE_PASSWORD
+                keyAlias CPM_DEBUG_KEY_ALIAS
+                keyPassword CPM_DEBUG_KEY_PASSWORD
+            }
+        }
         release{
             if (System.env.KEYSTORE) {
                 storeFile file(System.env.KEYSTORE)
