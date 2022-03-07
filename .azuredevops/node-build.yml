@@ -1,0 +1,17 @@
+steps:
+  - task: NodeTool@0
+    inputs:
+      versionSpec: "16.14.0"
+    displayName: "Install Node"
+
+  - script: npm install
+    workingDirectory: .
+    displayName: "Install node dependencies"
+
+  - script: npm version prerelease --preid "$(Build.BuildNumber)" --no-git-tag-version
+    workingDirectory: .
+    displayName: "Increment version in package.json"
+
+  - task: ShellScript@2
+    inputs:
+      scriptPath: "$(System.DefaultWorkingDirectory)/bumpVersion.sh"

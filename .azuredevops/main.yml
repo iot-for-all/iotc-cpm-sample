@@ -10,180 +10,139 @@ variables:
   - name: CPM_RELEASE_PROJECT_NAME
     value: $(Project_Name)
   - name: rootPath
-    value: "$(System.DefaultWorkingDirectory)"
+    value: '$(System.DefaultWorkingDirectory)'
 
 name: $(Date:yyyyMMdd)$(Rev:.r)
 jobs:
-  - job: Setup
-    steps:
-      # - task: NodeTool@0
-      #   inputs:
-      #     versionSpec: "12.18.4"
-      #   displayName: "Install Node"
-
-      # - script: npm install
-      #   workingDirectory: .
-      #   displayName: "Install node dependencies"
-
-      # - script: npm version prerelease --preid "$(Build.BuildNumber)" --no-git-tag-version
-      #   workingDirectory: .
-      #   displayName: "Increment version in package.json"
-
-      # - task: ShellScript@2
-      #   inputs:
-      #     scriptPath: "$(rootPath)/bumpVersion.sh"
-
-      - bash: |
-          echo "##vso[task.setvariable variable=AgentName;isoutput=true]$(Agent.Name)"
-        name: passOutput
-      
-      - bash: |
-          echo "pippo" > $(rootPath)/created.txt
-
   - job: iOS_Release
     timeoutInMinutes: 120
-    dependsOn: Setup
-    # condition: and(succeeded(), eq(variables.isMaster, true))
     variables:
+      rootPath: '$(System.DefaultWorkingDirectory)'
       agentName: $[ dependencies.Setup.outputs['passOutput.AgentName'] ]
-      archivePath: "$(rootPath)/output/archive"
-      xcodeDeveloperDir: "/Applications/Xcode_$(Xcode_Version).app/Contents/Developer"
-      xcarchivePath: "$(archivePath)/$(Project_Name).xcarchive"
-      zipToSign: "$(archivePath)/$(Project_Name).zip"
-      signedZip: "$(archivePath)/$(Project_Name).zip"
-      signedExtractedPath: "$(exportPath)/signed"
-    pool:
-      vmImage: 'macos-latest'
-      demands:
-        - Agent.Name -equals $(agentName)
-
+      archivePath: '$(rootPath)/output/archive'
+      xcodeDeveloperDir: '/Applications/Xcode_$(Xcode_Version).app/Contents/Developer'
+      xcarchivePath: '$(archivePath)/$(Project_Name).xcarchive'
+      zipToSign: '$(archivePath)/$(Project_Name).zip'
+      signedZip: '$(archivePath)/$(Project_Name).zip'
+      signedExtractedPath: '$(exportPath)/signed'
     steps:
-      - bash: |
-          cat $(rootPath)/created.txt 
-      # - task: DownloadSecureFile@1
-      #   displayName: "Download distribution profile from Azure secure files storage"
-      #   inputs:
-      #     secureFile: "CPM_Dogfood.mobileprovision"
-      #     retryCount: 5
+      - template: ./node-build.yml
+      - task: DownloadSecureFile@1
+        displayName: 'Download distribution profile from Azure secure files storage'
+        inputs:
+          secureFile: 'CPM_Dogfood.mobileprovision'
+          retryCount: 5
 
-      # - task: CopyFiles@2
-      #   displayName: "Copy distribution provisioning profile"
-      #   inputs:
-      #     SourceFolder: "$(Agent.TempDirectory)"
-      #     Contents: "CPM_Dogfood.mobileprovision"
-      #     TargetFolder: "$(archivePath)"
-      #     flattenFolders: true
+      - task: CopyFiles@2
+        displayName: 'Copy distribution provisioning profile'
+        inputs:
+          SourceFolder: '$(Agent.TempDirectory)'
+          Contents: 'CPM_Dogfood.mobileprovision'
+          TargetFolder: '$(archivePath)'
+          flattenFolders: true
 
-      # - task: CopyFiles@2
-      #   displayName: "Copy ExportOptions"
-      #   inputs:
-      #     SourceFolder: "$(rootPath)"
-      #     Contents: "ExportOptions.plist"
-      #     TargetFolder: "$(archivePath)"
-      #     flattenFolders: true
-      
-      # - task: Xcode@5
-      #   displayName: "Build Mobile Application"
-      #   inputs:
-      #     actions: "build archive"
-      #     configuration: "Release"
-      #     xcWorkspacePath: "$(rootPath)/ios/$(Project_Name).xcworkspace"
-      #     scheme: "$(Project_Name)"
-      #     sdk: "iphoneos15.0"
-      #     useXcpretty: false
-      #     archivePath: "$(xcarchivePath)"
-      #     args: "-archivePath $(xcarchivePath)"
-      #     xcodeVersion: "default"
+      - task: CopyFiles@2
+        displayName: 'Copy ExportOptions'
+        inputs:
+          SourceFolder: '$(rootPath)'
+          Contents: 'ExportOptions.plist'
+          TargetFolder: '$(archivePath)'
+          flattenFolders: true
 
-      # - task: PublishBuildArtifacts@1
-      #   displayName: "Publish Archive"
-      #   inputs:
-      #     PathtoPublish: "$(archivePath)"
-      #     ArtifactName: "archive"
-      #     publishLocation: "Container"
+      - task: Xcode@5
+        displayName: 'Build Mobile Application'
+        inputs:
+          actions: 'build archive'
+          configuration: 'Release'
+          xcWorkspacePath: '$(rootPath)/ios/$(Project_Name).xcworkspace'
+          scheme: '$(Project_Name)'
+          sdk: 'iphoneos15.0'
+          useXcpretty: false
+          archivePath: '$(xcarchivePath)'
+          args: '-archivePath $(xcarchivePath)'
+          xcodeVersion: 'default'
 
-      # - task: ArchiveFiles@2
-      #   displayName: "Create zip for signing"
-      #   inputs:
-      #     rootFolderOrFile: "$(archivePath)"
-      #     includeRootFolder: false
-      #     archiveFile: "$(zipToSign)"
+      - task: PublishBuildArtifacts@1
+        displayName: 'Publish Archive'
+        inputs:
+          PathtoPublish: '$(archivePath)'
+          ArtifactName: 'archive'
+          publishLocation: 'Container'
 
-      # - task: EsrpCodeSigning@1
-      #   displayName: "Sign build"
-      #   inputs:
-      #     ConnectedServiceName: "IoT PnP PaaD"
-      #     FolderPath: "$(archivePath)"
-      #     Pattern: "*.zip"
-      #     signConfigType: "inlineSignParams"
-      #     inlineOperation: |
-      #       [
-      #             {
-      #                 "KeyCode" : "CP-464234-Apple",
-      #                 "OperationCode" : "iOSAppSignVnext",
-      #                 "Parameters" : {},
-      #                 "ToolName" : "sign",
-      #                 "ToolVersion" : "1.0"
-      #             }
-      #       ]
-      #     SessionTimeout: "60"
-      #     MaxConcurrency: "50"
-      #     MaxRetryAttempts: "5"
+      - task: ArchiveFiles@2
+        displayName: 'Create zip for signing'
+        inputs:
+          rootFolderOrFile: '$(archivePath)'
+          includeRootFolder: false
+          archiveFile: '$(zipToSign)'
 
-      # - task: ExtractFiles@1
-      #   displayName: "Extract signed build"
-      #   inputs:
-      #     archiveFilePatterns: "$(signedZip)"
-      #     destinationFolder: "$(signedExtractedPath)"
+      - task: EsrpCodeSigning@1
+        displayName: 'Sign build'
+        inputs:
+          ConnectedServiceName: 'IoT PnP PaaD'
+          FolderPath: '$(archivePath)'
+          Pattern: '*.zip'
+          signConfigType: 'inlineSignParams'
+          inlineOperation: |
+            [
+                  {
+                      "KeyCode" : "CP-464234-Apple",
+                      "OperationCode" : "iOSAppSignVnext",
+                      "Parameters" : {},
+                      "ToolName" : "sign",
+                      "ToolVersion" : "1.0"
+                  }
+            ]
+          SessionTimeout: '60'
+          MaxConcurrency: '50'
+          MaxRetryAttempts: '5'
 
-      # - task: PublishBuildArtifacts@1
-      #   displayName: "Publish Signed Ipa"
-      #   inputs:
-      #     PathtoPublish: "$(signedExtractedPath)"
-      #     ArtifactName: "ios_signed"
-      #     publishLocation: "Container"
+      - task: ExtractFiles@1
+        displayName: 'Extract signed build'
+        inputs:
+          archiveFilePatterns: '$(signedZip)'
+          destinationFolder: '$(signedExtractedPath)'
+
+      - task: PublishBuildArtifacts@1
+        displayName: 'Publish Signed Ipa'
+        inputs:
+          PathtoPublish: '$(signedExtractedPath)'
+          ArtifactName: 'ios_signed'
+          publishLocation: 'Container'
 
   - job: Android_Release
-    dependsOn: Setup
-    variables:
-      agentName: $[ dependencies.Setup.outputs['passOutput.AgentName'] ]
-    pool:
-      vmImage: 'macos-latest'
-      demands:
-        - Agent.Name -equals $(agentName)
     steps:
+      - template: ./node-build.yml
+      - task: DownloadSecureFile@1
+        name: androidKeystore
+        inputs:
+          secureFile: iotc-cpm-release.keystore
+
       - bash: |
-          cat $(rootPath)/created.txt
-      # - task: DownloadSecureFile@1
-      #   name: androidKeystore
-      #   inputs:
-      #     secureFile: iotc-cpm-release.keystore
+          CPM_RELEASE_VERSION_CODE=$(echo $(Build.BuildNumber) | sed 's/\.//')
+          echo "##vso[task.setvariable variable=CPM_RELEASE_VERSION_CODE]$CPM_RELEASE_VERSION_CODE"
+          cp $(androidKeystore.secureFilePath) android/app/$CPM_RELEASE_STORE_FILE
+          ls -l android/app/$CPM_RELEASE_STORE_FILE
 
-      # - bash: |
-      #     CPM_RELEASE_VERSION_CODE=$(echo $(Build.BuildNumber) | sed 's/\.//')
-      #     echo "##vso[task.setvariable variable=CPM_RELEASE_VERSION_CODE]$CPM_RELEASE_VERSION_CODE"
-      #     cp $(androidKeystore.secureFilePath) android/app/$CPM_RELEASE_STORE_FILE
-      #     ls -l android/app/$CPM_RELEASE_STORE_FILE
+      - bash: env | sort
 
-      # - bash: env | sort
+      - task: Gradle@2
+        env:
+          KEYSTORE_PASSWORD: $(CPM_RELEASE_STORE_PASSWORD)
+          KEYSTORE: $(CPM_RELEASE_STORE_FILE)
+          KEY_ALIAS: $(CPM_RELEASE_KEY_ALIAS)
+          KEY_PASSWORD: $(CPM_RELEASE_KEY_PASSWORD)
+        inputs:
+          workingDirectory: 'android'
+          gradleWrapperFile: 'android/gradlew'
+          gradleOptions: '-Xmx3072m'
+          publishJUnitResults: false
+          testResultsFiles: '**/TEST-*.xml'
+          tasks: 'assembleRelease'
 
-      # - task: Gradle@2
-      #   env:
-      #     KEYSTORE_PASSWORD: $(CPM_RELEASE_STORE_PASSWORD)
-      #     KEYSTORE: $(CPM_RELEASE_STORE_FILE)
-      #     KEY_ALIAS: $(CPM_RELEASE_KEY_ALIAS)
-      #     KEY_PASSWORD: $(CPM_RELEASE_KEY_PASSWORD)
-      #   inputs:
-      #     workingDirectory: 'android'
-      #     gradleWrapperFile: 'android/gradlew'
-      #     gradleOptions: '-Xmx3072m'
-      #     publishJUnitResults: false
-      #     testResultsFiles: '**/TEST-*.xml'
-      #     tasks: 'assembleRelease'
-
-      # - task: PublishBuildArtifacts@1
-      #   displayName: 'Publish Build Artifact'
-      #   inputs:
-      #     PathtoPublish: 'android/app/build/outputs/apk/release/$(Project_Name)-release.apk'
-      #     ArtifactName: 'android'
-      #     publishLocation: 'Container'
+      - task: PublishBuildArtifacts@1
+        displayName: 'Publish Build Artifact'
+        inputs:
+          PathtoPublish: 'android/app/build/outputs/apk/release/$(Project_Name)-release.apk'
+          ArtifactName: 'android'
+          publishLocation: 'Container'
