@@ -9,6 +9,8 @@ variables:
     value: $(Project_Name)
   - name: CPM_RELEASE_PROJECT_NAME
     value: $(Project_Name)
+  - name: rootPath
+    value: "$(System.DefaultWorkingDirectory)"
 
 name: $(Date:yyyyMMdd)$(Rev:.r)
 jobs:
@@ -41,7 +43,6 @@ jobs:
         - Agent.Name -equals $(Agent.Name)
     # condition: and(succeeded(), eq(variables.isMaster, true))
     variables:
-      rootPath: "$(System.DefaultWorkingDirectory)"
       archivePath: "$(rootPath)/output/archive"
       xcodeDeveloperDir: "/Applications/Xcode_$(Xcode_Version).app/Contents/Developer"
       xcarchivePath: "$(archivePath)/$(Project_Name).xcarchive"
