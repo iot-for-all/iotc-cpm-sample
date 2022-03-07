@@ -35,6 +35,7 @@ jobs:
 
   - job: iOS_Release
     timeoutInMinutes: 120
+    dependsOn: Setup
     pool:
       demands:
         - Agent.Name -equals $(Agent.Name)
@@ -133,6 +134,7 @@ jobs:
           publishLocation: "Container"
 
   - job: Android_Release
+    dependsOn: Setup
     pool:
       demands:
         - Agent.Name -equals $(Agent.Name)
