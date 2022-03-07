@@ -6,10 +6,11 @@ import {
 } from '../models';
 import GoogleFit, { Scopes } from 'react-native-google-fit';
 import { dottedToName, snakeToName } from '../utils';
-import {PERMISSIONS,request, RESULTS} from 'react-native-permissions';
+import { PERMISSIONS, request, RESULTS } from 'react-native-permissions';
 import { GoogleFitBloodPressureResult, GoogleFitStepResult } from '../types';
 import { DATA_AVAILABLE_EVENT } from './ble';
 import { EventEmitter } from 'events';
+import { Platform } from 'react-native';
 
 const SCOPES = [
   Scopes.FITNESS_ACTIVITY_READ,
@@ -57,19 +58,21 @@ export class GoogleFitManager implements IHealthManager {
       if (granted !== RESULTS.GRANTED) {
         throw new Error('Bluetooth permissions not granted');
       }
-      granted = await request(
-        PERMISSIONS.ANDROID.ACTIVITY_RECOGNITION,
-        {
-          title: 'Activity Permission',
-          message: `Application would like to use activity permissions.`,
-          buttonNeutral: 'Ask Me Later',
-          buttonNegative: 'Cancel',
-          buttonPositive: 'OK',
-        },
-      );
+      if (Platform.Version > 28) {
+        granted = await request(
+          PERMISSIONS.ANDROID.ACTIVITY_RECOGNITION,
+          {
+            title: 'Activity Permission',
+            message: `Application would like to use activity permissions.`,
+            buttonNeutral: 'Ask Me Later',
+            buttonNegative: 'Cancel',
+            buttonPositive: 'OK',
+          },
+        );
 
-      if (granted !== RESULTS.GRANTED) {
-        throw new Error('Activity permissions not granted');
+        if (granted !== RESULTS.GRANTED) {
+          throw new Error('Activity permissions not granted');
+        }
       }
       if (!GoogleFit.isAuthorized) {
         try {
@@ -186,14 +189,11 @@ export class GoogleFitDevice implements IHealthDevice {
               results.forEach(result => {
                 if (result.steps && result.steps.length > 0) {
                   item.value = result.steps[result.steps.length - 1].value;
-                } else {
-                  // if no steps are provided just emit 0
-                  item.value = 0;
                 }
               });
               this.eventEmitter.emit(DATA_AVAILABLE_EVENT, {
                 itemId: item.id,
-                value: item.value,
+                value: item.value ?? 0,
                 itemName: item.name,
               });
               break;
@@ -206,13 +206,10 @@ export class GoogleFitDevice implements IHealthDevice {
                 if (result.systolic) {
                   item.value = result.systolic
                 }
-                else {
-                  item.value = 0
-                }
               });
               this.eventEmitter.emit(DATA_AVAILABLE_EVENT, {
                 itemId: item.id,
-                value: item.value,
+                value: item.value ?? 0,
                 itemName: item.name,
               });
               break;
@@ -225,13 +222,10 @@ export class GoogleFitDevice implements IHealthDevice {
                 if (result.diastolic) {
                   item.value = result.diastolic
                 }
-                else {
-                  item.value = 0
-                }
               });
               this.eventEmitter.emit(DATA_AVAILABLE_EVENT, {
                 itemId: item.id,
-                value: item.value,
+                value: item.value ?? 0,
                 itemName: item.name,
               });
               break;
