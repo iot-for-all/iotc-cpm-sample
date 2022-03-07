@@ -41,7 +41,7 @@ jobs:
     pool:
       vmImage: 'macos-latest'
       demands:
-        - Agent.Name -equals $(Agent.Name)
+        - Agent.Name -equals $(AgentName)
     # condition: and(succeeded(), eq(variables.isMaster, true))
     variables:
       archivePath: "$(rootPath)/output/archive"
@@ -140,7 +140,7 @@ jobs:
     pool:
       vmImage: 'macos-latest'
       demands:
-        - Agent.Name -equals $(Agent.Name)
+        - Agent.Name -equals $(AgentName)
     steps:
       - task: DownloadSecureFile@1
         name: androidKeystore
