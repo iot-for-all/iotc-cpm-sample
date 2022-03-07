@@ -1,21 +1,12 @@
 # Walkthrough
 
-## 1. Login
-![login](../media/login.png)
-
-Insert username and password. Login is simulated so credentials are not validated, you can enter anything.
-
-If you want to connect to Azure IoT Central you must note down inserted password as it will be needed when generating authorization codes using the credentials portal.
-
-## 2. Authorization
+## 1. Authorization
 ![authorization](../media/authorization.png)
 ![qrcode](../media/qrcode.png)
-![numeric](../media/numeric.png)
 
-Select one of the options to connect with Azure IoT Central.
-QR or numeric codes can be obtained through credentials portal.
+Scan QR Code to connect to a device in IoT Central. 
 
-To avoid connecting with Azure IoT Central click on "Use Simulated Code". The application will still read data from BLE devices and show it on insight chart but it will not generate telemetry data for IoT Central.
+To skip this, tap on "Use simulation". The application will still read data from BLE devices or health providers and show it on insight chart but it will not generate telemetry data for IoT Central.
 
 ## 3. Home
 ![home](../media/home.png)

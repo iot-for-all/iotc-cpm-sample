@@ -1,38 +1,42 @@
-{
-  "@id": "urn:cpm:GoogleFit_2j4:1",
-  "@type": "CapabilityModel",
-  "implements": [
-    {
-      "@id": "urn:cpm:GoogleFit_2j4:fuqq0g8ns:1",
-      "@type": "InterfaceInstance",
-      "displayName": {
-        "en": "Interface"
-      },
-      "name": "GoogleFit_22t",
-      "schema": {
-        "@id": "urn:cpm:GoogleFit_22t:1",
-        "@type": "Interface",
+[
+  {
+    "@id": "dtmi:cpm:GoogleFit_5r4;1",
+    "@type": "Interface",
+    "contents": [
+      {
+        "@id": "dtmi:cpm:GoogleFit_5r4:steps;1",
+        "@type": "Telemetry",
         "displayName": {
-          "en": "Interface"
+          "en": "Steps"
         },
-        "contents": [
-          {
-            "@id": "urn:cpm:GoogleFit_22t:Steps:1",
-            "@type": "Telemetry",
-            "displayName": {
-              "en": "Steps"
-            },
-            "name": "Steps",
-            "schema": "integer"
-          }
-        ]
+        "name": "steps",
+        "schema": "double"
+      },
+      {
+        "@id": "dtmi:cpm:GoogleFit_5r4:BloodPressureSystolic;1",
+        "@type": "Telemetry",
+        "displayName": {
+          "en": "Blood Pressure Systolic"
+        },
+        "name": "BloodPressureSystolic",
+        "schema": "double"
+      },
+      {
+        "@id": "dtmi:cpm:GoogleFit_5r4:BloodPressureDiastolic;1",
+        "@type": "Telemetry",
+        "displayName": {
+          "en": "Blood Pressure Diastolic"
+        },
+        "name": "BloodPressureDiastolic",
+        "schema": "double"
       }
-    }
-  ],
-  "displayName": {
-    "en": "Google Fit"
-  },
-  "@context": [
-    "http://azureiot.com/v1/contexts/IoTModel.json"
-  ]
-}
+    ],
+    "displayName": {
+      "en": "Google Fit"
+    },
+    "@context": [
+      "dtmi:iotcentral:context;2",
+      "dtmi:dtdl:context;2"
+    ]
+  }
+]
