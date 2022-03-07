@@ -33,23 +33,25 @@ jobs:
         inputs:
           scriptPath: "$(rootPath)/bumpVersion.sh"
       - bash: |
-          echo "##vso[task.setvariable variable=AgentName;]$(Agent.Name)"
+          echo "##vso[task.setvariable variable=AgentName;isoutput=true]$(Agent.Name)"
+        name: passOutput
 
   - job: iOS_Release
     timeoutInMinutes: 120
     dependsOn: Setup
-    pool:
-      vmImage: 'macos-latest'
-      demands:
-        - Agent.Name -equals $(AgentName)
     # condition: and(succeeded(), eq(variables.isMaster, true))
     variables:
+      agentName: $[ dependencies.Setup.outputs['passOutput.AgentName'] ]
       archivePath: "$(rootPath)/output/archive"
       xcodeDeveloperDir: "/Applications/Xcode_$(Xcode_Version).app/Contents/Developer"
       xcarchivePath: "$(archivePath)/$(Project_Name).xcarchive"
       zipToSign: "$(archivePath)/$(Project_Name).zip"
       signedZip: "$(archivePath)/$(Project_Name).zip"
       signedExtractedPath: "$(exportPath)/signed"
+    pool:
+      vmImage: 'macos-latest'
+      demands:
+        - Agent.Name -equals $(agentName)
 
     steps:
       - task: DownloadSecureFile@1
@@ -137,10 +139,12 @@ jobs:
 
   - job: Android_Release
     dependsOn: Setup
+    variables:
+      agentName: $[ dependencies.Setup.outputs['passOutput.AgentName'] ]
     pool:
       vmImage: 'macos-latest'
       demands:
-        - Agent.Name -equals $(AgentName)
+        - Agent.Name -equals $(agentName)
     steps:
       - task: DownloadSecureFile@1
         name: androidKeystore
