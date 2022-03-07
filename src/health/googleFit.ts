@@ -5,7 +5,7 @@ import {
   DeviceType,
 } from '../models';
 import GoogleFit, { Scopes } from 'react-native-google-fit';
-import { dottedToName, snakeToName } from '../utils';
+import { camelToName } from '../utils';
 import { PERMISSIONS, request, RESULTS } from 'react-native-permissions';
 import { GoogleFitBloodPressureResult, GoogleFitStepResult } from '../types';
 import { DATA_AVAILABLE_EVENT } from './ble';
@@ -25,9 +25,9 @@ const SCOPES = [
   Scopes.FITNESS_BLOOD_GLUCOSE_WRITE,
 ];
 enum GOOGLE_ITEMS {
-  STEPS = 'Steps',
-  BLOOD_PRESSURE_SYSTOLIC = 'Blood Pressure Systolic',
-  BLOOD_PRESSURE_DIASTOLIC = 'Blood Pressure Diastolic',
+  STEPS = 'steps',
+  BLOOD_PRESSURE_SYSTOLIC = 'bloodPressureSystolic',
+  BLOOD_PRESSURE_DIASTOLIC = 'bloodPressureDiastolic',
 }
 
 export class GoogleFitManager implements IHealthManager {
@@ -251,7 +251,7 @@ export class GoogleFitDevice implements IHealthDevice {
       const name = (<any>GOOGLE_ITEMS)[perm];
       return {
         id: name,
-        name: snakeToName(dottedToName(name)),
+        name: camelToName(name),
         enabled: true,
         value: undefined,
       };

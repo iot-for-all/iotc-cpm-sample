@@ -27,7 +27,7 @@ The main features of the app are:
 ## Build and Run
 
 The application is available for both Android and iOS.
-It can be run on emulators as well (Android Studio or Xcode required). The "simulated" options appearing during the application flow can be used to simulate the full experience since camera and bluetooth are not available in these environments.
+It can be run on emulators as well (Android Studio or Xcode required). The "simulated" options appearing during the application flow can be used to simulate the full experience since camera and bluetooth may not be available in these environments.
 
 See [Running with simulation](./docs/simulation.md) to get more details on the simulation feature.
 
@@ -37,13 +37,12 @@ and click on React Native CLI Quickstart for more detailed instructions.
 "Installing dependencies" is the section that explains
 developer setup. If you are developing on Windows for Android you will need:
 
-1. Node.JS (10+)
-1. Java SE Development Kit (JDK 8+)
-1. Python 2.7+/3.7+
-1. Android Studio
-1. React Native command line interface
+1. Node.JS (12+)
+1. Java SE Development Kit (JDK 8+) - _Android_
+1. Android Studio - _Android_
+1. XCode - _Mac OS_
 
-To set up a real device for development, follow the instructions for device setup [here.](https://facebook.github.io/react-native/docs/0.59/running-on-device)
+To set up a real device for development, follow the instructions for device setup [here.](https://reactnative.dev/docs/running-on-device)
 
 ## Installation
 ```shell
@@ -56,7 +55,7 @@ npm install
 ```
 
 ## Quickly run on device/simulator
-This sample is ready to run to quickly have a demonstration of its features without any customizations. However some tweaks may be required to read data from particular devices (see [Data Format](#data-format)).
+This sample is ready to run and quickly have a demonstration of its features without any customizations. However some tweaks may be required to read data from particular devices (see [Data Format](#data-format)).
 
 ### From the Command Line
 From the root folder, run `npm run android` or  `npm run ios`.
@@ -69,9 +68,10 @@ From the root folder, run `npm run android` or  `npm run ios`.
 3. Start Debug
 
 ## Getting started
-1. Login with username and password. Login is just simulated and it's not doing any credentials processing. Use an easy password as it will be needed when generating credentials codes. (see [Generate Credentials](#generate-credentials))
-2. Generate a QR Code or a numeric code for an IoT Central device using the credentials portal.
-3. Scan the obtained QR Code or insert the numeric code.
+1. Create a device in an IoT Central application or reuse an existing one.
+2. Open the connect tab for the device to reveal the connection QR Code.
+In-depth instructions [here](https://docs.microsoft.com/en-us/azure/iot-central/core/quick-deploy-iot-central#register-a-device).
+3. Run the CPM application and tap "Scan" to scan the device QR Code or "Use simulation" if testing the app without connecting to IoT Central.
 4. Select operation (scan BLE devices, Google Fit or Apple Health).
 5. Data is available in the chart. Items can be enabled or disabled through the sync option menu. (see [Insight docs](docs/insight.md))
 
@@ -119,10 +119,12 @@ https://developers.google.com/fit/android/get-api-key
    
 2. In order for your app to communicate properly with the Google Fitness API,
    you need to provide the SHA1 sum of the certificate used for signing your
-   application to Google. This will enable the GoogleFit plugin to communicate
+   application to Google. This will enable the Google Fit plugin to communicate
    with the Fit application in each smartphone where the application is installed.
    https://developers.google.com/fit/android/get-api-key
 ```
+
+The current sample is limited to provide "Steps" and "Blood Pressure" telemetries from Google Fit. Capabilities can easily be extended to support all available telemetries. Follow instructions in the [Google Fit](./docs/google_fit) section.
 
 ### iOS
 The HealthKit entitlement is required and must be available in the provisioning profile to use when signing the release build.
@@ -158,22 +160,6 @@ Sample model definitions for AppleHealth and Google Fit are also available for t
 
 - [Google Fit](./media/Google_Fit.json)
 - [Apple Health](./media/Apple_HealthKit.json)
-
-### Generate credentials
-User can generate both a QR Code and a numeric code to be used for connecting to IoT Central.
-Just go to http://cpm-cred-server.azurewebsites.net and generate codes by inserting IoT Central data in the form.
-The encryption key must be the equal to the password specified during login into the mobile app since it is used to secure QR Code data.
-
-More details [here](docs/credentials.md).
-
-
-
-## Troubleshooting
-If seeing issues with various NPM packages, often deleting the node_modules and rebuilding will fix the issue.
-
-If running from VSCode and seeing error "Error while executing command 'react-native.cmd run-android --no-packager' (error code 101)", stop the current instance using button on the bottom bar (see image below) or killing adb and nodejs processes (from taskmanager or equivalent) and start debug again.
-
-![packager](./media/packager.jpg)
 
 ## License
 This samples is licensed with the MIT license. For more information, see [LICENSE](./LICENSE)
