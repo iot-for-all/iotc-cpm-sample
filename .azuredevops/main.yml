@@ -39,6 +39,7 @@ jobs:
     timeoutInMinutes: 120
     dependsOn: Setup
     pool:
+      vmImage: 'macos-latest'
       demands:
         - Agent.Name -equals $(Agent.Name)
     # condition: and(succeeded(), eq(variables.isMaster, true))
@@ -137,6 +138,7 @@ jobs:
   - job: Android_Release
     dependsOn: Setup
     pool:
+      vmImage: 'macos-latest'
       demands:
         - Agent.Name -equals $(Agent.Name)
     steps:
