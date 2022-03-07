@@ -31,7 +31,7 @@ jobs:
         inputs:
           scriptPath: "$(rootPath)/bumpVersion.sh"
       - bash: |
-        echo "##vso[task.setvariable variable=AgentName;]$(Agent.Name)"
+          echo "##vso[task.setvariable variable=AgentName;]$(Agent.Name)"
 
   - job: iOS_Release
     timeoutInMinutes: 120
