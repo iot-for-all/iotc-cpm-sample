@@ -13,6 +13,7 @@
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		4AAAA1B526CAC0C400794BB3 /* libswiftWebKit.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 4AAAA1B426CAC0C400794BB3 /* libswiftWebKit.tbd */; };
 		536C4BC14FEA40702D9F8B27 /* libPods-cpm-cpmTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DB91F243AC61C388439A6F8 /* libPods-cpm-cpmTests.a */; };
+		8178FC3A27D0DE2A0080095C /* HealthKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8178FC3927D0DE2A0080095C /* HealthKit.framework */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
 		AB1F2C0BBC721B68D4B86B14 /* libPods-cpm.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 944F78DB4953F3970DEACE31 /* libPods-cpm.a */; };
 /* End PBXBuildFile section */
@@ -41,7 +42,11 @@
 		3478DFB43FA9FF37C44B7B11 /* Pods-cpm-cpmTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-cpm-cpmTests.debug.xcconfig"; path = "Target Support Files/Pods-cpm-cpmTests/Pods-cpm-cpmTests.debug.xcconfig"; sourceTree = "<group>"; };
 		4AAAA1B426CAC0C400794BB3 /* libswiftWebKit.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libswiftWebKit.tbd; path = usr/lib/swift/libswiftWebKit.tbd; sourceTree = SDKROOT; };
 		508A8850559996A7717DCBA4 /* Pods-cpm-cpmTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-cpm-cpmTests.release.xcconfig"; path = "Target Support Files/Pods-cpm-cpmTests/Pods-cpm-cpmTests.release.xcconfig"; sourceTree = "<group>"; };
+		8178FC3827D0DE2A0080095C /* cpmDebug.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = cpmDebug.entitlements; path = cpm/cpmDebug.entitlements; sourceTree = "<group>"; };
+		8178FC3927D0DE2A0080095C /* HealthKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = HealthKit.framework; path = System/Library/Frameworks/HealthKit.framework; sourceTree = SDKROOT; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = cpm/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		81FA301527D0FB47002DB6D7 /* cpm.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = cpm.entitlements; path = cpm/cpm.entitlements; sourceTree = "<group>"; };
+		81FA301627D12F97002DB6D7 /* cpmRelease.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = cpmRelease.entitlements; path = cpm/cpmRelease.entitlements; sourceTree = "<group>"; };
 		944F78DB4953F3970DEACE31 /* libPods-cpm.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-cpm.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		A4CA790072380415079DA36B /* Pods-cpm.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-cpm.release.xcconfig"; path = "Target Support Files/Pods-cpm/Pods-cpm.release.xcconfig"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
@@ -61,6 +66,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8178FC3A27D0DE2A0080095C /* HealthKit.framework in Frameworks */,
 				4AAAA1B526CAC0C400794BB3 /* libswiftWebKit.tbd in Frameworks */,
 				AB1F2C0BBC721B68D4B86B14 /* libPods-cpm.a in Frameworks */,
 			);
@@ -89,6 +95,9 @@
 		13B07FAE1A68108700A75B9A /* cpm */ = {
 			isa = PBXGroup;
 			children = (
+				81FA301627D12F97002DB6D7 /* cpmRelease.entitlements */,
+				81FA301527D0FB47002DB6D7 /* cpm.entitlements */,
+				8178FC3827D0DE2A0080095C /* cpmDebug.entitlements */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
 				13B07FB01A68108700A75B9A /* AppDelegate.m */,
 				13B07FB51A68108700A75B9A /* Images.xcassets */,
@@ -113,6 +122,7 @@
 		2D16E6871FA4F8E400B85C8A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				8178FC3927D0DE2A0080095C /* HealthKit.framework */,
 				4AAAA1B426CAC0C400794BB3 /* libswiftWebKit.tbd */,
 				ED297162215061F000B7C4FE /* JavaScriptCore.framework */,
 				944F78DB4953F3970DEACE31 /* libPods-cpm.a */,
@@ -487,6 +497,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = cpm/cpmDebug.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
@@ -521,7 +532,10 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = cpm/cpmRelease.entitlements;
+				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = "";
 				INFOPLIST_FILE = cpm/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -538,6 +552,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = cpm;
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
 			};

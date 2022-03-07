@@ -12,6 +12,8 @@
 #import <SKIOSNetworkPlugin/SKIOSNetworkAdapter.h>
 #import <FlipperKitReactPlugin/FlipperKitReactPlugin.h>
 
+#import "RCTAppleHealthKit.h"
+
 static void InitializeFlipper(UIApplication *application) {
   FlipperClient *client = [FlipperClient sharedClient];
   SKDescriptorMapper *layoutDescriptorMapper = [[SKDescriptorMapper alloc] initWithDefaults];
@@ -36,6 +38,11 @@ static void InitializeFlipper(UIApplication *application) {
                                                    moduleName:@"cpm"
                                             initialProperties:nil];
 
+   @try{
+   [[RCTAppleHealthKit new] initializeBackgroundObservers:bridge];
+    }
+    @catch(NSException *exception){
+    }
   if (@available(iOS 13.0, *)) {
       rootView.backgroundColor = [UIColor systemBackgroundColor];
   } else {
