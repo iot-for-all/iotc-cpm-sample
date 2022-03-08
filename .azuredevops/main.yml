@@ -75,6 +75,13 @@ jobs:
           rootFolderOrFile: '$(archivePath)'
           includeRootFolder: false
           archiveFile: '$(zipToSign)'
+      
+      - task: UseDotNet@2
+        displayName: 'Use .NET Core sdk(temporary)'
+        inputs:
+          packageType: sdk
+          version: 2.1.x
+          installationPath: $(Agent.ToolsDirectory)/dotnet
 
       - task: EsrpCodeSigning@1
         displayName: 'Sign build'
