@@ -4,7 +4,7 @@ const path = require('path');
 
 switch (process.platform) {
     case 'darwin':
-        exec('pod install', { cwd: path.join(__dirname, 'ios') }, (err, stdout, stderr) => {
+        exec('bundle install && pod install', { cwd: path.join(__dirname, 'ios') }, (err, stdout, stderr) => {
             if (err) {
                 console.error(err);
             }
