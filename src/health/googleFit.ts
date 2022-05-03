@@ -4,13 +4,13 @@ import {
   IHealthItem,
   DeviceType,
 } from '../models';
-import GoogleFit, { Scopes } from 'react-native-google-fit';
-import { camelToName } from '../utils';
-import { PERMISSIONS, request, RESULTS } from 'react-native-permissions';
-import { GoogleFitBloodPressureResult, GoogleFitStepResult } from '../types';
-import { DATA_AVAILABLE_EVENT } from './ble';
-import { EventEmitter } from 'events';
-import { Platform } from 'react-native';
+import GoogleFit, {Scopes} from 'react-native-google-fit';
+import {camelToName} from '../utils';
+import {PERMISSIONS, request, RESULTS} from 'react-native-permissions';
+import {GoogleFitBloodPressureResult, GoogleFitStepResult} from '../types';
+import {DATA_AVAILABLE_EVENT} from './ble';
+import {EventEmitter} from 'events';
+import {Platform} from 'react-native';
 
 const SCOPES = [
   Scopes.FITNESS_ACTIVITY_READ,
@@ -40,35 +40,28 @@ export class GoogleFitManager implements IHealthManager {
     (async () => {
       try {
         await GoogleFit.checkIsAuthorized();
-      }
-      catch (er) {
+      } catch (er) {
         console.log(er);
       }
-      let granted = await request(
-        PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION,
-        {
-          title: 'Location Permission',
-          message: `Application would like to use location permissions for distance calculation`,
-          buttonNeutral: 'Ask Me Later',
-          buttonNegative: 'Cancel',
-          buttonPositive: 'OK',
-        },
-      );
+      let granted = await request(PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION, {
+        title: 'Location Permission',
+        message: `Application would like to use location permissions for distance calculation`,
+        buttonNeutral: 'Ask Me Later',
+        buttonNegative: 'Cancel',
+        buttonPositive: 'OK',
+      });
 
       if (granted !== RESULTS.GRANTED) {
         throw new Error('Bluetooth permissions not granted');
       }
       if (Platform.Version > 28) {
-        granted = await request(
-          PERMISSIONS.ANDROID.ACTIVITY_RECOGNITION,
-          {
-            title: 'Activity Permission',
-            message: `Application would like to use activity permissions.`,
-            buttonNeutral: 'Ask Me Later',
-            buttonNegative: 'Cancel',
-            buttonPositive: 'OK',
-          },
-        );
+        granted = await request(PERMISSIONS.ANDROID.ACTIVITY_RECOGNITION, {
+          title: 'Activity Permission',
+          message: `Application would like to use activity permissions.`,
+          buttonNeutral: 'Ask Me Later',
+          buttonNegative: 'Cancel',
+          buttonPositive: 'OK',
+        });
 
         if (granted !== RESULTS.GRANTED) {
           throw new Error('Activity permissions not granted');
@@ -76,7 +69,7 @@ export class GoogleFitManager implements IHealthManager {
       }
       if (!GoogleFit.isAuthorized) {
         try {
-          const authResult = await GoogleFit.authorize({ scopes: SCOPES });
+          const authResult = await GoogleFit.authorize({scopes: SCOPES});
           if (authResult.success) {
             GoogleFit.startRecording(
               data => {
@@ -87,8 +80,7 @@ export class GoogleFitManager implements IHealthManager {
               },
               ['step', 'distance', 'activity'],
             );
-          }
-          else {
+          } else {
             console.log(authResult);
             throw new Error(
               `Google Fit Authorization denied: ${authResult.message}`,
@@ -97,8 +89,7 @@ export class GoogleFitManager implements IHealthManager {
         } catch (err) {
           console.log(err);
         }
-      }
-      else {
+      } else {
         if (this.device) {
           onDeviceFound(this.device);
         }
@@ -204,7 +195,7 @@ export class GoogleFitDevice implements IHealthDevice {
               })) as GoogleFitBloodPressureResult[];
               results.forEach(result => {
                 if (result.systolic) {
-                  item.value = result.systolic
+                  item.value = result.systolic;
                 }
               });
               this.eventEmitter.emit(DATA_AVAILABLE_EVENT, {
@@ -220,7 +211,7 @@ export class GoogleFitDevice implements IHealthDevice {
               })) as GoogleFitBloodPressureResult[];
               results.forEach(result => {
                 if (result.diastolic) {
-                  item.value = result.diastolic
+                  item.value = result.diastolic;
                 }
               });
               this.eventEmitter.emit(DATA_AVAILABLE_EVENT, {

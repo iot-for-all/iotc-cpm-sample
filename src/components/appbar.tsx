@@ -1,7 +1,7 @@
-import React, { useContext, memo } from 'react';
-import { Appbar } from 'react-native-paper';
-import { Platform } from 'react-native';
-import { UIContext } from '../contexts/ui';
+import React, {useContext, memo} from 'react';
+import {Appbar} from 'react-native-paper';
+import {Platform} from 'react-native';
+import {UIContext} from '../contexts/ui';
 
 export interface IAppBarProps {
   title: string;
@@ -10,8 +10,8 @@ export interface IAppBarProps {
 }
 
 const ApplicationBar = memo(function (props: IAppBarProps) {
-  const { title, hasPrevious, goBack } = props;
-  const { state: uiState } = useContext(UIContext);
+  const {title, hasPrevious, goBack} = props;
+  const {state: uiState} = useContext(UIContext);
   let leftIcon = 'menu';
   let leftAction = uiState.headersActions?.left;
   let rightAction = uiState.headersActions?.right;

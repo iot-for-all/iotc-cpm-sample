@@ -1,8 +1,8 @@
 import React from 'react';
-import { View, StyleSheet, ViewStyle, Platform } from 'react-native';
-import { IconButton } from 'react-native-paper';
-import { useState } from 'react';
-import { CPMText } from './typography';
+import {View, StyleSheet, ViewStyle, Platform} from 'react-native';
+import {IconButton} from 'react-native-paper';
+import {useState} from 'react';
+import {CPMText} from './typography';
 
 const defaultTitle = 'Learn more about this technology';
 export interface IFooterProps {
@@ -14,7 +14,7 @@ export interface IFooterProps {
 export function Footer(props: IFooterProps) {
   const [expanded, setExpanded] = useState(false);
   return (
-    <View style={{ ...style.container, ...props.style }}>
+    <View style={{...style.container, ...props.style}}>
       <IconButton
         icon={expanded ? 'chevron-down' : 'chevron-up'}
         onPress={() => {
@@ -27,12 +27,12 @@ export function Footer(props: IFooterProps) {
         <CPMText
           style={{
             textAlign: 'center',
-            ...(props.textColor ? { color: props.textColor } : {}),
+            ...(props.textColor ? {color: props.textColor} : {}),
           }}>
           {props.text}
         </CPMText>
       ) : (
-        <CPMText style={props.textColor ? { color: props.textColor } : {}}>
+        <CPMText style={props.textColor ? {color: props.textColor} : {}}>
           {props.title ? props.title : defaultTitle}
         </CPMText>
       )}
@@ -46,7 +46,7 @@ const style = StyleSheet.create({
     alignItems: 'center',
     marginBottom: Platform.select({
       android: 10,
-      ios: 30
+      ios: 30,
     }),
     marginHorizontal: 30,
   },

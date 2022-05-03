@@ -4,10 +4,7 @@ import {
   IHealthItem,
   DeviceType,
 } from '../models';
-import AppleHealthKit, {
-  HealthKitPermissions,
-} from 'react-native-health'
-import {NativeAppEventEmitter} from 'react-native';
+import AppleHealthKit, {HealthKitPermissions} from 'react-native-health';
 import {camelToName} from '../utils';
 import {HealthRealTimeData} from '../types';
 import {DATA_AVAILABLE_EVENT} from './ble';
@@ -141,7 +138,7 @@ export class AppleHealthDevice implements IHealthDevice {
         case PERMS.StepCount:
           try {
             item.value = await new Promise((resolve, reject) =>
-            AppleHealthKit.getStepCount({}, (err, result) => {
+              AppleHealthKit.getStepCount({}, (err, result) => {
                 if (err) {
                   reject(
                     `Error from Apple HealthKit:\n${(err as any).message}`,

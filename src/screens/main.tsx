@@ -5,7 +5,7 @@ import {Footer} from '../components/footer';
 import DefaultStyles from '../styles';
 import ApplicationBar from '../components/appbar';
 import {CPMText} from '../components/typography';
-import {createStackNavigator, TransitionPresets} from '@react-navigation/stack';
+import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import ConnectedLogo from '../assets/home_connected_logo.svg';
 import Devices from './devices';
 import Insight from './insight';
@@ -38,12 +38,7 @@ const sync = Platform.select({
   ios: 'SYNC APPLE HEALTH',
 });
 
-const headerMode = Platform.select<'screen' | 'float'>({
-  android: 'screen',
-  ios: 'float',
-});
-
-const Stack = createStackNavigator<NavigationScreens>();
+const Stack = createNativeStackNavigator<NavigationScreens>();
 const Drawer = createDrawerNavigator<DrawerNavigationScreens>();
 const getTitle = function (
   route: RouteProp<Record<string, NavigationParams>, ''>,
@@ -62,7 +57,6 @@ function Navigation() {
     <Stack.Navigator
       initialRouteName={Screens.HOME_SCREEN}
       screenOptions={{
-        headerMode,
         header: function ({route, navigation}) {
           return (
             <ApplicationBar
@@ -71,16 +65,6 @@ function Navigation() {
               title={getTitle(route as any)}
             />
           );
-        },
-        transitionSpec: {
-          open: TransitionPresets.DefaultTransition.transitionSpec.open,
-          close: {
-            ...TransitionPresets.DefaultTransition.transitionSpec.close,
-            config: {
-              duration: 0,
-            },
-            animation: 'timing',
-          },
         },
       }}>
       <Stack.Screen name={Screens.HOME_SCREEN} component={Home} />

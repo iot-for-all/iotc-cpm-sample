@@ -517,7 +517,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "com.github.iot-for-all.cpm-sample";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.github.iot-for-all.cpmsample";
 				PRODUCT_NAME = cpm;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";

@@ -1,4 +1,4 @@
-import {StackNavigationProp} from '@react-navigation/stack';
+import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {DrawerNavigationProp} from '@react-navigation/drawer';
 import {
   LineData,
@@ -55,7 +55,7 @@ export type DrawerScreenNames =
 /**
  * Defines type of navigator properties
  */
-export type NavigationProperty = StackNavigationProp<
+export type NavigationProperty = NativeStackNavigationProp<
   NavigationScreens,
   ScreenNames
 >;
