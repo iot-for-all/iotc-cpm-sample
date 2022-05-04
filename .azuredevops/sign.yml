@@ -34,26 +34,6 @@ jobs:
           allowFailedBuilds: true
           path: '$(archivePath)'
 
-      - task: Xcode@5
-        displayName: 'Build Mobile Application'
-        inputs:
-          actions: 'build archive'
-          configuration: 'Release'
-          xcWorkspacePath: '$(rootPath)/ios/$(Project_Name).xcworkspace'
-          scheme: '$(Project_Name)'
-          sdk: 'iphoneos15.2'
-          useXcpretty: false
-          archivePath: '$(xcarchivePath)'
-          args: '-archivePath $(xcarchivePath)'
-          xcodeVersion: 'default'
-
-      - task: PublishBuildArtifacts@1
-        displayName: 'Publish Archive'
-        inputs:
-          PathtoPublish: '$(archivePath)'
-          ArtifactName: 'archive'
-          publishLocation: 'Container'
-
       - task: ArchiveFiles@2
         displayName: 'Create zip for signing'
         inputs:
