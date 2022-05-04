@@ -27,6 +27,7 @@ jobs:
       signedExtractedPath: '$(exportPath)/signed'
     steps:
       - template: ./node-build.yml
+      - bash: npm run podinstall
       - task: DownloadSecureFile@1
         displayName: 'Download distribution profile from Azure secure files storage'
         inputs:
@@ -132,6 +133,8 @@ jobs:
           ls -l android/app/$CPM_RELEASE_STORE_FILE
 
       - bash: env | sort
+
+      - bash: npx jetify
 
       - task: Gradle@2
         env:

@@ -11,7 +11,7 @@
     "format": "prettier --write src/",
     "build": "npm run format && npm run lint && tsc",
     "podinstall": "node podinstall.js",
-    "postinstall": "npx jetify && npm run podinstall && npm run prepackage",
+    "postinstall": "npm run prepackage",
     "prepackage": "node pre-packager.js"
   },
   "dependencies": {
