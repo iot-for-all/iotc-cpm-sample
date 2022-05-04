@@ -1,6 +1,3 @@
-pool:
-  vmImage: 'macos-latest'
-
 name: $(Date:yyyyMMdd)$(Rev:.r)
 jobs:
   - job: iOS_Release
