@@ -15,18 +15,42 @@ jobs:
       signedZip: '$(archivePath)/$(Project_Name).zip'
       signedExtractedPath: '$(exportPath)/signed'
     steps:
-      - task: DownloadPipelineArtifact@2
+      # - task: DownloadPipelineArtifact@2
+      #   inputs:
+      #     source: 'specific'
+      #     project: 'One'
+      #     pipeline: '216276'
+      #     runVersion: 'specific'
+      #     runId: '54976743'
+      #     allowPartiallySucceededBuilds: true
+      #     allowFailedBuilds: true
+      #     path: '$(archivePath)'
+      #     artifact: 'archive'
+      - task: DownloadBuildArtifacts@0
         inputs:
-          source: 'specific'
-          project: 'One'
-          pipeline: '216276'
-          runVersion: 'specific'
-          runId: '54976743'
-          allowPartiallySucceededBuilds: true
-          allowFailedBuilds: true
-          path: '$(archivePath)'
-          artifact: 'archive'
-      
+          buildType: 'specific' # Options: current, specific
+          project: 'One' # Required when buildType == Specific
+          pipeline: '216276' # Required when buildType == Specific
+          #specificBuildWithTriggering: false # Optional
+          buildVersionToDownload: 'specific' # Required when buildType == Specific. Options: latest, latestFromBranch, specific
+          allowPartiallySucceededBuilds: true # Optional
+          #branchName: 'refs/heads/master' # Required when buildType == Specific && BuildVersionToDownload == LatestFromBranch
+          buildId: '54976743' # Required when buildType == Specific && BuildVersionToDownload == Specific
+          #tags: # Optional
+          downloadType: 'single' # Choose whether to download a single artifact or all artifacts of a specific build. Options: single, specific
+          artifactName: 'archive' # Required when downloadType == Single
+          #itemPattern: '**' # Optional
+          downloadPath: '$(archivePath)' 
+          #cleanDestinationFolder: false # Optional
+          #parallelizationLimit: '8' # Optional
+          #extractTars: false # Optional
+
+      - task: DeleteFiles@1
+        inputs:
+          SourceFolder: '$(archivePath)'
+          Contents: 'ExportOptions.plist' 
+          #RemoveSourceFolder: # Optional
+
       - task: CopyFiles@2
         displayName: 'Copy ExportOptions'
         inputs:
