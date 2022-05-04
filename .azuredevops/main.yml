@@ -55,7 +55,7 @@ jobs:
           configuration: 'Release'
           xcWorkspacePath: '$(rootPath)/ios/$(Project_Name).xcworkspace'
           scheme: '$(Project_Name)'
-          sdk: 'iphoneos15.2'
+          sdk: 'iphoneos15.4'
           useXcpretty: false
           archivePath: '$(xcarchivePath)'
           args: '-archivePath $(xcarchivePath)'
