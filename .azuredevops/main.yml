@@ -24,6 +24,10 @@ jobs:
       signedZip: '$(archivePath)/$(Project_Name).zip'
       signedExtractedPath: '$(exportPath)/signed'
     steps:
+      - task: UseRubyVersion@0
+        inputs:
+          versionSpec: '< 2.8'
+          
       - template: ./node-build.yml
       - bash: npm run podinstall
       - task: DownloadSecureFile@1
