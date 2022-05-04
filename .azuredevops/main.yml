@@ -1,5 +1,5 @@
 pool:
-  vmImage: 'macos-latest'
+  vmImage: 'macOS-12'
 
 variables:
   - group: iotc-cpm-android
@@ -110,41 +110,41 @@ jobs:
           ArtifactName: 'ios_signed'
           publishLocation: 'Container'
 
-  - job: Android_Release
-    steps:
-      - template: ./node-build.yml
-      - task: DownloadSecureFile@1
-        name: androidKeystore
-        inputs:
-          secureFile: iotc-cpm-release.keystore
+  # - job: Android_Release
+  #   steps:
+  #     - template: ./node-build.yml
+  #     - task: DownloadSecureFile@1
+  #       name: androidKeystore
+  #       inputs:
+  #         secureFile: iotc-cpm-release.keystore
 
-      - bash: |
-          CPM_RELEASE_VERSION_CODE=$(echo $(Build.BuildNumber) | sed 's/\.//')
-          echo "##vso[task.setvariable variable=CPM_RELEASE_VERSION_CODE]$CPM_RELEASE_VERSION_CODE"
-          cp $(androidKeystore.secureFilePath) android/app/$CPM_RELEASE_STORE_FILE
-          ls -l android/app/$CPM_RELEASE_STORE_FILE
+  #     - bash: |
+  #         CPM_RELEASE_VERSION_CODE=$(echo $(Build.BuildNumber) | sed 's/\.//')
+  #         echo "##vso[task.setvariable variable=CPM_RELEASE_VERSION_CODE]$CPM_RELEASE_VERSION_CODE"
+  #         cp $(androidKeystore.secureFilePath) android/app/$CPM_RELEASE_STORE_FILE
+  #         ls -l android/app/$CPM_RELEASE_STORE_FILE
 
-      - bash: env | sort
+  #     - bash: env | sort
 
-      - bash: npx jetify
+  #     - bash: npx jetify
 
-      - task: Gradle@2
-        env:
-          KEYSTORE_PASSWORD: $(CPM_RELEASE_STORE_PASSWORD)
-          KEYSTORE: $(CPM_RELEASE_STORE_FILE)
-          KEY_ALIAS: $(CPM_RELEASE_KEY_ALIAS)
-          KEY_PASSWORD: $(CPM_RELEASE_KEY_PASSWORD)
-        inputs:
-          workingDirectory: 'android'
-          gradleWrapperFile: 'android/gradlew'
-          gradleOptions: '-Xmx3072m'
-          publishJUnitResults: false
-          testResultsFiles: '**/TEST-*.xml'
-          tasks: 'assembleRelease'
+  #     - task: Gradle@2
+  #       env:
+  #         KEYSTORE_PASSWORD: $(CPM_RELEASE_STORE_PASSWORD)
+  #         KEYSTORE: $(CPM_RELEASE_STORE_FILE)
+  #         KEY_ALIAS: $(CPM_RELEASE_KEY_ALIAS)
+  #         KEY_PASSWORD: $(CPM_RELEASE_KEY_PASSWORD)
+  #       inputs:
+  #         workingDirectory: 'android'
+  #         gradleWrapperFile: 'android/gradlew'
+  #         gradleOptions: '-Xmx3072m'
+  #         publishJUnitResults: false
+  #         testResultsFiles: '**/TEST-*.xml'
+  #         tasks: 'assembleRelease'
 
-      - task: PublishBuildArtifacts@1
-        displayName: 'Publish Build Artifact'
-        inputs:
-          PathtoPublish: 'android/app/build/outputs/apk/release/$(Project_Name)-release.apk'
-          ArtifactName: 'android'
-          publishLocation: 'Container'
+  #     - task: PublishBuildArtifacts@1
+  #       displayName: 'Publish Build Artifact'
+  #       inputs:
+  #         PathtoPublish: 'android/app/build/outputs/apk/release/$(Project_Name)-release.apk'
+  #         ArtifactName: 'android'
+  #         publishLocation: 'Container'
