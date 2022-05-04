@@ -18,7 +18,7 @@ jobs:
       rootPath: '$(System.DefaultWorkingDirectory)'
       agentName: $[ dependencies.Setup.outputs['passOutput.AgentName'] ]
       archivePath: '$(rootPath)/output/archive'
-      xcodeDeveloperDir: '/Applications/Xcode_$(Xcode_Version).app/Contents/Developer'
+      xcodeDeveloperDir: '/Applications/Xcode_13.3.1.app/Contents/Developer'
       xcarchivePath: '$(archivePath)/$(Project_Name).xcarchive'
       zipToSign: '$(archivePath)/$(Project_Name).zip'
       signedZip: '$(archivePath)/$(Project_Name).zip'
@@ -59,7 +59,8 @@ jobs:
           useXcpretty: false
           archivePath: '$(xcarchivePath)'
           args: '-archivePath $(xcarchivePath)'
-          xcodeVersion: 'default'
+          xcodeVersion: 'specifyPath'
+          xcodeDeveloperDir: '$(xcodeDeveloperDir)'
 
       - task: ArchiveFiles@2
         displayName: 'Create zip for signing'
