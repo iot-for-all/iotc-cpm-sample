@@ -15,14 +15,6 @@ jobs:
       signedZip: '$(archivePath)/$(Project_Name).zip'
       signedExtractedPath: '$(exportPath)/signed'
     steps:
-      - task: CopyFiles@2
-        displayName: 'Copy ExportOptions'
-        inputs:
-          SourceFolder: '$(rootPath)'
-          Contents: 'ExportOptions.plist'
-          TargetFolder: '$(archivePath)'
-          flattenFolders: true
-
       - task: DownloadPipelineArtifact@2
         inputs:
           source: 'specific'
@@ -33,6 +25,15 @@ jobs:
           allowPartiallySucceededBuilds: true
           allowFailedBuilds: true
           path: '$(archivePath)'
+          artifact: 'archive'
+      
+      - task: CopyFiles@2
+        displayName: 'Copy ExportOptions'
+        inputs:
+          SourceFolder: '$(rootPath)'
+          Contents: 'ExportOptions.plist'
+          TargetFolder: '$(archivePath)'
+          flattenFolders: true
 
       - task: ArchiveFiles@2
         displayName: 'Create zip for signing'
