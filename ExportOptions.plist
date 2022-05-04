@@ -2,24 +2,22 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>generateAppStoreInformation</key>
-	<false/>
+	<key>destination</key>
+	<string>export</string>
 	<key>method</key>
 	<string>enterprise</string>
 	<key>provisioningProfiles</key>
 	<dict>
 		<key>com.microsoft.CPM-df</key>
-		<string>CPM Dogfood</string>
+		<string>d1ba23a0-3c3c-4fd1-a202-cf5008bb66fd</string>
 	</dict>
 	<key>signingCertificate</key>
 	<string>iOS Distribution</string>
 	<key>signingStyle</key>
 	<string>manual</string>
-	<key>stripSwiftSymbols</key>
-	<true/>
 	<key>teamID</key>
 	<string>9KBH5RKYEW</string>
-	<key>uploadBitcode</key>
+	<key>compileBitcode</key>
 	<false/>
 	<key>uploadSymbols</key>
 	<true/>
