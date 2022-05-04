@@ -1,3 +1,6 @@
+pool:
+  vmImage: 'macos-latest'
+
 name: $(Date:yyyyMMdd)$(Rev:.r)
 jobs:
   - job: iOS_Release
@@ -37,7 +40,7 @@ jobs:
           downloadType: 'single' # Choose whether to download a single artifact or all artifacts of a specific build. Options: single, specific
           artifactName: 'archive' # Required when downloadType == Single
           #itemPattern: '**' # Optional
-          downloadPath: '$(archivePath)' 
+          downloadPath: '$(rootPath)/output' 
           #cleanDestinationFolder: false # Optional
           #parallelizationLimit: '8' # Optional
           #extractTars: false # Optional
