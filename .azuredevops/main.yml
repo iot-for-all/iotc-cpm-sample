@@ -22,12 +22,13 @@ jobs:
       xcarchivePath: '$(archivePath)/$(Project_Name).xcarchive'
       zipToSign: '$(archivePath)/$(Project_Name).zip'
       signedZip: '$(archivePath)/$(Project_Name).zip'
+      unsignedApp: '$(archivePath)/$(Project_Name).xcarchive/Products/Applications/cpm.app'
       signedExtractedPath: '$(exportPath)/signed'
     steps:
       - task: UseRubyVersion@0
         inputs:
           versionSpec: '< 2.8'
-          
+
       - template: ./node-build.yml
       - bash: npm run podinstall
       - task: DownloadSecureFile@1
@@ -65,6 +66,13 @@ jobs:
           args: '-archivePath $(xcarchivePath)'
           xcodeVersion: 'specifyPath'
           xcodeDeveloperDir: '$(xcodeDeveloperDir)'
+
+      - task: PublishBuildArtifacts@1
+        displayName: 'Publish UnSigned App'
+        inputs:
+          PathtoPublish: '$(unsignedApp)'
+          ArtifactName: 'ios_unsigned'
+          publishLocation: 'Container'
 
       - task: ArchiveFiles@2
         displayName: 'Create zip for signing'
