@@ -9,10 +9,10 @@
 	<key>provisioningProfiles</key>
 	<dict>
 		<key>com.microsoft.CPM-df</key>
-		<string>d1ba23a0-3c3c-4fd1-a202-cf5008bb66fd</string>
+		<string>9f52ed79-85f8-4d3a-b306-42120249050b</string>
 	</dict>
 	<key>signingCertificate</key>
-	<string>iOS Distribution</string>
+	<string>iPhone Distribution</string>
 	<key>signingStyle</key>
 	<string>manual</string>
 	<key>teamID</key>
