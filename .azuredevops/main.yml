@@ -18,11 +18,13 @@ jobs:
       rootPath: '$(System.DefaultWorkingDirectory)'
       agentName: $[ dependencies.Setup.outputs['passOutput.AgentName'] ]
       archivePath: '$(rootPath)/output/archive'
+      exportPath: '$(rootPath)/output/export'
+      developmentProfile: '$(Development_Provisioning_Profile)'
       xcodeDeveloperDir: '/Applications/Xcode_13.3.1.app/Contents/Developer'
       xcarchivePath: '$(archivePath)/$(Project_Name).xcarchive'
-      zipToSign: '$(archivePath)/$(Project_Name).zip'
-      signedZip: '$(archivePath)/$(Project_Name).zip'
-      unsignedApp: '$(archivePath)/$(Project_Name).xcarchive/Products/Applications/cpm.app'
+      zipToSign: '$(exportPath)/$(Project_Name).zip'
+      signedZip: '$(exportPath)/$(Project_Name).zip'
+      unsignedIpa: '$(exportPath)/$(Project_Name).ipa'
       signedExtractedPath: '$(exportPath)/signed'
     steps:
       - task: UseRubyVersion@0
@@ -31,18 +33,29 @@ jobs:
 
       - template: ./node-build.yml
       - bash: npm run podinstall
+
+      - task: InstallAppleCertificate@2
+        inputs:
+          certSecureFile: '$(CPM_Development_Apple_Cert)'
+          certPwd: '$(CPM_Development_Apple_Cert_Password)'
+          keychain: 'temp'
+
+      - task: InstallAppleProvisioningProfile@1
+        inputs:
+          provisioningProfileLocation: 'secureFiles'
+          provProfileSecureFile: '$(Development_Provisioning_Profile)'
       - task: DownloadSecureFile@1
         displayName: 'Download distribution profile from Azure secure files storage'
         inputs:
-          secureFile: 'CPM_Dogfood.mobileprovision'
+          secureFile: '$(Distribution_Provisioning_Profile)'
           retryCount: 5
 
       - task: CopyFiles@2
         displayName: 'Copy distribution provisioning profile'
         inputs:
           SourceFolder: '$(Agent.TempDirectory)'
-          Contents: 'CPM_Dogfood.mobileprovision'
-          TargetFolder: '$(archivePath)'
+          Contents: '$(Distribution_Provisioning_Profile)'
+          TargetFolder: '$(exportPath)'
           flattenFolders: true
 
       - task: CopyFiles@2
@@ -50,7 +63,7 @@ jobs:
         inputs:
           SourceFolder: '$(rootPath)'
           Contents: 'ExportOptions.plist'
-          TargetFolder: '$(archivePath)'
+          TargetFolder: '$(exportPath)'
           flattenFolders: true
 
       - task: Xcode@5
@@ -62,22 +75,27 @@ jobs:
           scheme: '$(Project_Name)'
           sdk: 'iphoneos15.4'
           useXcpretty: false
-          archivePath: '$(xcarchivePath)'
-          args: '-archivePath $(xcarchivePath)'
+          exportPath: '$(exportPath)'
+          exportOptions: 'specify'
+          exportMethod: 'development'
+          signingOption: 'manual'
+          signingIdentity: '$(APPLE_CERTIFICATE_SIGNING_IDENTITY)'
+          provisioningProfileUuid: '$(APPLE_PROV_PROFILE_UUID)'
+          packageApp: true
           xcodeVersion: 'specifyPath'
           xcodeDeveloperDir: '$(xcodeDeveloperDir)'
 
       - task: PublishBuildArtifacts@1
-        displayName: 'Publish UnSigned App'
+        displayName: 'Publish Development App'
         inputs:
-          PathtoPublish: '$(unsignedApp)'
+          PathtoPublish: '$(unsignedIpa)'
           ArtifactName: 'ios_unsigned'
           publishLocation: 'Container'
 
       - task: ArchiveFiles@2
         displayName: 'Create zip for signing'
         inputs:
-          rootFolderOrFile: '$(archivePath)'
+          rootFolderOrFile: '$(exportPath)'
           includeRootFolder: false
           archiveFile: '$(zipToSign)'
       
@@ -92,7 +110,7 @@ jobs:
         displayName: 'Sign build'
         inputs:
           ConnectedServiceName: 'IoT PnP PaaD'
-          FolderPath: '$(archivePath)'
+          FolderPath: '$(exportPath)'
           Pattern: '*.zip'
           signConfigType: 'inlineSignParams'
           inlineOperation: |
