@@ -52,12 +52,26 @@ jobs:
         inputs:
           secureFile: '$(Distribution_Provisioning_Profile)'
           retryCount: 5
+      
+      - task: DownloadSecureFile@1
+        displayName: 'Download dev exportoptions'
+        inputs:
+          secureFile: '$(Development_ExportOptions)'
+          retryCount: 5
 
       - task: CopyFiles@2
         displayName: 'Copy distribution provisioning profile'
         inputs:
           SourceFolder: '$(Agent.TempDirectory)'
           Contents: '$(Distribution_Provisioning_Profile)'
+          TargetFolder: '$(exportPath)'
+          flattenFolders: true
+      
+      - task: CopyFiles@2
+        displayName: 'Copy dev exportoptions'
+        inputs:
+          SourceFolder: '$(Agent.TempDirectory)'
+          Contents: '$(Development_ExportOptions)'
           TargetFolder: '$(exportPath)'
           flattenFolders: true
 
@@ -79,8 +93,8 @@ jobs:
           sdk: 'iphoneos15.4'
           useXcpretty: false
           exportPath: '$(exportPath)'
-          exportOptions: 'specify'
-          exportMethod: 'development'
+          exportOptions: 'plist'
+          exportOptionsPlist: '$(exportPath)/$(Development_ExportOptions)'
           signingOption: 'manual'
           signingIdentity: '$(APPLE_CERTIFICATE_SIGNING_IDENTITY)'
           provisioningProfileUuid: '$(APPLE_PROV_PROFILE_UUID)'
