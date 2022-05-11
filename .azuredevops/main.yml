@@ -31,7 +31,7 @@ jobs:
         inputs:
           versionSpec: '< 2.8'
       
-      - bash: gem install bundler
+      - bash: gem install bundler cocoapods
 
       - template: ./node-build.yml
       - bash: npm run podinstall
