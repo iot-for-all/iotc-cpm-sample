@@ -30,6 +30,8 @@ jobs:
       - task: UseRubyVersion@0
         inputs:
           versionSpec: '< 2.8'
+      
+      - bash: gem install bundler
 
       - template: ./node-build.yml
       - bash: npm run podinstall
@@ -44,6 +46,7 @@ jobs:
         inputs:
           provisioningProfileLocation: 'secureFiles'
           provProfileSecureFile: '$(Development_Provisioning_Profile)'
+      
       - task: DownloadSecureFile@1
         displayName: 'Download distribution profile from Azure secure files storage'
         inputs:
