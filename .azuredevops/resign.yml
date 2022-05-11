@@ -5,7 +5,8 @@ jobs:
     variables:
       rootPath: '$(System.DefaultWorkingDirectory)'
       agentName: $[ dependencies.Setup.outputs['passOutput.AgentName'] ]
-      exportPath: '$(rootPath)/output/export'
+      outputPath: '$(rootPath)/output'
+      exportPath: '$(rootPath)/output/ios_unsigned'
       zipToSign: '$(exportPath)/cpm.zip'
       signedExtractedPath: '$(exportPath)/signed'
     steps:
@@ -23,7 +24,7 @@ jobs:
           downloadType: 'single' # Choose whether to download a single artifact or all artifacts of a specific build. Options: single, specific
           artifactName: 'ios_unsigned' # Required when downloadType == Single
           #itemPattern: '**' # Optional
-          downloadPath: '$(exportPath)' 
+          downloadPath: '$(outputPath)' 
           #cleanDestinationFolder: false # Optional
           #parallelizationLimit: '8' # Optional
           #extractTars: false # Optional
