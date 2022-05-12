@@ -9,7 +9,7 @@
 	<key>provisioningProfiles</key>
 	<dict>
 		<key>com.microsoft.CPM-df</key>
-		<string>9f52ed79-85f8-4d3a-b306-42120249050b</string>
+		<string>b28e1ead-d58e-452e-b6c4-87b0be44530e</string>
 	</dict>
 	<key>signingCertificate</key>
 	<string>iPhone Distribution</string>
