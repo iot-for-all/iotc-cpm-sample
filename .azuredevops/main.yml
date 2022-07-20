@@ -11,187 +11,193 @@ variables:
     value: '$(System.DefaultWorkingDirectory)'
 
 name: $(Date:yyyyMMdd)$(Rev:.r)
-jobs:
-  - job: iOS_Release
-    timeoutInMinutes: 120
-    variables:
-      rootPath: '$(System.DefaultWorkingDirectory)'
-      agentName: $[ dependencies.Setup.outputs['passOutput.AgentName'] ]
-      archivePath: '$(rootPath)/output/archive'
-      exportPath: '$(rootPath)/output/export'
-      developmentProfile: '$(Development_Provisioning_Profile)'
-      xcodeDeveloperDir: '/Applications/Xcode_13.3.1.app/Contents/Developer'
-      xcarchivePath: '$(archivePath)/$(Project_Name).xcarchive'
-      zipToSign: '$(exportPath)/$(Project_Name).zip'
-      signedZip: '$(exportPath)/$(Project_Name).zip'
-      unsignedIpa: '$(exportPath)/$(Project_Name).ipa'
-      signedExtractedPath: '$(exportPath)/signed'
-    steps:
-      - task: UseRubyVersion@0
-        inputs:
-          versionSpec: '< 2.8'
-      
-      - bash: gem install bundler cocoapods
+stages:
+  - stage: iOS
+    dependsOn: []
+    jobs:
+      - job: iOS_Dogfood
+        timeoutInMinutes: 120
+        variables:
+          rootPath: '$(System.DefaultWorkingDirectory)'
+          agentName: $[ dependencies.Setup.outputs['passOutput.AgentName'] ]
+          archivePath: '$(rootPath)/output/archive'
+          exportPath: '$(rootPath)/output/export'
+          developmentProfile: '$(Development_Provisioning_Profile)'
+          xcodeDeveloperDir: '/Applications/Xcode_13.3.1.app/Contents/Developer'
+          xcarchivePath: '$(archivePath)/$(Project_Name).xcarchive'
+          zipToSign: '$(exportPath)/$(Project_Name).zip'
+          signedZip: '$(exportPath)/$(Project_Name).zip'
+          unsignedIpa: '$(exportPath)/$(Project_Name).ipa'
+          signedExtractedPath: '$(exportPath)/signed'
+        steps:
+          - task: UseRubyVersion@0
+            inputs:
+              versionSpec: '< 2.8'
+          
+          - bash: gem install bundler cocoapods
 
-      - template: ./node-build.yml
-      - bash: npm run podinstall
+          - template: ./node-build.yml
+          - bash: npm run podinstall
 
-      - task: InstallAppleCertificate@2
-        inputs:
-          certSecureFile: '$(CPM_Development_Apple_Cert)'
-          certPwd: '$(CPM_Development_Apple_Cert_Password)'
-          keychain: 'temp'
+          - task: InstallAppleCertificate@2
+            inputs:
+              certSecureFile: '$(CPM_Development_Apple_Cert)'
+              certPwd: '$(CPM_Development_Apple_Cert_Password)'
+              keychain: 'temp'
 
-      - task: InstallAppleProvisioningProfile@1
-        inputs:
-          provisioningProfileLocation: 'secureFiles'
-          provProfileSecureFile: '$(Development_Provisioning_Profile)'
-      
-      - task: DownloadSecureFile@1
-        displayName: 'Download distribution profile from Azure secure files storage'
-        inputs:
-          secureFile: '$(Distribution_Provisioning_Profile)'
-          retryCount: 5
-      
-      - task: DownloadSecureFile@1
-        displayName: 'Download dev exportoptions'
-        inputs:
-          secureFile: '$(Development_ExportOptions)'
-          retryCount: 5
+          - task: InstallAppleProvisioningProfile@1
+            inputs:
+              provisioningProfileLocation: 'secureFiles'
+              provProfileSecureFile: '$(Development_Provisioning_Profile)'
+          
+          - task: DownloadSecureFile@1
+            displayName: 'Download distribution profile from Azure secure files storage'
+            inputs:
+              secureFile: '$(Distribution_Provisioning_Profile)'
+              retryCount: 5
+          
+          - task: DownloadSecureFile@1
+            displayName: 'Download dev exportoptions'
+            inputs:
+              secureFile: '$(Development_ExportOptions)'
+              retryCount: 5
 
-      - task: CopyFiles@2
-        displayName: 'Copy distribution provisioning profile'
-        inputs:
-          SourceFolder: '$(Agent.TempDirectory)'
-          Contents: '$(Distribution_Provisioning_Profile)'
-          TargetFolder: '$(exportPath)'
-          flattenFolders: true
-      
-      - task: CopyFiles@2
-        displayName: 'Copy dev exportoptions'
-        inputs:
-          SourceFolder: '$(Agent.TempDirectory)'
-          Contents: '$(Development_ExportOptions)'
-          TargetFolder: '$(exportPath)'
-          flattenFolders: true
+          - task: CopyFiles@2
+            displayName: 'Copy distribution provisioning profile'
+            inputs:
+              SourceFolder: '$(Agent.TempDirectory)'
+              Contents: '$(Distribution_Provisioning_Profile)'
+              TargetFolder: '$(exportPath)'
+              flattenFolders: true
+          
+          - task: CopyFiles@2
+            displayName: 'Copy dev exportoptions'
+            inputs:
+              SourceFolder: '$(Agent.TempDirectory)'
+              Contents: '$(Development_ExportOptions)'
+              TargetFolder: '$(exportPath)'
+              flattenFolders: true
 
-      - task: CopyFiles@2
-        displayName: 'Copy ExportOptions'
-        inputs:
-          SourceFolder: '$(rootPath)'
-          Contents: 'ExportOptions.plist'
-          TargetFolder: '$(exportPath)'
-          flattenFolders: true
+          - task: CopyFiles@2
+            displayName: 'Copy ExportOptions'
+            inputs:
+              SourceFolder: '$(rootPath)'
+              Contents: 'ExportOptions.plist'
+              TargetFolder: '$(exportPath)'
+              flattenFolders: true
 
-      - task: Xcode@5
-        displayName: 'Build Mobile Application'
-        inputs:
-          actions: 'build archive'
-          configuration: 'Release'
-          xcWorkspacePath: '$(rootPath)/ios/$(Project_Name).xcworkspace'
-          scheme: '$(Project_Name)'
-          sdk: 'iphoneos15.4'
-          useXcpretty: false
-          exportPath: '$(exportPath)'
-          exportOptions: 'plist'
-          exportOptionsPlist: '$(exportPath)/$(Development_ExportOptions)'
-          signingOption: 'manual'
-          signingIdentity: '$(APPLE_CERTIFICATE_SIGNING_IDENTITY)'
-          provisioningProfileUuid: '$(APPLE_PROV_PROFILE_UUID)'
-          packageApp: true
-          xcodeVersion: 'specifyPath'
-          xcodeDeveloperDir: '$(xcodeDeveloperDir)'
+          - task: Xcode@5
+            displayName: 'Build Mobile Application'
+            inputs:
+              actions: 'build archive'
+              configuration: 'Release'
+              xcWorkspacePath: '$(rootPath)/ios/$(Project_Name).xcworkspace'
+              scheme: '$(Project_Name)'
+              sdk: 'iphoneos15.4'
+              useXcpretty: false
+              exportPath: '$(exportPath)'
+              exportOptions: 'plist'
+              exportOptionsPlist: '$(exportPath)/$(Development_ExportOptions)'
+              signingOption: 'manual'
+              signingIdentity: '$(APPLE_CERTIFICATE_SIGNING_IDENTITY)'
+              provisioningProfileUuid: '$(APPLE_PROV_PROFILE_UUID)'
+              packageApp: true
+              xcodeVersion: 'specifyPath'
+              xcodeDeveloperDir: '$(xcodeDeveloperDir)'
 
-      - task: PublishBuildArtifacts@1
-        displayName: 'Publish Development App'
-        inputs:
-          PathtoPublish: '$(unsignedIpa)'
-          ArtifactName: 'ios_unsigned'
-          publishLocation: 'Container'
+          - task: PublishBuildArtifacts@1
+            displayName: 'Publish Development App'
+            inputs:
+              PathtoPublish: '$(unsignedIpa)'
+              ArtifactName: 'ios_unsigned'
+              publishLocation: 'Container'
 
-      - task: ArchiveFiles@2
-        displayName: 'Create zip for signing'
-        inputs:
-          rootFolderOrFile: '$(exportPath)'
-          includeRootFolder: false
-          archiveFile: '$(zipToSign)'
-      
-      - task: UseDotNet@2
-        displayName: 'Use .NET Core sdk(temporary)'
-        inputs:
-          packageType: sdk
-          version: 2.1.x
-          installationPath: $(Agent.ToolsDirectory)/dotnet
+          - task: ArchiveFiles@2
+            displayName: 'Create zip for signing'
+            inputs:
+              rootFolderOrFile: '$(exportPath)'
+              includeRootFolder: false
+              archiveFile: '$(zipToSign)'
+          
+          - task: UseDotNet@2
+            displayName: 'Use .NET Core sdk(temporary)'
+            inputs:
+              packageType: sdk
+              version: 2.1.x
+              installationPath: $(Agent.ToolsDirectory)/dotnet
 
-      - task: EsrpCodeSigning@1
-        displayName: 'Sign build'
-        inputs:
-          ConnectedServiceName: 'IoT PnP PaaD'
-          FolderPath: '$(exportPath)'
-          Pattern: '*.zip'
-          signConfigType: 'inlineSignParams'
-          inlineOperation: |
-            [
-                  {
-                      "KeyCode" : "CP-464234-Apple",
-                      "OperationCode" : "iOSAppSign",
-                      "Parameters" : {},
-                      "ToolName" : "sign",
-                      "ToolVersion" : "1.0"
-                  }
-            ]
-          SessionTimeout: '60'
-          MaxConcurrency: '50'
-          MaxRetryAttempts: '5'
+          - task: EsrpCodeSigning@1
+            displayName: 'Sign build'
+            inputs:
+              ConnectedServiceName: 'IoT PnP PaaD'
+              FolderPath: '$(exportPath)'
+              Pattern: '*.zip'
+              signConfigType: 'inlineSignParams'
+              inlineOperation: |
+                [
+                      {
+                          "KeyCode" : "CP-464234-Apple",
+                          "OperationCode" : "iOSAppSign",
+                          "Parameters" : {},
+                          "ToolName" : "sign",
+                          "ToolVersion" : "1.0"
+                      }
+                ]
+              SessionTimeout: '60'
+              MaxConcurrency: '50'
+              MaxRetryAttempts: '5'
 
-      - task: ExtractFiles@1
-        displayName: 'Extract signed build'
-        inputs:
-          archiveFilePatterns: '$(signedZip)'
-          destinationFolder: '$(signedExtractedPath)'
+          - task: ExtractFiles@1
+            displayName: 'Extract signed build'
+            inputs:
+              archiveFilePatterns: '$(signedZip)'
+              destinationFolder: '$(signedExtractedPath)'
 
-      - task: PublishBuildArtifacts@1
-        displayName: 'Publish Signed Ipa'
-        inputs:
-          PathtoPublish: '$(signedExtractedPath)'
-          ArtifactName: 'ios_signed'
-          publishLocation: 'Container'
+          - task: PublishBuildArtifacts@1
+            displayName: 'Publish Signed Ipa'
+            inputs:
+              PathtoPublish: '$(signedExtractedPath)'
+              ArtifactName: 'ios_signed'
+              publishLocation: 'Container'
 
-  # - job: Android_Release
-  #   steps:
-  #     - template: ./node-build.yml
-  #     - task: DownloadSecureFile@1
-  #       name: androidKeystore
-  #       inputs:
-  #         secureFile: iotc-cpm-release.keystore
+  - stage: Android
+    dependsOn: []
+    jobs:
+      - job: Android_Dogfood
+        steps:
+          - template: ./node-build.yml
+          - task: DownloadSecureFile@1
+            name: androidKeystore
+            inputs:
+              secureFile: iotc-cpm-release.keystore
 
-  #     - bash: |
-  #         CPM_RELEASE_VERSION_CODE=$(echo $(Build.BuildNumber) | sed 's/\.//')
-  #         echo "##vso[task.setvariable variable=CPM_RELEASE_VERSION_CODE]$CPM_RELEASE_VERSION_CODE"
-  #         cp $(androidKeystore.secureFilePath) android/app/$CPM_RELEASE_STORE_FILE
-  #         ls -l android/app/$CPM_RELEASE_STORE_FILE
+          - bash: |
+              CPM_RELEASE_VERSION_CODE=$(echo $(Build.BuildNumber) | sed 's/\.//')
+              echo "##vso[task.setvariable variable=CPM_RELEASE_VERSION_CODE]$CPM_RELEASE_VERSION_CODE"
+              cp $(androidKeystore.secureFilePath) android/app/$CPM_RELEASE_STORE_FILE
+              ls -l android/app/$CPM_RELEASE_STORE_FILE
 
-  #     - bash: env | sort
+          - bash: env | sort
 
-  #     - bash: npx jetify
+          - bash: npx jetify
 
-  #     - task: Gradle@2
-  #       env:
-  #         KEYSTORE_PASSWORD: $(CPM_RELEASE_STORE_PASSWORD)
-  #         KEYSTORE: $(CPM_RELEASE_STORE_FILE)
-  #         KEY_ALIAS: $(CPM_RELEASE_KEY_ALIAS)
-  #         KEY_PASSWORD: $(CPM_RELEASE_KEY_PASSWORD)
-  #       inputs:
-  #         workingDirectory: 'android'
-  #         gradleWrapperFile: 'android/gradlew'
-  #         gradleOptions: '-Xmx3072m'
-  #         publishJUnitResults: false
-  #         testResultsFiles: '**/TEST-*.xml'
-  #         tasks: 'assembleRelease'
+          - task: Gradle@2
+            env:
+              KEYSTORE_PASSWORD: $(CPM_RELEASE_STORE_PASSWORD)
+              KEYSTORE: $(CPM_RELEASE_STORE_FILE)
+              KEY_ALIAS: $(CPM_RELEASE_KEY_ALIAS)
+              KEY_PASSWORD: $(CPM_RELEASE_KEY_PASSWORD)
+            inputs:
+              workingDirectory: 'android'
+              gradleWrapperFile: 'android/gradlew'
+              gradleOptions: '-Xmx3072m'
+              publishJUnitResults: false
+              testResultsFiles: '**/TEST-*.xml'
+              tasks: 'assembleRelease'
 
-  #     - task: PublishBuildArtifacts@1
-  #       displayName: 'Publish Build Artifact'
-  #       inputs:
-  #         PathtoPublish: 'android/app/build/outputs/apk/release/$(Project_Name)-release.apk'
-  #         ArtifactName: 'android'
-  #         publishLocation: 'Container'
+          - task: PublishBuildArtifacts@1
+            displayName: 'Publish Build Artifact'
+            inputs:
+              PathtoPublish: 'android/app/build/outputs/apk/release/$(Project_Name)-release.apk'
+              ArtifactName: 'android'
+              publishLocation: 'Container'
