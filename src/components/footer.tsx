@@ -28,7 +28,8 @@ export function Footer(props: IFooterProps) {
           style={{
             textAlign: 'center',
             ...(props.textColor ? {color: props.textColor} : {}),
-          }}>
+          }}
+        >
           {props.text}
         </CPMText>
       ) : (

@@ -172,7 +172,8 @@ export default function Devices() {
             style={{
               marginTop: 20,
               marginHorizontal: 10,
-            }}>
+            }}
+          >
             <GetConnectedHeader />
           </View>
           <View style={style.scan}>
@@ -211,12 +212,14 @@ function Device(props: {
         padding: 20,
         ...DefaultStyles.elevated,
         backgroundColor: 'white',
-      }}>
+      }}
+    >
       <TouchableOpacity
         style={{flexDirection: 'column', justifyContent: 'center'}}
         onPress={async () => {
           await connect(device.id);
-        }}>
+        }}
+      >
         <Name style={DefaultStyles.itemName}>
           {device.name.length > MAX_NAME_LENGTH
             ? device.name.substring(0, MAX_NAME_LENGTH - 3) + '...'
@@ -228,7 +231,8 @@ function Device(props: {
         style={{
           flex: 1,
           alignItems: 'flex-end',
-        }}>
+        }}
+      >
         {device.paired ? null : (
           <Action style={{fontWeight: 'bold'}}>PAIR</Action>
         )}
@@ -262,7 +266,8 @@ function DeviceList(props: {
               // component will be unmounted by the end of the scan process
             }}
           />
-        }>
+        }
+      >
         {devices.map(device => {
           return <Device key={device.id} device={device} connect={connect} />;
         })}
@@ -295,7 +300,8 @@ function NotFound(props: {retry: () => void}) {
         style={{
           ...DefaultStyles.centerFragment,
           ...{justifyContent: 'space-evenly', marginHorizontal: 20},
-        }}>
+        }}
+      >
         <CPMText style={DefaultStyles.header}>{NOT_FOUND_TITLE}</CPMText>
         <CPMText style={{textAlign: 'center'}}>{NOT_FOUND_TEXT}</CPMText>
       </View>
@@ -303,7 +309,8 @@ function NotFound(props: {retry: () => void}) {
         <Button
           mode="contained"
           style={{...DefaultStyles.centeredButton, ...DefaultStyles.elevated}}
-          onPress={props.retry}>
+          onPress={props.retry}
+        >
           <CPMText>TRY AGAIN</CPMText>
         </Button>
         <SimulatedButton refresh={props.retry} />
@@ -338,7 +345,8 @@ const SimulatedButton = React.memo<{refresh: () => void}>(({refresh}) => {
           type: 'ACTIVATE',
           payload: simManager,
         });
-      }}>
+      }}
+    >
       USE SIMULATED DEVICES
     </CPMButton>
   );

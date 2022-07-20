@@ -13,7 +13,8 @@ export function Headline(props: Props) {
   return (
     <Text
       style={[style, {fontSize: normalize(20), fontWeight: 'bold'}]}
-      {...textProps}>
+      {...textProps}
+    >
       {props.children}
     </Text>
   );
@@ -24,7 +25,8 @@ export function CPMText(props: Props) {
   return (
     <Text
       style={[style, {fontSize: normalize(14), fontStyle: 'normal'}]}
-      {...textProps}>
+      {...textProps}
+    >
       {props.children}
     </Text>
   );
@@ -43,7 +45,8 @@ export function Name(props: Props) {
           letterSpacing: 1.15,
         },
       ]}
-      {...textProps}>
+      {...textProps}
+    >
       {props.children}
     </Text>
   );
@@ -57,7 +60,8 @@ export function Item(props: Props) {
         style,
         {fontSize: normalize(14), fontWeight: 'bold', fontStyle: 'normal'},
       ]}
-      {...textProps}>
+      {...textProps}
+    >
       {props.children}
     </Text>
   );
@@ -69,7 +73,8 @@ export function Detail(props: Props) {
   return (
     <Text
       style={[style, {fontSize: normalize(14), color: '#666666'}]}
-      {...textProps}>
+      {...textProps}
+    >
       {props.children}
     </Text>
   );
@@ -81,7 +86,8 @@ export function Action(props: Props) {
   return (
     <Text
       style={[style, {fontSize: normalize(14), color: '#00B1FF'}]}
-      {...textProps}>
+      {...textProps}
+    >
       {props.children}
     </Text>
   );
