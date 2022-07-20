@@ -198,13 +198,15 @@ export default function Insight() {
           <TouchableOpacity
             onPress={() => {
               openDrawer();
-            }}>
+            }}
+          >
             <View
               style={{
                 flexDirection: 'row',
                 alignItems: 'center',
                 marginLeft: -15,
-              }}>
+              }}
+            >
               <IconButton icon="chevron-right" />
               <Name>SYNC OPTIONS</Name>
             </View>

@@ -107,7 +107,8 @@ export default React.memo(() => {
         <CPMButton
           mode="contained"
           style={{marginBottom: 50, ...style.button}}
-          onPress={() => setQR(true)}>
+          onPress={() => setQR(true)}
+        >
           {scan}
         </CPMButton>
         <SimulatedButton />
@@ -190,7 +191,8 @@ function SimulatedButton(props: {textColor?: string}) {
   return (
     <View style={{alignItems: 'center', ...viewStyle}}>
       <CPMText
-        style={props.textColor ? {color: props.textColor} : {}}></CPMText>
+        style={props.textColor ? {color: props.textColor} : {}}
+      ></CPMText>
       <CPMButton
         style={style.button}
         mode="outlined"
@@ -200,7 +202,8 @@ function SimulatedButton(props: {textColor?: string}) {
             type: 'CONNECT',
             payload: null,
           });
-        }}>
+        }}
+      >
         {simulation}
       </CPMButton>
     </View>

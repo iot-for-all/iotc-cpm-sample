@@ -27,7 +27,8 @@ export function CPMButton(props: CPMButtonProps) {
           ? {borderColor: '#75FBFD', borderWidth: 2, ...DefaultStyles.elevated}
           : {},
       ]}
-      labelStyle={{color: textColor}}>
+      labelStyle={{color: textColor}}
+    >
       {children}
     </Button>
   );

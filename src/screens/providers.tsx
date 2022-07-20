@@ -57,7 +57,8 @@ export default function Providers() {
       <View style={{flex: 1}}>
         <Loading />
         <Headline
-          style={{flex: 1, textAlign: 'center', justifyContent: 'center'}}>
+          style={{flex: 1, textAlign: 'center', justifyContent: 'center'}}
+        >
           Loading provider data ...
         </Headline>
       </View>

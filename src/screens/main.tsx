@@ -66,7 +66,8 @@ function Navigation() {
             />
           );
         },
-      }}>
+      }}
+    >
       <Stack.Screen name={Screens.HOME_SCREEN} component={Home} />
       <Stack.Screen name={Screens.DEVICES_SCREEN} component={Devices} />
       <Stack.Screen name={Screens.PROVIDERS_SCREEN} component={Providers} />
@@ -95,7 +96,8 @@ export default function Main() {
             />
           );
         }}
-        screenOptions={{swipeEdgeWidth: -100, headerShown: false}}>
+        screenOptions={{swipeEdgeWidth: -100, headerShown: false}}
+      >
         <Drawer.Screen name={DrawerScreens.MAIN} component={Navigation} />
       </Drawer.Navigator>
     </React.Fragment>
@@ -116,7 +118,8 @@ function Home() {
             style={{justifyContent: 'center'}}
           />
           <CPMText
-            style={{paddingHorizontal: 20, paddingVertical: normalize(10)}}>
+            style={{paddingHorizontal: 20, paddingVertical: normalize(10)}}
+          >
             {instructions}
           </CPMText>
           <Options />
@@ -139,14 +142,16 @@ function Options() {
         justifyContent: 'space-between',
         padding: 20,
         marginTop: 10,
-      }}>
+      }}
+    >
       <TouchableOpacity
         style={{flexDirection: 'row', alignItems: 'center'}}
         onPress={() => {
           navigation.navigate(Screens.DEVICES_SCREEN);
           // Custom title can be set in this way. However, this will not be reverted when going back
           navigation.setParams({title: 'Devices'});
-        }}>
+        }}
+      >
         <IconButton icon="bluetooth" size={30} style={{marginRight: -5}} />
         <CPMText>PAIR DEVICE</CPMText>
       </TouchableOpacity>
@@ -156,7 +161,8 @@ function Options() {
           style={{flexDirection: 'row', alignItems: 'center'}}
           onPress={() => {
             navigation.navigate(Screens.PROVIDERS_SCREEN);
-          }}>
+          }}
+        >
           <IconButton icon="sync" size={30} style={{marginRight: -5}} />
           <CPMText>{sync}</CPMText>
         </TouchableOpacity>

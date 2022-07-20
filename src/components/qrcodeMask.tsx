@@ -12,7 +12,8 @@ export default function QRCodeMask() {
         position: 'relative',
         width: markerWidth + sectorWidth,
         height: markerWidth + sectorWidth,
-      }}>
+      }}
+    >
       <View
         style={{
           position: 'absolute',
@@ -23,7 +24,8 @@ export default function QRCodeMask() {
           borderColor: 'black',
           borderLeftWidth: 5,
           borderTopWidth: 5,
-        }}></View>
+        }}
+      ></View>
       <View
         style={{
           position: 'absolute',
@@ -34,7 +36,8 @@ export default function QRCodeMask() {
           borderColor: 'black',
           borderRightWidth: 5,
           borderTopWidth: 5,
-        }}></View>
+        }}
+      ></View>
       <View
         style={{
           position: 'absolute',
@@ -45,7 +48,8 @@ export default function QRCodeMask() {
           borderColor: 'black',
           borderLeftWidth: 5,
           borderBottomWidth: 5,
-        }}></View>
+        }}
+      ></View>
       <View
         style={{
           position: 'absolute',
@@ -56,7 +60,8 @@ export default function QRCodeMask() {
           borderColor: 'black',
           borderRightWidth: 5,
           borderBottomWidth: 5,
-        }}></View>
+        }}
+      ></View>
     </View>
   );
 }
