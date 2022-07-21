@@ -190,6 +190,8 @@ stages:
             inputs:
               workingDirectory: 'android'
               gradleWrapperFile: 'android/gradlew'
+              javaHomeOption: 'JDKVersion'
+              jdkVersionOption: '1.11'
               gradleOptions: '-Xmx3072m'
               publishJUnitResults: false
               testResultsFiles: '**/TEST-*.xml'
