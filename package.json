@@ -11,7 +11,7 @@
     "format": "prettier --write src/",
     "build": "npm run format && npm run lint && tsc",
     "podinstall": "node podinstall.js",
-    "postinstall": "npm run prepackage",
+    "postinstall": "npm run prepackage && patch-package",
     "prepackage": "node pre-packager.js"
   },
   "dependencies": {
@@ -21,7 +21,9 @@
     "@react-navigation/native": "^6.0.10",
     "@react-navigation/native-stack": "^6.6.2",
     "buffer": "^5.6.0",
+    "deprecated-react-native-prop-types": "^2.3.0",
     "events": "^3.2.0",
+    "patch-package": "^6.4.7",
     "react": "^18.0.0",
     "react-native": "^0.69.1",
     "react-native-azure-iotcentral-client": "1.1.7",
