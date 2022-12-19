@@ -1,5 +1,7 @@
-# Continuous Patient Monitoring Sample
-A sample application written in React-Native to connect BLE (Bluetooth Low-Energy) devices to Azure IoT Central.
+# Continuous Patient Monitoring Sample [ARCHIVED]
+
+## IMPORTANT 
+The Project is archived in favor of [IoT Central PaaD (Phone as a Device)](https://github.com/Azure/iot-central-paad) that now has bluetooth capabilities.
 
 <!-- **Android**   
 
