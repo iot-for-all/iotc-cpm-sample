@@ -58,7 +58,7 @@
     "@typescript-eslint/parser": "^4.30.0",
     "@welldone-software/why-did-you-render": "^4.2.5",
     "babel-jest": "^26.6.3",
-    "babel-plugin-module-resolver": "^4.1.0",
+    "babel-plugin-module-resolver": "^5.0.0",
     "eslint": "^7.32.0",
     "eslint-plugin-react": "^7.25.1",
     "eslint-plugin-react-hooks": "^4.2.0",
